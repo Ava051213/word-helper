@@ -1,0 +1,1975 @@
+{
+  "deteriorate": {
+    "data": {
+      "word": "deteriorate",
+      "phonetic": "/dɪˈtɪəɹɪəɹeɪt/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To make worse; to make inferior in quality or value; to impair."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To grow worse; to be impaired in quality; to degenerate."
+        }
+      ],
+      "examples": [
+        "to deteriorate the mind"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "使情况变得更糟；降低质量或价值；损害。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "变得更糟；质量受损；退化。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.4122884,
+    "cached_at": 1766240843.3759074
+  },
+  "warehouse": {
+    "data": {
+      "word": "warehouse",
+      "phonetic": "",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A place for storing large amounts of products. In logistics, a place where products go to from the manufacturer before going to the retailer."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To store in a warehouse or similar."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To confine (a person) to an institution for a long period."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To acquire and then shelve, simply to prevent competitors from acquiring it."
+        }
+      ],
+      "examples": [
+        "the warehousing of syndicated TV shows"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "存放大量产品的地方。在物流中，产品从制造商运往零售商之前的地方。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "存放在仓库或类似场所。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "将（人）长期限制在某个机构内。"
+        }
+      ]
+    },
+    "last_accessed": 1766243153.8459964,
+    "cached_at": 1766240847.39414
+  },
+  "oak": {
+    "data": {
+      "word": "oak",
+      "phonetic": "/əʊk/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A deciduous tree with distinctive deeply lobed leaves, acorns, and notably strong wood, typically of England and northeastern North America, included in genus Quercus."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The wood of the oak."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A rich brown colour, like that of oak wood."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any tree of the genus Quercus, in family Fagaceae."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any tree of other genera and species of trees resembling typical oaks of genus Quercus in some ways."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The outer (lockable) door of a set of rooms in a college or similar institution. (Often in the phrase \"to sport one's oak\")."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The flavor of oak."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To expose to oak in order for the oak to impart its flavors."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Having a rich brown colour, like that of oak wood."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Made of oak wood or timber"
+        }
+      ],
+      "examples": [
+        "an oak table, oak beam, etc"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一种落叶树，具有独特的深裂叶、橡子和特别坚固的木材，通常产于英格兰和北美洲东北部，属于栎属。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "橡木的木材。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "浓郁的棕色，像橡木的颜色。"
+        }
+      ]
+    },
+    "last_accessed": 1766243156.3591156,
+    "cached_at": 1766240851.3881683
+  },
+  "flame": {
+    "data": {
+      "word": "flame",
+      "phonetic": "/fleɪm/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The visible part of fire; a stream of burning vapour or gas, emitting light and heat."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A romantic partner or lover in a usually short-lived but passionate affair."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Intentionally insulting criticism or remark meant to incite anger."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A brilliant reddish orange-gold fiery colour."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The contrasting light and dark figure seen in wood used for stringed instrument making; the curl."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Burning zeal, passion, imagination, excitement, or anger."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To produce flames; to burn with a flame or blaze."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To burst forth like flame; to break out in violence of passion; to be kindled with zeal or ardour."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To post a destructively critical or abusive message (to somebody)."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Of a brilliant reddish orange-gold colour, like that of a flame."
+        }
+      ],
+      "examples": [
+        "The cello has a two-piece back with a beautiful narrow flame.",
+        "I flamed him for spamming in my favourite newsgroup."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "火的可见部分；燃烧的蒸气或气体流，发出光和热。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一段通常短暂但充满激情的恋情中的浪漫伴侣或情人。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "故意侮辱性批评或旨在煽动愤怒的言论。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.4100652,
+    "cached_at": 1766240855.1858177
+  },
+  "preside": {
+    "data": {
+      "word": "preside",
+      "phonetic": "",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To act as president or chairperson."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To exercise authority or control, oversit."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To be a featured solo performer."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "担任主席或主席。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "为了行使权力或控制权，请过度监督。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "成为一名有特色的独奏演员。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.4108648,
+    "cached_at": 1766240858.9150243
+  },
+  "aside": {
+    "data": {
+      "word": "aside",
+      "phonetic": "/əˈsaɪd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "An incidental remark made quietly so as to be heard by the person to whom it is said and not by any others in the vicinity."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A brief comment by a character addressing the audience, unheard by other characters."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A minor related mention, an afterthought."
+        },
+        {
+          "part_of_speech": "adverb",
+          "definition": "To or on one side so as to be out of the way."
+        }
+      ],
+      "examples": [
+        "Move aside, please, so that these people can come through."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "轻声说的偶然言论，以便被说这句话的人听到，而不是被附近的任何其他人听到。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一个角色向观众发表的简短评论，其他角色听不到。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一个小的相关提及，事后的想法。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.411322,
+    "cached_at": 1766240862.897707
+  },
+  "riot": {
+    "data": {
+      "word": "riot",
+      "phonetic": "/ˈɹaɪ.ət/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Wanton or unrestrained behavior; uproar; tumult."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The tumultuous disturbance of the public peace by an unlawful assembly of three or more persons in the execution of some private object."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A wide and unconstrained variety."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Excessive and expensive feasting; wild and loose festivity; revelry."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To create or take part in a riot; to raise an uproar or sedition."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To act in an unrestrained or wanton manner; to indulge in excess of feasting, luxury, etc."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cause to riot; to throw into a tumult."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To annoy."
+        }
+      ],
+      "examples": [
+        "In summer this flower garden is a riot of colour.",
+        "The nuclear protesters rioted outside the military base."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "肆意或无节制的行为；骚动；骚乱。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "三人或三人以上非法集会以执行某些私人目的，扰乱公共秩序。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "品种广泛且不受限制。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.4104,
+    "cached_at": 1766240867.3898468
+  },
+  "torrent": {
+    "data": {
+      "word": "torrent",
+      "phonetic": "/ˈtɒɹ.ənt/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A violent flow, as of water, lava, etc.; a stream suddenly raised and running rapidly, as down a precipice."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A large amount or stream of something."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Rolling or rushing in a rapid stream."
+        }
+      ],
+      "examples": [
+        "A torrent of green and white water broke over the hull of the sail-boat.",
+        "They endured a torrent of inquiries."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "猛烈的流动，如水、熔岩等；一条小溪突然上涨，急速流淌，就像冲下悬崖一样。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "大量或大量的东西。"
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "在急流中滚动或冲刷。"
+        }
+      ]
+    },
+    "last_accessed": 1766254904.2783759,
+    "cached_at": 1766240871.0435429
+  },
+  "agent": {
+    "data": {
+      "word": "agent",
+      "phonetic": "/ˈeɪ.dʒənt/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "One who exerts power, or has the power to act"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "One who acts for, or in the place of, another (the principal), by authority from him/her; someone entrusted to do the business of another"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A person who looks for work for another person"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Someone who works for an intelligence agency"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An active power or cause or substance; something which has the power to produce an effect"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "In the client-server model, the part of the system that performs information preparation and exchange on behalf of a client or server. Especially in the phrase “intelligent agent” it implies some kind of autonomous process which can communicate with other agents to perform some collective task on behalf of one or more humans."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(grammar) The participant of a situation that carries out the action in this situation, e.g. \"the boy\" in the sentences \"The boy kicked the ball\" and \"The ball was kicked by the boy\"."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A cheat who is assisted by dishonest casino staff."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "行使权力或有权力采取行动的人"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "依据另一人（委托人）的授权，为另一人（委托人）行事或代替另一人（委托人）行事的人；受委托做他人生意的人"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "为另一个人找工作的人"
+        }
+      ]
+    },
+    "last_accessed": 1766243157.7391448,
+    "cached_at": 1766240875.0070546
+  },
+  "comedy": {
+    "data": {
+      "word": "comedy",
+      "phonetic": "/ˈkɒmədi/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A choric song of celebration or revel, especially in Ancient Greece."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A light, amusing play with a happy ending."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(Medieval Europe) A narrative poem with an agreeable ending (e.g., The Divine Comedy)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A dramatic work that is light and humorous or satirical in tone."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The genre of such works."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Entertainment composed of jokes, satire, or humorous performance."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The art of composing comedy."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A humorous event."
+        }
+      ],
+      "examples": [
+        "Why would you be watching comedy when there are kids starving right now?"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "庆祝或狂欢的合唱歌曲，尤其是在古希腊。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一部轻松有趣的剧，结局圆满。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（中世纪欧洲）一首具有愉快结局的叙事诗（例如《神曲》）。"
+        }
+      ]
+    },
+    "last_accessed": 1766240895.055982,
+    "cached_at": 1766240895.0559824
+  },
+  "realize": {
+    "data": {
+      "word": "realize",
+      "phonetic": "/ˈɹɪə.laɪz/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To make real; to convert from the imaginary or fictitious into reality; to bring into real existence"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To become aware of (a fact or situation, especially of something that has been true for a long time)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cause to seem real; to sense vividly or strongly; to make one's own in thought or experience."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To acquire as an actual possession; to obtain as the result of plans and efforts; to gain; to get"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To convert any kind of property into money, especially property representing investments, such as shares, bonds, etc."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To convert into real property; to make real estate of."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To turn an abstract linguistic object into actual language, especially said of a phoneme's conversion into speech sound."
+        }
+      ],
+      "examples": [
+        "The objectives of the project were never fully realized.",
+        "He realized that he had left his umbrella on the train.",
+        "to realize large profits from a speculation",
+        "By realizing the company's assets, the liquidator was able to return most of the shareholders' investments.",
+        "The southern /v/ is realized as the voiced approximant [ʋ]."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "使之成为现实；从想象或虚构转变为现实；变为现实存在"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "意识到（事实或情况，尤其是长期存在的事情）。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "使看起来真实；生动地或强烈地感觉到；创造自己的思想或经验。"
+        }
+      ]
+    },
+    "last_accessed": 1766240902.987132,
+    "cached_at": 1766240902.9871333
+  },
+  "perdition": {
+    "data": {
+      "word": "perdition",
+      "phonetic": "/pɜː(ɹ).ˈdɪ.ʃən/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Eternal damnation."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Hell."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Absolute ruin."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "永恒的诅咒。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "地狱。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "绝对的毁灭。"
+        }
+      ]
+    },
+    "last_accessed": 1766240911.6492941,
+    "cached_at": 1766240911.6492946
+  },
+  "spouse": {
+    "data": {
+      "word": "spouse",
+      "phonetic": "/spaʊs/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A person in a marriage or marital relationship."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To wed; to espouse."
+        }
+      ],
+      "examples": [
+        "People should treat their spouses with respect."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "处于婚姻或婚姻关系中的人。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "结婚；去拥护。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.41061,
+    "cached_at": 1766241402.3637455
+  },
+  "taper": {
+    "data": {
+      "word": "taper",
+      "phonetic": "/ˈteɪpə/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A slender wax candle; a small lighted wax candle"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(by extension) a small light."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A tapering form; gradual diminution of thickness and/or cross section in an elongated object"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A thin stick used for lighting candles, either a wax-coated wick or a slow-burning wooden rod."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To make thinner or narrower at one end."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To diminish gradually."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Tapered; narrowing to a point."
+        }
+      ],
+      "examples": [
+        "The legs of the table had a slight taper to them."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一根细长的蜡烛；一支点燃的小蜡烛"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（推而广之）一盏小灯。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "锥形形式；细长物体的厚度和/或横截面逐渐减小"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.411666,
+    "cached_at": 1766241422.8960233
+  },
+  "dubious": {
+    "data": {
+      "word": "dubious",
+      "phonetic": "/ˈdjuːbi.əs/",
+      "meanings": [
+        {
+          "part_of_speech": "adjective",
+          "definition": "(of a statement) Arousing doubt; questionable; open to suspicion."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(of a person) In disbelief; wavering, uncertain, or hesitating in opinion; inclined to doubt; undecided."
+        }
+      ],
+      "examples": [
+        "After he made some dubious claims about the company, fewer people trusted him.",
+        "She was dubious about my plan at first, but later I managed to persuade her to cooperate."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "adjective",
+          "definition": "（陈述）引起怀疑；有疑问的；容易受到怀疑。"
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "（某人）难以置信；意见摇摆不定、不确定或犹豫；倾向于怀疑；尚未决定。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.4121351,
+    "cached_at": 1766241720.0288594
+  },
+  "speed": {
+    "data": {
+      "word": "speed",
+      "phonetic": "/spiːd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The state of moving quickly or the capacity for rapid motion; rapidity."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The rate of motion or action, specifically / the magnitude of the velocity; the rate distance is traversed in a given time."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The sensitivity to light of film, plates or sensor."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The duration of exposure, the time during which a camera shutter is open (shutter speed)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The largest size of the lens opening at which a lens can be used."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The ratio of the focal length to the diameter of a photographic objective."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Amphetamine or any amphetamine-based drug (especially methamphetamine) used as a stimulant, especially illegally."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Luck, success, prosperity."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Personal preference."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A third-order measure of derivative price sensitivity, expressed as the rate of change of gamma with respect to changes in the underlying asset price."
+        }
+      ],
+      "examples": [
+        "How does Usain Bolt run at that speed?",
+        "Speed limits provide information to the drivers about the safe speed to travel in average conditions.",
+        "We could go to the shore next week, or somewhere else if that's not your speed."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "快速移动的状态或快速移动的能力；速度。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "运动或动作的速率，特别是/速度的大小；给定时间内经过的速率距离。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "胶片、板或传感器对光的敏感度。"
+        }
+      ]
+    },
+    "last_accessed": 1766254972.4762144,
+    "cached_at": 1766242576.0629005
+  },
+  "fleet": {
+    "data": {
+      "word": "fleet",
+      "phonetic": "/fliːt/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A group of vessels or vehicles."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any group of associated items."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A large, coordinated group of people."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A number of vessels in company, especially war vessels; also, the collective naval force of a country, etc."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(British Royal Navy) Any command of vessels exceeding a squadron in size, or a rear admiral's command, composed of five sail-of-the-line, with any number of smaller vessels."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一组船只或车辆。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "任何相关项目组。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一个庞大而协调的人群。"
+        }
+      ]
+    },
+    "last_accessed": 1766242606.4101634,
+    "cached_at": 1766242606.410164
+  },
+  "merge": {
+    "data": {
+      "word": "merge",
+      "phonetic": "/mɜːdʒ/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The joining together of multiple sources."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To combine into a whole."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To combine into a whole."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To blend gradually into something else."
+        }
+      ],
+      "examples": [
+        "The merge of the two documents failed.",
+        "Headquarters merged the operations of the three divisions.",
+        "The two companies merged.",
+        "The lanes of traffic merged."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "将多个来源连接在一起。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "组合成一个整体。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "组合成一个整体。"
+        }
+      ]
+    },
+    "last_accessed": 1766242621.6207418,
+    "cached_at": 1766242621.6207423
+  },
+  "radical": {
+    "data": {
+      "word": "radical",
+      "phonetic": "/ˈɹædɪkəl/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "(historical: 19th-century Britain) A member of the most progressive wing of the Liberal Party; someone favouring social reform (but generally stopping short of socialism)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(historical: early 20th-century France) A member of an influential, centrist political party favouring moderate social reform, a republican constitution, and secular politics."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A person with radical opinions."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A root (of a number or quantity)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "In logographic writing systems such as the Chinese writing system, the portion of a character (if any) that provides an indication of its meaning, as opposed to phonetic."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "In Semitic languages, any one of the set of consonants (typically three) that make up a root."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A group of atoms, joined by covalent bonds, that take part in reactions as a single unit."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A free radical."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(commutative algebra, of an ideal) Given an ideal I in a commutative ring R, another ideal, denoted Rad(I) or \\sqrt{I}, such that an element x ∈ R is in Rad(I) if, for some positive integer n, xn ∈ I; equivalently, the intersection of all prime ideals containing I."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(of a ring) Given a ring R, an ideal containing elements of R that share a property considered, in some sense, \"not good\"."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(of a module) The intersection of maximal submodules of a given module."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The product of the distinct prime factors of a given positive integer."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Favoring fundamental change, or change at the root cause of a matter."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Pertaining to a root (of a plant)."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Pertaining to the basic or intrinsic nature of something."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Thoroughgoing; far-reaching."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Of or pertaining to the root of a word."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(of a sound) Produced using the root of the tongue."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Involving free radicals."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Relating to a radix or mathematical root."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(1980s & 1990s) Excellent; awesome."
+        }
+      ],
+      "examples": [
+        "His beliefs are radical.",
+        "The spread of the cancer required radical surgery, and the entire organ was removed.",
+        "a radical quantity; a radical sign",
+        "That was a radical jump!"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "（历史：19世纪的英国）自由党最进步派的成员；支持社会改革（但通常不支持社会主义）的人。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（历史：20世纪初的法国）一个有影响力的中间派政党的成员，主张温和的社会改革、共和宪法和世俗政治。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "具有激进观点的人。"
+        }
+      ]
+    },
+    "last_accessed": 1766243159.411897,
+    "cached_at": 1766242631.6143928
+  },
+  "cancel": {
+    "data": {
+      "word": "cancel",
+      "phonetic": "/ˈkænsl̩/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A cancellation (US); (nonstandard in some kinds of English)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An enclosure; a boundary; a limit."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The suppression on striking out of matter in type, or of a printed page or pages."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The page thus suppressed."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The page that replaces it."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cross out something with lines etc."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To invalidate or annul something."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To mark something (such as a used postage stamp) so that it can't be reused."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To offset or equalize something."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To remove a common factor from both the numerator and denominator of a fraction, or from both sides of an equation."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To stop production of a programme."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To suppress or omit; to strike out, as matter in type."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To shut out, as with a railing or with latticework; to exclude."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To kill."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cease to provide financial or moral support to (someone deemed unacceptable). Compare cancel culture."
+        }
+      ],
+      "examples": [
+        "He cancelled his order on their website.",
+        "This machine cancels the letters that have a valid zip code.",
+        "The corrective feedback mechanism cancels out the noise."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "取消（美国）； （某些英语是非标准的）。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "外壳；边界；一个限制。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "禁止删除印刷版或印刷版内容。"
+        }
+      ]
+    },
+    "last_accessed": 1766243239.8221123,
+    "cached_at": 1766243239.8221126
+  },
+  "dry": {
+    "data": {
+      "word": "dry",
+      "phonetic": "/dɹaɪ/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The process by which something is dried."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A prohibitionist (of alcoholic beverages)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(with \"the\") The dry season."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An area of waterless country."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(UK politics) A radical or hard-line Conservative; especially, one who supported the policies of British Prime Minister Margaret Thatcher in the 1980s."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To lose moisture."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To remove moisture from."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To be thirsty."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To exhaust; to cause to run dry."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "For an actor to forget his or her lines while performing."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Free from or lacking moisture."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Unable to produce a liquid, as water, oil, or (farming) milk."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Built without or lacking mortar."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Anhydrous: free from or lacking water in any state, regardless of the presence of other liquids."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Athirst, eager."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Free from or lacking alcohol or alcoholic beverages."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Describing an area where sales of alcoholic or strong alcoholic beverages are banned."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Free from or lacking embellishment or sweetness, particularly:"
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(somewhat derogatory) Involving computations rather than work with biological or chemical matter."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(of a sound recording) Free from applied audio effects."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Without a usual complement or consummation; impotent."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Of a mass, service, or rite: involving neither consecration nor communion."
+        }
+      ],
+      "examples": [
+        "This towel is still damp: I think it needs another dry.",
+        "The clothes dried on the line.",
+        "Devin dried her eyes with a handkerchief.",
+        "This towel's dry. Could you wet it and cover the chicken so it doesn't go dry as it cooks?",
+        "This well is as dry as that cow.",
+        "Dry alcohol is 200 proof.",
+        "Of course it's a dry house. He was an alcoholic but he's been dry for almost a year now.",
+        "You'll have to drive out of this dry county to find any liquor.",
+        "never dry fire a bow; dry humping her girlfriend; making a dry run"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "干燥某物的过程。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（酒精饮料）禁酒者。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（同“之”）旱季。"
+        }
+      ]
+    },
+    "last_accessed": 1766243248.9178948,
+    "cached_at": 1766243248.9178953
+  },
+  "ascribe": {
+    "data": {
+      "word": "ascribe",
+      "phonetic": "/əˈskɹaɪb/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To attribute a cause or characteristic to someone or something."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To attribute a book, painting or any work of art or literature to a writer or creator."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "(with to) To believe in or agree with; subscribe."
+        }
+      ],
+      "examples": [
+        "One may ascribe these problems to the federal government; however, at this stage it is unclear what caused them.",
+        "It is arguable as to whether we can truly ascribe this play to Shakespeare."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "将原因或特征归因于某人或某事。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "将书籍、绘画或任何艺术或文学作品归因于作家或创作者。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "（with to）相信或同意；订阅。"
+        }
+      ]
+    },
+    "last_accessed": 1766247075.2632642,
+    "cached_at": 1766243257.0943859
+  },
+  "dive": {
+    "data": {
+      "word": "dive",
+      "phonetic": "/ˈdaɪv/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A jump or plunge into water."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A headfirst jump toward the ground or into another substance."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A downward swooping motion."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A swim under water."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A decline."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A seedy bar, nightclub, etc."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Aerial descent with the nose pointed down."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A deliberate fall after a challenge."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To swim under water."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To jump into water head-first."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To jump headfirst toward the ground or into another substance."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To descend sharply or steeply."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "(especially with in) To undertake with enthusiasm."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To deliberately fall down after a challenge, imitating being fouled, in the hope of getting one's opponent penalised."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cause to descend, dunk; to plunge something into water."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To explore by diving; to plunge into."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To plunge or to go deeply into any subject, question, business, etc.; to penetrate; to explore."
+        }
+      ],
+      "examples": [
+        "the dive of a hawk after prey",
+        "to dive into home plate",
+        "She dove right in and started making improvements."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "跳入水中或跳入水中。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "头朝下跳向地面或跳入另一种物质。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "向下俯冲的动作。"
+        }
+      ]
+    },
+    "last_accessed": 1766243280.978133,
+    "cached_at": 1766243280.9781334
+  },
+  "medal": {
+    "data": {
+      "word": "medal",
+      "phonetic": "[ˈmeɾ.ɫ̩]",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A stamped metal disc used as a personal ornament, a charm, or a religious object."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A stamped or cast metal object (usually a disc), particularly one awarded as a prize or reward."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To win a medal."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To award a medal to."
+        }
+      ],
+      "examples": [
+        "He medalled twice at the Olympics."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "用作个人装饰品、护身符或宗教物品的冲压金属圆盘。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "冲压或铸造的金属物体（通常是圆盘），特别是作为奖品或奖励而授予的金属物体。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "赢得奖牌。"
+        }
+      ]
+    },
+    "last_accessed": 1766243291.4450614,
+    "cached_at": 1766243291.4450622
+  },
+  "encourage": {
+    "data": {
+      "word": "encourage",
+      "phonetic": "/ɪnˈkʌɹɪdʒ/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To mentally support; to motivate, give courage, hope or spirit."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To spur on, strongly recommend."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To foster, give help or patronage"
+        }
+      ],
+      "examples": [
+        "I encouraged him during his race.",
+        "We encourage the use of bicycles in the town centre.",
+        "The royal family has always encouraged the arts in word and deed"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "精神上的支持；激励、给予勇气、希望或精神。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "为了鞭策，强烈推荐。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "培养、给予帮助或赞助"
+        }
+      ]
+    },
+    "last_accessed": 1766247135.0284376,
+    "cached_at": 1766247135.0284383
+  },
+  "remove": {
+    "data": {
+      "word": "remove",
+      "phonetic": "/ɹɪˈmuːv/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of removing something."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(archaic) Removing a dish at a meal in order to replace it with the next course, a dish thus replaced, or the replacement."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(at some public schools) A division of the school, especially the form prior to last"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A step or gradation (as in the phrase \"at one remove\")"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Distance in time or space; interval."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(by extension) Emotional distance or indifference."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The transfer of one's home or business to another place; a move."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of resetting a horse's shoe."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To move something from one place to another, especially to take away."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To murder."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To dismiss a batsman."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To discard, set aside, especially something abstract (a thought, feeling, etc.)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To depart, leave."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To change one's residence; to move."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To dismiss or discharge from office."
+        }
+      ],
+      "examples": [
+        "He removed the marbles from the bag.",
+        "The President removed many postmasters."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "移除某物的行为。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（古语）在一顿饭中拿走一道菜，以便用下一道菜代替它，因此被替换的菜，或替代品。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（在某些公立学校）学校的一个部门，尤其是上一学年之前的形式"
+        }
+      ]
+    },
+    "last_accessed": 1766247149.493422,
+    "cached_at": 1766247149.4934225
+  },
+  "counsel": {
+    "data": {
+      "word": "counsel",
+      "phonetic": "/ˈkaʊn.səl/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The exchange of opinions and advice especially in legal issues; consultation."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Exercise of judgment; prudence."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Advice; guidance."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Deliberate purpose; design; intent; scheme; plan."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A secret opinion or purpose; a private matter."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A lawyer, as in Queen's Counsel (QC)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To give advice, especially professional advice, to (somebody)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To recommend (a course of action)."
+        }
+      ],
+      "examples": [
+        "Psychiatrists, psychologists, social workers and other mental health professionals counsel clients.",
+        "I would counsel prudence in this matter."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "交换意见和建议，特别是在法律问题上；咨询。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "行使判断力；谨慎。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "建议;指导。"
+        }
+      ]
+    },
+    "last_accessed": 1766254893.0892317,
+    "cached_at": 1766247155.3253312
+  },
+  "scare": {
+    "data": {
+      "word": "scare",
+      "phonetic": "/skɛə/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A minor fright."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A cause of slight terror; something that inspires fear or dread."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A device or object used to frighten."
+        }
+      ],
+      "examples": [
+        "Johnny had a bad scare last night.",
+        "a food-poisoning scare"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "轻微的惊吓。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "引起轻微恐惧的原因；激发恐惧或恐惧的东西。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "用于恐吓的装置或物体。"
+        }
+      ]
+    },
+    "last_accessed": 1766254937.125978,
+    "cached_at": 1766254933.175232
+  },
+  "rhythm": {
+    "data": {
+      "word": "rhythm",
+      "phonetic": "/ˈɹɪ.ð(ə)m/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The variation of strong and weak elements (such as duration, accent) of sounds, notably in speech or music, over time; a beat or meter."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A specifically defined pattern of such variation."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A flow, repetition or regularity."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The tempo or speed of a beat, song or repetitive event."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The musical instruments which provide rhythm (mainly; not or less melody) in a musical ensemble."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A regular quantitative change in a variable (notably natural) process."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Controlled repetition of a phrase, incident or other element as a stylistic figure in literature and other narrative arts; the effect it creates."
+        }
+      ],
+      "examples": [
+        "Dance to the rhythm of the music.",
+        "Most dances have a rhythm as distinctive as the Iambic verse in poetry",
+        "Once you get the rhythm of it, the job will become easy.",
+        "We walked with a quick, even rhythm.",
+        "The Baroque term basso continuo is virtually equivalent to rhythm",
+        "The rhythm of the seasons dominates agriculture as well as wildlife",
+        "The running gag is a popular rhythm in motion pictures and theater comedy"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "声音的强弱元素（例如持续时间、口音）随时间的变化，尤其是在语音或音乐中；节拍或米。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "这种变化的具体定义模式。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "流动、重复或规律性。"
+        }
+      ]
+    },
+    "last_accessed": 1766254945.7806344,
+    "cached_at": 1766254945.7806354
+  },
+  "skill": {
+    "data": {
+      "word": "skill",
+      "phonetic": "/skɪl/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Capacity to do something well; technique, ability. Skills are usually acquired or learned, as opposed to abilities, which are often thought of as innate."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Discrimination; judgment; propriety; reason; cause."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Knowledge; understanding."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Display of art; exercise of ability; contrivance; address."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Great, excellent."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "做好某事的能力；技术，能力。技能通常是获得或学习的，而不是通常被认为是与生俱来的能力。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "歧视;判断;礼;原因;原因。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "知识;理解。"
+        }
+      ]
+    },
+    "last_accessed": 1766254970.7699485,
+    "cached_at": 1766254970.7699487
+  },
+  "bear": {
+    "data": {
+      "word": "bear",
+      "phonetic": "/bɛə(ɹ)/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A large omnivorous mammal, related to the dog and raccoon, having shaggy hair, a very small tail, and flat feet; a member of family Ursidae."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A rough, unmannerly, uncouth person."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An investor who sells commodities, securities or futures in anticipation of a fall in prices."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A state policeman (short for smokey bear)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A large, hairy man, especially one who is homosexual."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A portable punching machine."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A block covered with coarse matting, used to scour the deck."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The fifteenth Lenormand card."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Something difficult or tiresome; a burden or chore."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To endeavour to depress the price of, or prices in."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(investments) Characterized by declining prices in securities markets or by belief that the prices will fall."
+        }
+      ],
+      "examples": [
+        "That window can be a bear to open.",
+        "to bear a railroad stock",
+        "The great bear market starting in 1929 scared a whole generation of investors."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一种大型杂食性哺乳动物，与狗和浣熊有关，有蓬松的毛发、非常小的尾巴和扁平足；熊科的成员。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "粗鲁、无礼、粗鲁的人。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "因预期价格下跌而出售商品、证券或期货的投资者。"
+        }
+      ]
+    },
+    "last_accessed": 1766255008.499572,
+    "cached_at": 1766255008.4995723
+  },
+  "fade": {
+    "data": {
+      "word": "fade",
+      "phonetic": "/feɪd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A golf shot that (for the right-handed player) curves intentionally to the right. See slice, hook, draw."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A haircut where the hair is short or shaved on the sides of the head and longer on top. See also high-top fade and low fade."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A fight."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A gradual decrease in the brightness of a shot or the volume of sound or music (as a means of cutting to a new scene or starting a new song)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of disappearing from a place so as not to be found; covert departure."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To grow weak; to lose strength; to decay; to perish gradually; to wither, as a plant."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To lose freshness, color, or brightness; to become faint in hue or tint; hence, to be wanting in color."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To sink away; to disappear gradually; to grow dim; to vanish."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cause to fade."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To bet against."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Weak; insipid; tasteless."
+        }
+      ],
+      "examples": [
+        "The milkman's whistling faded into the distance."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "（对于惯用右手的球员）有意向右弯曲的高尔夫击球。请参阅切片、钩子、绘制。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一种将头两侧的头发剪短或剃光、头顶留长的发型。另请参见高顶褪色和低顶褪色。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一场战斗。"
+        }
+      ]
+    },
+    "last_accessed": 1766255023.0121014,
+    "cached_at": 1766255023.012102
+  },
+  "squeeze": {
+    "data": {
+      "word": "squeeze",
+      "phonetic": "/skwiːz/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A close or tight fit."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A difficult position."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A hug or other affectionate grasp."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A romantic partner."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An illicit alcoholic drink made by squeezing Sterno through cheesecloth, etc., and mixing the result with fruit juice."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of bunting in an attempt to score a runner from third."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A play that forces an opponent to discard a card that gives up one or more tricks."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A traversal of a narrow passage."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(epigraphy) An impression of an inscription formed by pressing wet paper onto the surface and peeling off when dry."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The gradual closing of workings by the weight of the overlying strata."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A bribe or fee paid to a middleman, especially in China; the practice of requiring such a bribe or fee."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To apply pressure to from two or more sides at once."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To embrace closely; to give a tight hug to."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To fit into a tight place."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To remove something with difficulty, or apparent difficulty."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To put in a difficult position by presenting two or more choices."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To oppress with hardships, burdens, or taxes; to harass."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To attempt to score a runner from third by bunting."
+        }
+      ],
+      "examples": [
+        "I'm in a tight squeeze right now when it comes to my free time.",
+        "a gentle squeeze on the arm",
+        "I want to be your main squeeze.",
+        "The game ended in exciting fashion with a failed squeeze.",
+        "It was a tight squeeze, but I got through to the next section of the cave.",
+        "The light not being good enough for photography, I took a squeeze of the stone.",
+        "I squeezed the ball between my hands.",
+        "Can you squeeze through that gap?",
+        "He squeezed some money out of his wallet.",
+        "I'm being squeezed between my job and my volunteer work.",
+        "Jones squeezed in Smith with a perfect bunt."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "贴身或紧身。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "处境艰难。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "拥抱或其他深情的拥抱。"
+        }
+      ]
+    },
+    "last_accessed": 1766255031.618198,
+    "cached_at": 1766255031.6181982
+  }
+}

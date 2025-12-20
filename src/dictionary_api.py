@@ -144,90 +144,92 @@ class DictionaryAPI:
         
         return word_info
     
-    def get_random_words_info(self, count: int = 10) -> List[Dict]:
+    def get_random_words_info(self, count: int = 10, vocabulary_level: str = "cet6") -> List[Dict]:
         """
         获取随机单词的信息列表
         
         Args:
             count: 要获取的随机单词数量
+            vocabulary_level: 词汇级别，可选值: "cet4", "cet6", "gre"
             
         Returns:
             包含单词信息的字典列表
         """
         import random
         
-        # 常用英语单词列表作为种子
-        common_words = [
-            "the", "be", "to", "of", "and", "a", "in", "that", "have", "I",
-            "it", "for", "not", "on", "with", "he", "as", "you", "do", "at",
-            "this", "but", "his", "by", "from", "they", "we", "say", "her", "she",
-            "or", "an", "will", "my", "one", "all", "would", "there", "their",
-            "what", "so", "up", "out", "if", "about", "who", "get", "which", "go",
-            "me", "when", "make", "can", "like", "time", "no", "just", "him", "know",
-            "take", "people", "into", "year", "your", "good", "some", "could", "them",
-            "see", "other", "than", "then", "now", "look", "only", "come", "its",
-            "over", "think", "also", "back", "after", "use", "two", "how", "our",
-            "work", "first", "well", "way", "even", "new", "want", "because", "any",
-            "these", "give", "day", "most", "us", "is", "was", "are", "has", "had",
-            "been", "were", "said", "each", "which", "their", "time", "will", "about",
-            "many", "then", "them", "write", "would", "like", "so", "these", "her",
-            "long", "make", "thing", "see", "him", "two", "has", "look", "more",
-            "day", "could", "go", "come", "did", "number", "sound", "no", "most",
-            "people", "my", "over", "know", "water", "than", "call", "first", "who",
-            "may", "down", "side", "been", "now", "find", "any", "new", "work",
-            "part", "take", "get", "place", "made", "live", "where", "after", "back",
-            "little", "only", "round", "man", "year", "came", "show", "every",
-            "good", "me", "give", "our", "under", "name", "very", "through", "just",
-            "form", "sentence", "great", "think", "say", "help", "low", "line",
-            "differ", "turn", "cause", "much", "mean", "before", "move", "right",
-            "boy", "old", "too", "same", "tell", "does", "set", "three", "want",
-            "air", "well", "also", "play", "small", "end", "put", "home", "read",
-            "hand", "port", "large", "spell", "add", "even", "land", "here", "must",
-            "big", "high", "such", "follow", "act", "why", "ask", "men", "change",
-            "went", "light", "kind", "off", "need", "house", "picture", "try",
-            "again", "animal", "point", "mother", "world", "near", "build", "self",
-            "earth", "father", "head", "stand", "own", "page", "should", "country",
-            "found", "answer", "school", "grow", "study", "still", "learn", "plant",
-            "cover", "food", "sun", "four", "between", "state", "keep", "eye",
-            "never", "last", "let", "thought", "city", "tree", "cross", "farm",
-            "hard", "start", "might", "story", "saw", "far", "sea", "draw", "left",
-            "late", "run", "don't", "while", "press", "close", "night", "real",
-            "life", "few", "north", "open", "seem", "together", "next", "white",
-            "children", "begin", "got", "walk", "example", "ease", "paper", "group",
-            "always", "music", "those", "both", "mark", "often", "letter", "until",
-            "mile", "river", "car", "feet", "care", "second", "book", "carry",
-            "took", "science", "eat", "room", "friend", "began", "idea", "fish",
-            "mountain", "stop", "once", "base", "hear", "horse", "cut", "sure",
-            "watch", "color", "face", "wood", "main", "enough", "plain", "girl",
-            "usual", "young", "ready", "above", "ever", "red", "list", "though",
-            "feel", "talk", "bird", "soon", "body", "dog", "family", "direct",
-            "pose", "leave", "song", "measure", "door", "product", "black", "short",
-            "numeral", "class", "wind", "question", "happen", "complete", "ship",
-            "area", "half", "rock", "order", "fire", "south", "problem", "piece",
-            "told", "knew", "pass", "since", "top", "whole", "king", "space",
-            "heard", "best", "hour", "better", "during", "hundred", "five", "remember",
-            "step", "early", "hold", "west", "ground", "interest", "reach", "fast",
-            "verb", "sing", "listen", "six", "table", "travel", "less", "morning",
-            "ten", "simple", "several", "vowel", "toward", "war", "lay", "against",
-            "pattern", "slow", "center", "love", "person", "money", "serve", "appear",
-            "road", "map", "rain", "rule", "govern", "pull", "cold", "notice",
-            "voice", "unit", "power", "town", "fine", "certain", "fly", "fall",
-            "lead", "cry", "dark", "machine", "note", "wait", "plan", "figure",
-            "star", "box", "noun", "field", "rest", "correct", "able", "pound",
-            "done", "beauty", "drive", "stood", "contain", "front", "teach", "week",
-            "final", "gave", "green", "oh", "quick", "develop", "ocean", "warm",
-            "free", "minute", "strong", "special", "mind", "behind", "clear", "tail",
-            "produce", "fact", "street", "inch", "multiply", "nothing", "course",
-            "stay", "wheel", "full", "force", "blue", "object", "decide", "surface",
-            "deep", "moon", "island", "foot", "system", "busy", "test", "record",
-            "boat", "common", "gold", "possible", "plane", "stead", "dry", "wonder",
-            "laugh", "thousands", "ago", "ran", "check", "game", "shape", "equate",
-            "hot", "miss", "brought", "heat", "snow", "tire", "bring", "yes",
-            "distant", "fill", "east", "paint", "language", "among"
-        ]
+        # 根据词汇级别选择对应的词汇文件
+        vocabulary_files = {
+            "cet4": "data/cet4_words.txt",
+            "cet6": "data/cet6_words.txt", 
+            "gre": "data/gre_words.txt"
+        }
+        
+        # 默认词汇级别为cet6
+        if vocabulary_level not in vocabulary_files:
+            logger.warning(f"未知的词汇级别: {vocabulary_level}，使用默认级别: cet6")
+            vocabulary_level = "cet6"
+        
+        vocabulary_file = vocabulary_files[vocabulary_level]
+        
+        try:
+            # 尝试读取指定级别的词汇文件
+            with open(vocabulary_file, 'r', encoding='utf-8') as f:
+                vocabulary_words = [line.strip() for line in f.readlines() if line.strip()]
+            logger.info(f"成功加载 {vocabulary_level.upper()} 词汇，共 {len(vocabulary_words)} 个单词")
+            
+        except FileNotFoundError:
+            # 如果找不到指定级别的词汇文件，尝试使用其他级别的文件作为备选
+            logger.warning(f"未找到 {vocabulary_level.upper()} 词汇文件: {vocabulary_file}")
+            
+            # 备选方案：按优先级尝试其他词汇文件
+            fallback_levels = ["cet6", "cet4", "gre"]
+            vocabulary_words = None
+            
+            for level in fallback_levels:
+                if level != vocabulary_level:
+                    fallback_file = vocabulary_files[level]
+                    try:
+                        with open(fallback_file, 'r', encoding='utf-8') as f:
+                            vocabulary_words = [line.strip() for line in f.readlines() if line.strip()]
+                        logger.info(f"使用备选词汇级别: {level.upper()}，共 {len(vocabulary_words)} 个单词")
+                        break
+                    except FileNotFoundError:
+                        continue
+            
+            # 如果所有词汇文件都找不到，使用默认词汇列表
+            if vocabulary_words is None:
+                logger.warning("未找到任何词汇文件，使用默认词汇列表")
+                vocabulary_words = [
+                    "ability", "able", "about", "above", "accept", "according", "account", "across", "act", "action",
+                    "activity", "actually", "add", "address", "administration", "admit", "adult", "affect", "after",
+                    "again", "against", "age", "agency", "agent", "ago", "agree", "agreement", "ahead", "air",
+                    "all", "allow", "almost", "alone", "along", "already", "also", "although", "always", "American",
+                    "among", "amount", "analysis", "and", "animal", "another", "answer", "any", "anyone", "anything",
+                    "appear", "apply", "approach", "area", "argue", "arm", "around", "arrive", "art", "article",
+                    "artist", "as", "ask", "assume", "at", "attack", "attention", "attorney", "audience", "author",
+                    "authority", "available", "avoid", "away", "baby", "back", "bad", "bag", "ball", "bank",
+                    "bar", "base", "be", "beat", "beautiful", "because", "become", "bed", "before", "begin",
+                    "behavior", "behind", "believe", "benefit", "best", "better", "between", "beyond", "big", "bill",
+                    "billion", "bit", "black", "blood", "blue", "board", "body", "book", "born", "both",
+                    "box", "boy", "break", "bring", "brother", "budget", "build", "building", "business", "but",
+                    "buy", "by", "call", "camera", "campaign", "can", "cancer", "candidate", "capital", "car",
+                    "card", "care", "career", "carry", "case", "catch", "cause", "cell", "center", "central",
+                    "century", "certain", "certainly", "chair", "challenge", "chance", "change", "character", "charge", "check",
+                    "child", "choice", "choose", "church", "citizen", "city", "civil", "claim", "class", "clear",
+                    "clearly", "close", "coach", "cold", "collection", "college", "color", "come", "commercial", "common",
+                    "community", "company", "compare", "computer", "concern", "condition", "conference", "Congress", "consider", "consumer",
+                    "contain", "continue", "control", "cost", "could", "country", "couple", "course", "court", "cover",
+                    "create", "crime", "cultural", "culture", "cup", "current", "customer", "cut", "dark", "data",
+                    "daughter", "day", "dead", "deal", "death", "debate", "decade", "decide", "decision", "deep",
+                    "defense", "degree", "Democrat", "democratic", "describe", "design", "despite", "detail", "determine", "develop",
+                    "development", "die", "difference", "different", "difficult", "dinner", "direction", "director", "discover", "discuss",
+                    "discussion", "disease", "do", "doctor", "dog", "door", "down", "draw", "dream", "drive",
+                    "drop", "drug", "during", "each", "early", "east", "easy", "eat", "economic", "economy",
+                    "edge", "education", "effect", "effort", "eight", "either", "election", "else", "employee", "end"
+                ]
         
         # 随机选择指定数量的单词
-        selected_words = random.sample(common_words, min(count, len(common_words)))
+        selected_words = random.sample(vocabulary_words, min(count, len(vocabulary_words)))
         
         # 获取每个单词的详细信息
         word_infos = []

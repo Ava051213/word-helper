@@ -1,12 +1,12 @@
 {
   "deteriorate": {
-    "meaning": "To make worse; to make inferior in quality or value; to impair.",
+    "meaning": "使情况变得更糟；降低质量或价值；损害。",
     "example": "to deteriorate the mind",
     "category": "",
     "add_date": "2025-12-20T03:21:10.315671",
-    "last_reviewed": null,
-    "next_review": null,
-    "review_count": 0,
+    "last_reviewed": "2025-12-20T17:58:00.707880",
+    "next_review": "2025-12-21T17:58:00.707880",
+    "review_count": 1,
     "interval": 1,
     "difficulty": "normal"
   }

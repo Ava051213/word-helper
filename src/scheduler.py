@@ -12,7 +12,7 @@ from word_manager import WordManager
 
 
 def calculate_next_review_interval(current_interval: int, is_correct: bool) -> int:
-    """计算下次复习间隔
+    """计算下次复习间隔（基于标准艾宾浩斯遗忘曲线）
     
     Args:
         current_interval: 当前间隔天数
@@ -21,11 +21,23 @@ def calculate_next_review_interval(current_interval: int, is_correct: bool) -> i
     Returns:
         下次复习间隔天数
     """
+    # 标准艾宾浩斯遗忘曲线间隔（天）
+    eb_intervals = [1, 2, 4, 7, 15, 30]
+    
     if is_correct:
-        # 回答正确，间隔时间乘以3
-        return current_interval * 3
+        # 回答正确，按标准艾宾浩斯曲线递进到下一个间隔
+        try:
+            current_idx = eb_intervals.index(current_interval)
+            if current_idx < len(eb_intervals) - 1:
+                return eb_intervals[current_idx + 1]
+            else:
+                # 超出预设间隔后，按指数增长（乘以2）
+                return current_interval * 2
+        except ValueError:
+            # 如果当前间隔不在标准列表中，按指数增长
+            return current_interval * 2
     else:
-        # 回答错误，间隔时间重置为1天
+        # 回答错误，重置为1天
         return 1
 
 
@@ -86,10 +98,11 @@ class Scheduler:
         info = self.word_manager.get_word(word)
         if info:
             now = datetime.datetime.now()
-            # 设置初次复习时间为1天后
-            next_review = now + datetime.timedelta(days=1)
-            info['next_review'] = next_review.isoformat()
+            # 新单词立即可以复习，设置next_review为当前时间
+            # 这样新单词会被get_words_for_review方法正确识别
+            info['next_review'] = now.isoformat()
             info['interval'] = 1
+            info['review_count'] = 0  # 确保新单词的复习次数为0
             self.word_manager.update_word(word, info)
     
     def _update_word_schedule(self, word: str, info: dict, is_correct: bool) -> None:
@@ -100,16 +113,9 @@ class Scheduler:
         info['review_count'] = info.get('review_count', 0) + 1
         info['last_reviewed'] = now.isoformat()
         
-        if is_correct:
-            # 回答正确，延长复习间隔
-            current_interval_idx = self.intervals.index(info['interval']) if info['interval'] in self.intervals else 0
-            if current_interval_idx < len(self.intervals) - 1:
-                next_interval = self.intervals[current_interval_idx + 1]
-            else:
-                next_interval = info['interval'] * 2  # 超出预设间隔后翻倍
-        else:
-            # 回答错误，缩短复习间隔
-            next_interval = 1
+        # 使用标准艾宾浩斯遗忘曲线计算下次复习间隔
+        current_interval = info.get('interval', 1)
+        next_interval = calculate_next_review_interval(current_interval, is_correct)
         
         # 设置下次复习时间
         next_review = now + datetime.timedelta(days=next_interval)
