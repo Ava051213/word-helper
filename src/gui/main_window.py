@@ -41,9 +41,7 @@ class WordReminderGUI:
         self.setup_styles()
         
         # 初始化数据管理器
-        # 使用正确的数据文件路径
-        data_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "words.json")
-        self.word_manager = WordManager(data_file_path)
+        self.word_manager = WordManager()
         self.scheduler = Scheduler(self.word_manager)
         
         # 移除自动测试功能，让用户通过按钮手动操作
@@ -152,8 +150,9 @@ class WordReminderGUI:
     def start_background_preloading(self):
         """启动后台预加载"""
         # 获取当前词库中的单词列表用于预加载
-        if hasattr(self.word_manager, 'words') and self.word_manager.words:
-            words_to_preload = list(self.word_manager.words.keys())[:50]  # 预加载前50个单词
+        all_words = self.word_manager.get_all_words()
+        if all_words:
+            words_to_preload = [w['word'] for w in all_words[:50]]  # 预加载前50个单词
             self.buffered_dictionary_api.start_preloading(words_to_preload)
     
     def refresh_word_list_optimized(self):
@@ -195,7 +194,7 @@ class WordReminderGUI:
                 'cache_size': cache_stats['cache_size'],
                 'total_requests': cache_stats['total_requests'],
                 'async_operations': async_ops,
-                'word_count': len(self.word_manager.words) if hasattr(self.word_manager, 'words') else 0
+                'word_count': self.word_manager.get_statistics().get('total_words', 0)
             }
             return stats
         return {}
@@ -584,25 +583,34 @@ class WordReminderGUI:
                 messagebox.showwarning("警告", f"未找到单词 '{word}' 的详细信息！")
                 return
             
-            # 更新单词信息
-            if word in self.word_manager.words:
+            # 获取当前单词信息
+            current_info = self.word_manager.get_word(word)
+            if current_info:
+                meaning = current_info['meaning']
+                example = current_info.get('example', '')
+                phonetic = current_info.get('phonetic', '')
+
                 # 更新释义（如果获取到了中文释义则使用中文释义）
                 if word_info.get('chinese_meanings'):
-                    self.word_manager.words[word]['meaning'] = word_info['chinese_meanings'][0]['definition']
+                    meaning = word_info['chinese_meanings'][0]['definition']
                 elif word_info.get('meanings'):
-                    self.word_manager.words[word]['meaning'] = word_info['meanings'][0]['definition']
+                    meaning = word_info['meanings'][0]['definition']
                 
                 # 如果当前没有例句但获取到了例句，则添加例句
-                if not self.word_manager.words[word].get('example') and word_info.get('examples'):
-                    self.word_manager.words[word]['example'] = word_info['examples'][0]
+                if not example and word_info.get('examples'):
+                    example = word_info['examples'][0]
+                
+                # 获取音标
+                if word_info.get('phonetic'):
+                    phonetic = word_info['phonetic']
                 
                 # 保存更新
-                self.word_manager.save_words()
-                
-                # 刷新单词列表
-                self.refresh_word_list()
-                
-                messagebox.showinfo("成功", f"单词 '{word}' 的信息已更新！")
+                if self.word_manager.update_word(word, meaning=meaning, example=example, phonetic=phonetic):
+                    # 刷新单词列表
+                    self.refresh_word_list()
+                    messagebox.showinfo("成功", f"单词 '{word}' 的信息已更新！")
+                else:
+                    messagebox.showerror("错误", f"更新单词 '{word}' 失败！")
             else:
                 messagebox.showwarning("警告", f"单词 '{word}' 不在词库中！")
         except Exception as e:
@@ -944,13 +952,15 @@ class WordReminderGUI:
         word = self.word_entry.get().strip().lower()
         
         # 检查单词是否已存在（显示确认对话框）
-        if word in self.word_manager.words:
+        existing_word = self.word_manager.get_word(word)
+        if existing_word:
             if not messagebox.askyesno("确认", f"单词 '{word}' 已存在，是否更新？"):
                 return
         
         # 尝试从词典API获取单词信息
         meaning = ""
         example = ""
+        phonetic = ""
         if hasattr(self.word_manager, 'dictionary_api') and self.word_manager.dictionary_api:
             # 显示加载指示器
             self.show_loading_indicator(f"正在获取单词 '{word}' 的信息...")
@@ -962,6 +972,7 @@ class WordReminderGUI:
                     info_text = f"找到单词信息:\n单词: {word_info['word']}"
                     if word_info['phonetic']:
                         info_text += f"\n音标: {word_info['phonetic']}"
+                        phonetic = word_info['phonetic']
                     
                     # 优先显示中文释义
                     if word_info['chinese_meanings']:
@@ -1015,44 +1026,30 @@ class WordReminderGUI:
             self.add_button.config(state=tk.NORMAL, text="添加单词")
             return
         
-        example = self.example_entry.get().strip()
-        category = self.category_entry.get().strip()
+        example_input = self.example_entry.get().strip()
+        category_input = self.category_entry.get().strip()
         
-        # 添加单词
-        self.word_manager.words[word] = {
-            "meaning": meaning_input,
-            "example": example,
-            "category": category,
-            "add_date": datetime.datetime.now().isoformat(),
-            "last_reviewed": None,
-            "next_review": None,
-            "review_count": 0,
-            "interval": 1,
-            "difficulty": "normal"
-        }
+        # 添加或更新单词
+        success = False
+        if existing_word:
+            success = self.word_manager.update_word(word, meaning=meaning_input, example=example_input, category=category_input, phonetic=phonetic)
+            action = "更新"
+        else:
+            success = self.word_manager.add_word_direct(word, meaning_input, example_input, phonetic)
+            # 如果有分类信息，由于 add_word_direct 不支持分类，我们需要额外更新一下
+            if success and category_input:
+                self.word_manager.update_word(word, category=category_input)
+            action = "添加"
         
-        self.word_manager.save_words()
-        
-        # 立即为新单词安排复习时间
-        self.scheduler.schedule_new_word(word)
-        
-        # 清空输入框
-        self.word_entry.delete(0, tk.END)
-        self.meaning_entry.delete(0, tk.END)
-        self.example_entry.delete(0, tk.END)
-        self.category_entry.delete(0, tk.END)
-        
-        # 恢复按钮状态
-        self.add_button.config(state=tk.NORMAL, text="添加单词")
-        
-        # 增强成功反馈
-        self.show_success_feedback(f"单词 '{word}' 添加成功！")
-        
-        # 刷新单词列表
-        self.refresh_word_list()
-        
-        # 更新提醒
-        self.update_reminder()
+        if success:
+            self.refresh_word_list()
+            self.update_review_count()
+            self.show_success_feedback(f"单词 '{word}' {action}成功！")
+            self.clear_form()
+            self.update_reminder()
+        else:
+            self.show_error_feedback(f"单词 '{word}' {action}失败！")
+            self.add_button.config(state=tk.NORMAL, text="添加单词")
     
     def setup_form_validation(self):
         """设置表单验证"""
@@ -1093,7 +1090,7 @@ class WordReminderGUI:
             self.set_field_validation_state('word', 'warning', "单词太短，建议至少2个字符")
             return True  # 警告但不阻止提交
         
-        if word in self.word_manager.words:
+        if self.word_manager.get_word(word):
             self.set_field_validation_state('word', 'warning', "单词已存在，将更新现有记录")
             return True  # 警告但不阻止提交
         
@@ -1293,17 +1290,21 @@ class WordReminderGUI:
         for item in self.word_tree.get_children():
             self.word_tree.delete(item)
         
+        # 获取所有数据
+        all_words = self.word_manager.get_all_words()
+        
         # 添加新数据
         search_term = self.view_search_var.get().lower()
-        for word, info in self.word_manager.words.items():
+        for info in all_words:
+            word = info['word']
             # 如果有搜索条件，过滤数据
             if search_term and search_term not in word.lower() and search_term not in info['meaning'].lower():
                 continue
                 
-            add_date = info.get('add_date', '')[:10] if info.get('add_date') else ''
+            add_date = info.get('added_date', '')[:10] if info.get('added_date') else ''
             review_count = info.get('review_count', 0)
             next_review = info.get('next_review', '')[:10] if info.get('next_review') else ''
-            self.word_tree.insert("", tk.END, values=(word, info['meaning'], info['category'], add_date, review_count, next_review))
+            self.word_tree.insert("", tk.END, values=(word, info['meaning'], info.get('category', ''), add_date, review_count, next_review))
     
     def on_view_search_change(self, *args):
         """视图搜索框内容变化时触发"""
@@ -1322,10 +1323,11 @@ class WordReminderGUI:
         
         # 确认删除
         if messagebox.askyesno("确认删除", f"确定要删除单词 '{word}' 吗？"):
-            del self.word_manager.words[word]
-            self.word_manager.save_words()
-            self.refresh_word_list()
-            messagebox.showinfo("成功", f"单词 '{word}' 删除成功！")
+            if self.word_manager.delete_word(word):
+                self.refresh_word_list()
+                messagebox.showinfo("成功", f"单词 '{word}' 删除成功！")
+            else:
+                messagebox.showerror("错误", f"单词 '{word}' 删除失败！")
     
     def edit_selected_word(self):
         """编辑选中的单词"""
@@ -1384,20 +1386,20 @@ class WordReminderGUI:
         def save_changes():
             """保存修改"""
             # 更新单词信息
-            self.word_manager.words[word]['meaning'] = meaning_var.get().strip()
-            self.word_manager.words[word]['example'] = example_var.get().strip()
-            self.word_manager.words[word]['category'] = category_var.get().strip()
+            meaning = meaning_var.get().strip()
+            example = example_var.get().strip()
+            category = category_var.get().strip()
             
-            # 保存到文件
-            self.word_manager.save_words()
-            
-            # 刷新单词列表
-            self.refresh_word_list()
-            
-            # 关闭编辑窗口
-            edit_window.destroy()
-            
-            messagebox.showinfo("成功", f"单词 '{word}' 修改成功！")
+            if self.word_manager.update_word(word, meaning=meaning, example=example, category=category):
+                # 刷新单词列表
+                self.refresh_word_list()
+                
+                # 关闭编辑窗口
+                edit_window.destroy()
+                
+                messagebox.showinfo("成功", f"单词 '{word}' 修改成功！")
+            else:
+                messagebox.showerror("错误", f"单词 '{word}' 修改失败！")
         
         # 使用更大的按钮和更好的间距
         ttk.Button(button_frame, text="保存", command=save_changes, width=8).pack(side=tk.LEFT, padx=10, pady=5)
@@ -1545,8 +1547,11 @@ class WordReminderGUI:
             if is_known is not None:
                 # 检查复习类型：快捷复习不更新复习数据
                 if not getattr(self, 'is_quick_review', False):
-                    # 标准复习：更新单词调度
-                    self.scheduler._update_word_schedule(self.current_review_word, info, is_known)
+                    # 标准复习：更新单词调度 (使用 SM-2 质量映射)
+                    # True (认识) -> 4 (良好)
+                    # False (不认识) -> 1 (重来)
+                    quality = 4 if is_known else 1
+                    self.word_manager.update_review_status(self.current_review_word, quality)
                 else:
                     # 快捷复习：不更新任何复习数据，只记录结果
                     pass
@@ -2101,8 +2106,10 @@ class WordReminderGUI:
         sort_by = self.sort_var.get()
         
         # 搜索匹配的单词
+        all_words = self.word_manager.get_all_words()
         matched_words = []
-        for word, info in self.word_manager.words.items():
+        for info in all_words:
+            word = info['word']
             # 根据搜索范围进行匹配
             if search_scope == "all":
                 # 搜索所有字段
@@ -2128,9 +2135,9 @@ class WordReminderGUI:
         
         # 显示搜索结果
         for word, info in matched_words:
-            add_date = info.get('add_date', '')[:10] if info.get('add_date') else ''
+            add_date = info.get('added_date', '')[:10] if info.get('added_date') else ''
             review_count = info.get('review_count', 0)
-            self.search_tree.insert("", tk.END, values=(word, info['meaning'], info['category'], add_date, review_count))
+            self.search_tree.insert("", tk.END, values=(word, info['meaning'], info.get('category', ''), add_date, review_count))
         
         # 显示搜索结果统计
         self._show_search_stats(len(matched_words), keyword)
@@ -2447,17 +2454,24 @@ class WordReminderGUI:
     
     def show_statistics(self):
         """显示统计信息"""
-        total_words = len(self.word_manager.words)
-        reviewed_words = sum(1 for info in self.word_manager.words.values() if info['review_count'] > 0)
-        total_reviews = sum(info['review_count'] for info in self.word_manager.words.values())
+        stats = self.word_manager.get_statistics()
+        total_words = stats['total_words']
+        reviewed_words = stats['reviewed_words']
+        
+        # 获取所有单词以计算总复习次数和本周复习情况
+        all_words = self.word_manager.get_all_words()
+        total_reviews = sum(info.get('review_count', 0) for info in all_words)
         
         # 计算最近7天的复习情况
         week_reviews = 0
         now = datetime.datetime.now()
-        for info in self.word_manager.words.values():
-            last_reviewed = info.get('last_reviewed')
+        for info in all_words:
+            last_reviewed = info.get('last_review') # 注意：SQLite 中字段名是 last_review
             if last_reviewed:
-                last_reviewed_time = datetime.datetime.fromisoformat(last_reviewed)
+                if isinstance(last_reviewed, str):
+                    last_reviewed_time = datetime.datetime.fromisoformat(last_reviewed)
+                else:
+                    last_reviewed_time = last_reviewed
                 if (now - last_reviewed_time).days <= 7:
                     week_reviews += 1
         
@@ -2475,7 +2489,7 @@ class WordReminderGUI:
 """
         
         if total_words > 0:
-            review_rate = (reviewed_words / total_words) * 100
+            review_rate = stats['review_rate']
             overview_text += f"复习率: {review_rate:.1f}%\n"
         
         if total_reviews > 0:
@@ -2491,7 +2505,8 @@ class WordReminderGUI:
     def update_reminder(self):
         """更新首页提醒"""
         review_count = len(self.word_manager.get_words_for_review())
-        total_words = len(self.word_manager.words)
+        stats = self.word_manager.get_statistics()
+        total_words = stats['total_words']
         
         reminder_text = f"""
 今日学习提醒
@@ -2636,9 +2651,9 @@ class WordReminderGUI:
         # 设置标签样式
         self._setup_chart_text_tags()
         
-        # 获取统计数据
-        words = self.word_manager.words
-        if not words:
+        # 获取所有单词数据
+        all_words = self.word_manager.get_all_words()
+        if not all_words:
             self._insert_colored_text("暂无数据可显示趋势图。", "title")
             return
         
@@ -2652,7 +2667,7 @@ class WordReminderGUI:
         now = datetime.datetime.now()
         daily_new_words = {}  # 每日新增单词数
         daily_reviewed_words = {}  # 每日复习单词数
-        daily_mastered_words = {}  # 每日掌握单词数（复习次数>=3）
+        daily_mastered_words = {}  # 每日掌握单词数（掌握等级>=4）
         
         # 初始化指定天数的数据
         for i in range(days_range):
@@ -2662,42 +2677,49 @@ class WordReminderGUI:
             daily_mastered_words[date_key] = 0
         
         # 统计每日数据
-        for word, info in words.items():
+        for info in all_words:
             # 统计新增单词
-            add_date = info.get('add_date')
+            add_date = info.get('added_date') # 注意：SQLite 中字段名是 added_date
             if add_date:
                 try:
-                    add_date_obj = datetime.datetime.fromisoformat(add_date)
+                    if isinstance(add_date, str):
+                        add_date_obj = datetime.datetime.fromisoformat(add_date)
+                    else:
+                        add_date_obj = add_date
                     add_date_key = add_date_obj.strftime('%Y-%m-%d')
                     if add_date_key in daily_new_words:
                         daily_new_words[add_date_key] += 1
-                except ValueError:
-                    pass  # 忽略无效日期格式
+                except (ValueError, TypeError):
+                    pass
             
             # 统计复习单词
-            last_reviewed = info.get('last_reviewed')
+            last_reviewed = info.get('last_review') # 注意：SQLite 中字段名是 last_review
             if last_reviewed:
                 try:
-                    review_date_obj = datetime.datetime.fromisoformat(last_reviewed)
+                    if isinstance(last_reviewed, str):
+                        review_date_obj = datetime.datetime.fromisoformat(last_reviewed)
+                    else:
+                        review_date_obj = last_reviewed
                     review_date_key = review_date_obj.strftime('%Y-%m-%d')
                     if review_date_key in daily_reviewed_words:
                         daily_reviewed_words[review_date_key] += 1
                         
-                        # 统计掌握单词（复习次数>=3）
-                        if info.get('review_count', 0) >= 3:
+                        # 统计掌握单词（掌握等级>=4）
+                        if info.get('mastery_level', 0) >= 4:
                             daily_mastered_words[review_date_key] += 1
-                except ValueError:
-                    pass  # 忽略无效日期格式
+                except (ValueError, TypeError):
+                    pass
         
         # 插入标题
         self._insert_colored_text("学习趋势图表\n", "title")
         self._insert_colored_text("=" * 20 + "\n", "separator")
         
         # 添加关键指标
-        total_words = len(words)
-        reviewed_words = sum(1 for info in words.values() if info['review_count'] > 0)
-        mastered_words = sum(1 for info in words.values() if info['review_count'] >= 3)
-        review_rate = (reviewed_words / total_words * 100) if total_words > 0 else 0
+        stats = self.word_manager.get_statistics()
+        total_words = stats['total_words']
+        reviewed_words = stats['reviewed_words']
+        mastered_words = stats['mastered_words']
+        review_rate = stats['review_rate']
         mastery_rate = (mastered_words / total_words * 100) if total_words > 0 else 0
         
         # 关键指标展示
@@ -2745,7 +2767,8 @@ class WordReminderGUI:
         self.review_start_time = time.time()
         
         # 获取所有单词
-        all_words = list(self.word_manager.words.keys())
+        all_words_info = self.word_manager.get_all_words()
+        all_words = [w['word'] for w in all_words_info]
         
         if not all_words:
             messagebox.showinfo("提示", "词库中暂无单词。\n\n建议：\n1. 添加更多单词到词库中\n2. 使用随机生成功能添加单词")
@@ -2757,7 +2780,11 @@ class WordReminderGUI:
         self.review_words = all_words[:20]  # 最多复习20个单词
         
         # 检查是否有新单词（未复习过的单词）
-        new_words = [word for word in self.review_words if self.word_manager.get_word(word).get('review_count', 0) == 0]
+        new_words = []
+        for word in self.review_words:
+            word_info = self.word_manager.get_word(word)
+            if word_info and word_info.get('review_count', 0) == 0:
+                new_words.append(word)
         
         self.review_results = []  # 清空之前的复习结果
         self.current_review_index = 0
@@ -2807,26 +2834,32 @@ class WordReminderGUI:
         """备份数据"""
         try:
             import shutil
-            backup_path = f"data/backup_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.json"
-            shutil.copy("data/words.json", backup_path)
-            messagebox.showinfo("成功", f"数据备份成功！\n备份文件: {backup_path}")
+            os.makedirs("data/backups", exist_ok=True)
+            backup_path = f"data/backups/backup_{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}.db"
+            db_file = "data/words.db"
+            if os.path.exists(db_file):
+                shutil.copy(db_file, backup_path)
+                messagebox.showinfo("成功", f"数据备份成功！\n备份文件: {backup_path}")
+            else:
+                messagebox.showerror("错误", "数据库文件不存在，无法备份")
         except Exception as e:
             messagebox.showerror("错误", f"备份失败: {str(e)}")
     
     def restore_data(self):
         """恢复数据"""
-        messagebox.showinfo("提示", "请手动替换 data/words.json 文件来恢复数据")
+        messagebox.showinfo("提示", "请手动将备份的 .db 文件替换为 data/words.db 来恢复数据")
     
     def clear_data(self):
         """清空数据"""
         if messagebox.askyesno("确认", "确定要清空所有单词数据吗？此操作不可恢复！"):
-            self.word_manager.words = {}
-            self.word_manager.save_words()
-            self.refresh_word_list()
-            self.update_review_count()
-            self.update_reminder()
-            self.show_statistics()
-            messagebox.showinfo("成功", "所有数据已清空！")
+            if self.word_manager.clear_all_words():
+                self.refresh_word_list()
+                self.update_review_count()
+                self.update_reminder()
+                self.show_statistics()
+                messagebox.showinfo("成功", "所有数据已清空！")
+            else:
+                messagebox.showerror("错误", "清空数据失败！")
     
     def export_chart(self):
         """导出图表数据"""
@@ -2865,33 +2898,39 @@ class WordReminderGUI:
                 daily_mastered_words[date_key] = 0
             
             # 统计每日数据
-            words = self.word_manager.words
-            for word, info in words.items():
+            all_words = self.word_manager.get_all_words()
+            for info in all_words:
                 # 统计新增单词
-                add_date = info.get('add_date')
+                add_date = info.get('added_date')
                 if add_date:
                     try:
-                        add_date_obj = datetime.datetime.fromisoformat(add_date)
+                        if isinstance(add_date, str):
+                            add_date_obj = datetime.datetime.fromisoformat(add_date)
+                        else:
+                            add_date_obj = add_date
                         add_date_key = add_date_obj.strftime('%Y-%m-%d')
                         if add_date_key in daily_new_words:
                             daily_new_words[add_date_key] += 1
-                    except ValueError:
-                        pass  # 忽略无效日期格式
+                    except (ValueError, TypeError):
+                        pass
                 
                 # 统计复习单词
-                last_reviewed = info.get('last_reviewed')
+                last_reviewed = info.get('last_review')
                 if last_reviewed:
                     try:
-                        review_date_obj = datetime.datetime.fromisoformat(last_reviewed)
+                        if isinstance(last_reviewed, str):
+                            review_date_obj = datetime.datetime.fromisoformat(last_reviewed)
+                        else:
+                            review_date_obj = last_reviewed
                         review_date_key = review_date_obj.strftime('%Y-%m-%d')
                         if review_date_key in daily_reviewed_words:
                             daily_reviewed_words[review_date_key] += 1
                             
-                            # 统计掌握单词（复习次数>=3）
-                            if info.get('review_count', 0) >= 3:
+                            # 统计掌握单词（掌握等级>=4）
+                            if info.get('mastery_level', 0) >= 4:
                                 daily_mastered_words[review_date_key] += 1
-                    except ValueError:
-                        pass  # 忽略无效日期格式
+                    except (ValueError, TypeError):
+                        pass
             
             # 写入CSV文件
             with open(file_path, 'w', newline='', encoding='utf-8') as csvfile:

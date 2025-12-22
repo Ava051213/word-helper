@@ -36,4 +36,6 @@ env/
 word_helper_backup/
 backup_optimization/
 data/backup/
+data/*.db
+data/backups/
 *.log
