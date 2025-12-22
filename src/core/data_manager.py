@@ -15,10 +15,14 @@ from typing import Dict, List
 class DataManager:
     """数据管理器"""
     
-    def __init__(self, data_file: str = "data/words.json"):
+    def __init__(self, data_file: str = None):
         """初始化数据管理器"""
-        self.data_file = data_file
-        self.backup_dir = "data/backups"
+        if data_file:
+            self.data_file = data_file
+        else:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+            self.data_file = os.path.join(base_dir, "data", "words.json")
+        self.backup_dir = os.path.join(os.path.dirname(self.data_file), "backups")
         os.makedirs(self.backup_dir, exist_ok=True)
     
     def export_to_csv(self, csv_file: str = "data/words_export.csv") -> bool:

@@ -8,7 +8,7 @@
 import datetime
 import random
 from typing import List
-from word_manager import WordManager
+from .word_manager import WordManager
 
 
 def calculate_next_review_interval(current_interval: int, is_correct: bool) -> int:

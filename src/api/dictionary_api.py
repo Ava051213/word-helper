@@ -8,11 +8,12 @@
 import requests
 import json
 import logging
+import time
 from typing import Dict, Optional, List
 
 # 导入翻译API
 try:
-    from translation_api import TranslationAPI
+    from .translation_api import TranslationAPI
     TRANSLATION_API_AVAILABLE = True
 except ImportError:
     TRANSLATION_API_AVAILABLE = False
@@ -29,6 +30,8 @@ class DictionaryAPI:
     def __init__(self):
         """初始化词典API客户端"""
         self.base_url = "https://api.dictionaryapi.dev/api/v2/entries/en"
+        self.max_retries = 3
+        self.backoff_factor = 0.5
         
         # 初始化翻译API
         if TRANSLATION_API_AVAILABLE:
@@ -45,42 +48,49 @@ class DictionaryAPI:
         Returns:
             包含单词信息的字典，如果查询失败则返回None
         """
-        try:
-            # 记录请求开始
-            logger.info(f"正在查询单词: {word}")
-            
-            # 发送API请求
-            url = f"{self.base_url}/{word.lower()}"
-            response = requests.get(url, timeout=10)
-            
-            # 检查响应状态
-            if response.status_code == 200:
-                data = response.json()
-                result = self._parse_response(data[0])  # API返回的是列表，取第一个结果
-                logger.info(f"成功获取单词 '{word}' 的信息")
-                return result
-            elif response.status_code == 404:
-                logger.warning(f"未找到单词 '{word}' 的定义")
-                return None
-            else:
-                logger.error(f"API请求失败，状态码: {response.status_code}")
-                return None
+        url = f"{self.base_url}/{word.lower()}"
+        attempt = 0
+        last_error = None
+        
+        while attempt < self.max_retries:
+            try:
+                logger.info(f"正在查询单词: {word} (尝试 {attempt + 1}/{self.max_retries})")
+                response = requests.get(url, timeout=10)
                 
-        except requests.exceptions.Timeout:
-            logger.error(f"网络请求超时: {word}")
-            return None
-        except requests.exceptions.ConnectionError:
-            logger.error(f"网络连接错误: 无法连接到词典服务器")
-            return None
-        except requests.exceptions.RequestException as e:
-            logger.error(f"网络请求错误: {e}")
-            return None
-        except json.JSONDecodeError as e:
-            logger.error(f"JSON解析错误: {e}")
-            return None
-        except Exception as e:
-            logger.error(f"获取单词信息时发生错误: {e}")
-            return None
+                if response.status_code == 200:
+                    data = response.json()
+                    result = self._parse_response(data[0])
+                    logger.info(f"成功获取单词 '{word}' 的信息")
+                    return result
+                if response.status_code == 404:
+                    logger.warning(f"未找到单词 '{word}' 的定义")
+                    return None
+                
+                last_error = f"状态码 {response.status_code}"
+                logger.warning(f"API请求失败: {last_error}")
+            except requests.exceptions.Timeout as e:
+                last_error = f"超时: {e}"
+                logger.warning(f"网络请求超时: {word}")
+            except requests.exceptions.ConnectionError as e:
+                last_error = f"连接错误: {e}"
+                logger.warning("网络连接错误: 无法连接到词典服务器")
+            except requests.exceptions.RequestException as e:
+                last_error = f"请求错误: {e}"
+                logger.warning(f"网络请求错误: {e}")
+            except json.JSONDecodeError as e:
+                last_error = f"JSON解析错误: {e}"
+                logger.warning(f"JSON解析错误: {e}")
+            except Exception as e:
+                last_error = f"未知错误: {e}"
+                logger.warning(f"获取单词信息时发生错误: {e}")
+            
+            attempt += 1
+            if attempt < self.max_retries:
+                sleep_seconds = self.backoff_factor * (2 ** (attempt - 1))
+                time.sleep(sleep_seconds)
+        
+        logger.error(f"获取单词 '{word}' 信息失败: {last_error}")
+        return None
     
     def _parse_response(self, data: Dict) -> Dict:
         """解析API响应数据
@@ -158,10 +168,11 @@ class DictionaryAPI:
         import random
         
         # 根据词汇级别选择对应的词汇文件
+        base_dir = os.path.dirname(os.path.dirname(__file__))
         vocabulary_files = {
-            "cet4": "data/cet4_words.txt",
-            "cet6": "data/cet6_words.txt", 
-            "gre": "data/gre_words.txt"
+            "cet4": os.path.join(base_dir, "data", "cet4_words.txt"),
+            "cet6": os.path.join(base_dir, "data", "cet6_words.txt"),
+            "gre": os.path.join(base_dir, "data", "gre_words.txt")
         }
         
         # 默认词汇级别为cet6

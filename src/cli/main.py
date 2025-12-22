@@ -9,11 +9,11 @@ import sys
 import os
 
 # 将src目录添加到Python路径中
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '.'))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from word_manager import WordManager
-from scheduler import Scheduler
-from utils import show_menu, get_user_choice
+from core.word_manager import WordManager
+from core.scheduler import Scheduler
+from utils.common import show_menu, get_user_choice, init_logging
 
 
 def main():
@@ -23,8 +23,12 @@ def main():
     print("基于艾宾浩斯记忆曲线的智能单词记忆系统")
     print("=" * 50)
     
-    # 初始化单词管理器和调度器
-    word_manager = WordManager()
+    # 初始化日志
+    init_logging()
+    
+    # 初始化单词管理器和调度器（统一数据文件路径）
+    data_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "words.json")
+    word_manager = WordManager(data_file_path)
     scheduler = Scheduler(word_manager)
     
     while True:

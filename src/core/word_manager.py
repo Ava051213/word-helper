@@ -12,11 +12,11 @@ from typing import Dict, List, Optional
 
 # 导入词典API模块
 try:
-    from buffered_dictionary_api import BufferedDictionaryAPI
+    from ..api.buffered_dictionary_api import BufferedDictionaryAPI
     DICTIONARY_API_AVAILABLE = True
 except ImportError:
     try:
-        from dictionary_api import DictionaryAPI
+        from ..api.dictionary_api import DictionaryAPI
         DICTIONARY_API_AVAILABLE = True
     except ImportError:
         DICTIONARY_API_AVAILABLE = False
@@ -26,9 +26,13 @@ except ImportError:
 class WordManager:
     """单词管理器"""
     
-    def __init__(self, data_file: str = "../data/words.json"):
+    def __init__(self, data_file: str = None):
         """初始化单词管理器"""
-        self.data_file = data_file
+        if data_file:
+            self.data_file = data_file
+        else:
+            base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+            self.data_file = os.path.join(base_dir, "data", "words.json")
         self.words = self.load_words()
         
         # 初始化词典API
@@ -38,7 +42,7 @@ class WordManager:
             except Exception as e:
                 print(f"无法初始化缓冲词典API: {e}，回退到普通词典API")
                 try:
-                    from dictionary_api import DictionaryAPI
+                    from ..api.dictionary_api import DictionaryAPI
                     self.dictionary_api = DictionaryAPI()
                 except Exception as e2:
                     print(f"无法初始化普通词典API: {e2}")
@@ -70,6 +74,9 @@ class WordManager:
         word = input("请输入单词: ").strip().lower()
         if not word:
             print("单词不能为空！")
+            return
+        if not word.isalpha():
+            print("单词只能包含字母！")
             return
         
         if word in self.words:
@@ -148,6 +155,9 @@ class WordManager:
             bool: 添加成功返回True，否则返回False
         """
         if not word or not meaning:
+            return False
+        
+        if not word.strip().isalpha():
             return False
         
         word = word.strip().lower()

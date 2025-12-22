@@ -16,11 +16,12 @@ import time
 import random
 
 # 添加src目录到Python路径
-sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from word_manager import WordManager
-from scheduler import Scheduler
-from buffered_dictionary_api import BufferedDictionaryAPI
+from core.word_manager import WordManager
+from core.scheduler import Scheduler
+from api.buffered_dictionary_api import BufferedDictionaryAPI
+from utils.common import init_logging
 
 
 class WordReminderGUI:
@@ -33,12 +34,15 @@ class WordReminderGUI:
         self.root.geometry("1200x800")
         self.root.minsize(1000, 700)
         
+        # 初始化日志
+        init_logging()
+        
         # 设置样式
         self.setup_styles()
         
         # 初始化数据管理器
         # 使用正确的数据文件路径
-        data_file_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "data", "words.json")
+        data_file_path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "data", "words.json")
         self.word_manager = WordManager(data_file_path)
         self.scheduler = Scheduler(self.word_manager)
         

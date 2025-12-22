@@ -7,3 +7,10 @@
 # PyQt5==5.15.7
 # PyQt6==6.4.0
 # kivy==2.1.0
+ 
+# 基础依赖
+requests>=2.31.0
+deep-translator>=1.11.4
+
+# 测试（可选）
+# pytest>=7.4.3

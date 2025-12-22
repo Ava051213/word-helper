@@ -15,10 +15,10 @@ import datetime
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src'))
 
-from word_manager import WordManager
-from scheduler import Scheduler
-from scheduler import calculate_next_review_interval
-from data_manager import DataManager
+from core.word_manager import WordManager
+from core.scheduler import Scheduler
+from core.scheduler import calculate_next_review_interval
+from core.data_manager import DataManager
 
 
 class TestWordManager(unittest.TestCase):
@@ -44,6 +44,12 @@ class TestWordManager(unittest.TestCase):
         self.assertTrue(result)
         self.assertIn(word, self.word_manager.words)
         self.assertEqual(self.word_manager.words[word]["meaning"], meaning)
+    
+    def test_add_word_invalid(self):
+        """测试非法单词输入"""
+        self.assertFalse(self.word_manager.add_word_direct("", "测试"))
+        self.assertFalse(self.word_manager.add_word_direct("test123", "测试"))
+        self.assertFalse(self.word_manager.add_word_direct("hello-world", "测试"))
     
     def test_get_word(self):
         """测试获取单词"""
@@ -165,12 +171,29 @@ class TestUtils(unittest.TestCase):
     
     def test_calculate_next_review_interval(self):
         """测试计算下次复习间隔"""
-        # 测试基础间隔计算
+        # 测试基于艾宾浩斯预设间隔的递进
         interval = calculate_next_review_interval(1, True)
-        self.assertEqual(interval, 3)  # 1 * 3 = 3
+        self.assertEqual(interval, 2)
         
+        interval = calculate_next_review_interval(2, True)
+        self.assertEqual(interval, 4)
+        
+        interval = calculate_next_review_interval(4, True)
+        self.assertEqual(interval, 7)
+        
+        interval = calculate_next_review_interval(7, True)
+        self.assertEqual(interval, 15)
+        
+        interval = calculate_next_review_interval(15, True)
+        self.assertEqual(interval, 30)
+        
+        # 测试超过预设间隔后的指数增长
+        interval = calculate_next_review_interval(30, True)
+        self.assertEqual(interval, 60)
+        
+        # 测试当前间隔不在预设列表时的退化逻辑（乘以2）
         interval = calculate_next_review_interval(3, True)
-        self.assertEqual(interval, 9)  # 3 * 3 = 9
+        self.assertEqual(interval, 6)
         
         # 测试遗忘后的重置
         interval = calculate_next_review_interval(5, False)

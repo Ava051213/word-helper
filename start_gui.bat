@@ -1,7 +1,7 @@
 @echo off
 title 单词记忆助手
 echo ========================================
-echo      单词记忆助手 (Word Reminder)
+echo      单词记忆助手 (GUI)
 echo ========================================
 echo.
 
@@ -16,16 +16,17 @@ if %errorlevel% neq 0 (
     exit /b 1
 )
 
-REM 启动GUI版本
+REM 启动GUI
 echo 正在启动单词记忆助手...
-python src/gui_main.py
+python src/gui/main_window.py
 
 if %errorlevel% neq 0 (
     echo.
-    echo 程序运行出错，请检查错误信息
+    echo 程序运行出现错误！
     pause
+    exit /b %errorlevel%
 )
 
 echo.
-echo 程序已退出
+echo 程序已退出。
 pause

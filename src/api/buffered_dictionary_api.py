@@ -11,7 +11,7 @@ import os
 import threading
 import time
 from typing import Dict, Optional, List
-from dictionary_api import DictionaryAPI
+from .dictionary_api import DictionaryAPI
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -67,8 +67,10 @@ class BufferedDictionaryAPI:
     def _save_cache(self):
         """保存缓存到文件"""
         try:
+            with self.cache_lock:
+                cache_copy = dict(self.cache)
             with open(self.cache_file, 'w', encoding='utf-8') as f:
-                json.dump(self.cache, f, ensure_ascii=False, indent=2)
+                json.dump(cache_copy, f, ensure_ascii=False, indent=2)
             logger.info("缓存已保存")
         except Exception as e:
             logger.error(f"保存缓存失败: {e}")

@@ -61,11 +61,7 @@
 
 ### Python依赖
 ```bash
-# 标准库依赖（无需额外安装）
-tkinter  # GUI界面 (通常随Python一起安装)
-json     # 数据存储
-datetime # 时间处理
-csv      # CSV文件操作
+pip install -r requirements.txt
 ```
 
 ## 🚀 快速开始
@@ -94,10 +90,39 @@ start_cli.bat
 
 ```bash
 # 启动图形界面
-python src/gui_main_improved.py
+python src/gui/main_window.py
 
 # 启动命令行界面
-python src/main.py
+python src/cli/main.py
+```
+
+## 🏗 项目结构
+
+重构后的项目结构如下：
+
+```
+word_helper/
+├── data/                   # 数据存储
+│   ├── words.json          # 单词数据
+│   └── dictionary_cache.json # 词典缓存
+├── docs/                   # 文档
+├── src/                    # 源代码
+│   ├── api/                # 外部API接口
+│   │   ├── dictionary_api.py
+│   │   └── ...
+│   ├── cli/                # 命令行界面
+│   │   └── main.py
+│   ├── core/               # 核心业务逻辑
+│   │   ├── word_manager.py
+│   │   ├── scheduler.py
+│   │   └── data_manager.py
+│   ├── gui/                # 图形用户界面
+│   │   └── main_window.py
+│   └── utils/              # 工具函数
+│       └── common.py
+├── tests/                  # 测试用例
+├── start_cli.bat           # CLI启动脚本
+└── start_gui.bat           # GUI启动脚本
 ```
 
 ## 🎮 使用方法
@@ -164,9 +189,9 @@ word_helper/
 - 第9次复习：学习后30天
 
 #### 间隔重复算法
-本系统采用简化的间隔重复算法：
-- 用户认识单词：间隔时间乘以3
-- 用户不认识单词：间隔时间重置为1天
+本系统采用基于艾宾浩斯预设间隔的递进策略：
+- 用户认识单词：在预设间隔序列 [1,2,4,7,15,30] 中前进到下一个间隔；超过序列后按指数增长（×2）
+- 用户不认识单词：间隔时间重置为 1 天
 
 ### 模块说明
 
@@ -233,3 +258,9 @@ python tests/test_all_enhanced.py
 <p align="center">
   <strong>让学习变得更简单，让记忆变得更轻松！</strong>
 </p>
+
+## 🧭 日志与监控
+
+- 日志输出：控制台 + 轮转文件 `logs/app.log`
+- 日志级别：默认 `INFO`（可在代码中通过 `utils.init_logging` 调整）
+- 词典请求：集成自动重试与指数退避，提升网络稳定性

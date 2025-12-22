@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# 单词记忆助手启动脚本 (改进版GUI)
+# 单词记忆助手启动脚本 (GUI)
 # 适用于 macOS 和 Linux 系统
 
 echo "========================================"
-echo "     单词记忆助手 (改进版GUI)"
+echo "     单词记忆助手 (GUI)"
 echo "========================================"
 echo ""
 
@@ -18,9 +18,9 @@ then
     exit 1
 fi
 
-# 启动改进版GUI
-echo "正在启动单词记忆助手(改进版)..."
-python3 src/gui_main_improved.py
+# 启动GUI
+echo "正在启动单词记忆助手..."
+python3 src/gui/main_window.py
 
 if [ $? -ne 0 ]; then
     echo ""
