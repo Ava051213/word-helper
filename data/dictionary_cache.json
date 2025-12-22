@@ -3024,7 +3024,7 @@
         }
       ]
     },
-    "last_accessed": 1766361948.7391174,
+    "last_accessed": 1766447422.8373294,
     "cached_at": 1766361948.7391176
   },
   "river": {
@@ -4300,5 +4300,962 @@
     },
     "last_accessed": 1766404149.1048713,
     "cached_at": 1766404149.1048717
+  },
+  "dad": {
+    "data": {
+      "word": "dad",
+      "phonetic": "/dæd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A father, a male parent."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(familiar) Used to address one's father"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Used to address an older adult male"
+        }
+      ],
+      "examples": [
+        "His dad was always there for him.",
+        "Happy Father's Day, Dad!"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一个父亲，一个男性父母。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（熟悉）用于称呼父亲"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "用于称呼年长的成年男性"
+        }
+      ]
+    },
+    "last_accessed": 1766447200.1367478,
+    "cached_at": 1766447200.136748
+  },
+  "dawn": {
+    "data": {
+      "word": "dawn",
+      "phonetic": "/doːn/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The morning twilight period immediately before sunrise."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The rising of the sun."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The time when the sun rises."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The earliest phase of something."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To begin to brighten with daylight."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To start to appear or be realized."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To begin to give promise; to begin to appear or to expand."
+        }
+      ],
+      "examples": [
+        "She rose before dawn to meet the train.",
+        "the dawn of civilization",
+        "A new day dawns.",
+        "I don’t want to be there when the truth dawns on him."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "日出前夕的黎明时期。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "太阳升起。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "太阳升起的时间。"
+        }
+      ]
+    },
+    "last_accessed": 1766447214.3302815,
+    "cached_at": 1766447214.330282
+  },
+  "critic": {
+    "data": {
+      "word": "critic",
+      "phonetic": "/ˈkɹɪt.ɪk/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A person who appraises the works of others."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A specialist in judging works of art."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "One who criticizes; a person who finds fault."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An opponent."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To criticise."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The art of criticism."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An essay in which another piece of work is criticised, reviewed, etc."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A point made to criticize something."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A critic; one who criticises."
+        }
+      ],
+      "examples": [
+        "Bob liked most of my presentation, but offered three minor critiques."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "评价他人作品的人。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "艺术作品评审专家。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "批评的人；挑剔的人。"
+        }
+      ]
+    },
+    "last_accessed": 1766447223.5895052,
+    "cached_at": 1766447223.5895052
+  },
+  "adventure": {
+    "data": {
+      "word": "adventure",
+      "phonetic": "/ædˈvɛnt͡ʃɚ/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The encountering of risks; a bold undertaking, in which dangers are likely to be encountered, and the issue is staked upon unforeseen events; a daring feat."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A remarkable occurrence; a striking event."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A mercantile or speculative enterprise of hazard; a venture; a shipment by a merchant on his own account."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A feeling of desire for new and exciting things."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A text adventure or an adventure game."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "That which happens by chance; hazard; hap."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Chance of danger or loss."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Risk; danger; peril."
+        }
+      ],
+      "examples": [
+        "A life full of adventures.",
+        "his sense of adventure"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "遭遇风险；一项大胆的事业，可能会遇到危险，并且问题取决于不可预见的事件；一项大胆的壮举。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一个非凡的事件；一个引人注目的事件。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "有风险的商业或投机企业；一次冒险；商人用自己的帐户发货的货物。"
+        }
+      ]
+    },
+    "last_accessed": 1766447239.6591766,
+    "cached_at": 1766447239.659177
+  },
+  "chase": {
+    "data": {
+      "word": "chase",
+      "phonetic": "/tʃeɪs/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of one who chases another; a pursuit."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A hunt."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A children's game where one player chases another."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A large country estate where game may be shot or hunted."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Anything being chased, especially a vessel in time of war."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A wild animal that is hunted."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any of the guns that fire directly ahead or astern; either a bow chase or stern chase."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(real tennis) The occurrence of a second bounce by the ball in certain areas of the court, giving the server the chance, later in the game, to \"play off\" the chase from the receiving end and possibly win the point."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(real tennis) A division of the floor of a gallery, marked by a figure or otherwise; the spot where a ball falls, and between which and the dedans the adversary must drive the ball in order to gain a point."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "One or more riders who are ahead of the peloton and trying to join the race or stage leaders."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To pursue."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To consume another beverage immediately after drinking hard liquor, typically something better tasting or less harsh such as soda or beer; to use a drink as a chaser"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To attempt to win by scoring the required number of runs in the final innings."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To swing at a pitch outside of the strike zone, typically an outside pitch"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To produce enough offense to cause the pitcher to be removed"
+        }
+      ],
+      "examples": [
+        "I need something to chase this shot with.",
+        "Australia will be chasing 217 for victory on the final day.",
+        "The rally chased the starter."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一个人追逐另一个人的行为；一种追求。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一场狩猎。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "一种儿童游戏，其中一个玩家追逐另一个玩家。"
+        }
+      ]
+    },
+    "last_accessed": 1766447253.172231,
+    "cached_at": 1766447253.1722314
+  },
+  "knock": {
+    "data": {
+      "word": "knock",
+      "phonetic": "/nɒk/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Sudden fatigue as a result of glycogen depletion from not having taken in enough nutrition."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An abrupt rapping sound, as from an impact of a hard object against wood."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A sharp impact."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Criticism."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Preignition, a type of abnormal combustion occurring in spark ignition engines caused by self-ignition; also, the characteristic knocking sound associated with it."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A batsman's innings."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To strike for admittance; to rap upon, as a door."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To criticize verbally; to denigrate; to undervalue."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To kick a ball towards another player; to pass."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To impress forcibly or strongly; to astonish; to move to admiration or applause."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To bump or impact."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To rap one's knuckles against something, especially wood."
+        }
+      ],
+      "examples": [
+        "I heard a knock on my door.",
+        "He took a knock on the head.",
+        "He played a slow but sure knock of 35.",
+        "Don’t knock it until you’ve tried it.",
+        "I accidentally knocked my drink off the bar.",
+        "Knock on the door and find out if they’re home."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "由于没有摄入足够的营养而导致糖原耗尽而导致突然疲劳。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "突然的敲击声，就像硬物撞击木头发出的声音。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "剧烈的冲击。"
+        }
+      ]
+    },
+    "last_accessed": 1766447386.2875195,
+    "cached_at": 1766447268.0222225
+  },
+  "hand": {
+    "data": {
+      "word": "hand",
+      "phonetic": "/hænd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The part of the forelimb below the forearm or wrist in a human, and the corresponding part in many other animals."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "That which resembles, or to some extent performs the office of, a human hand."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "In linear measurement:"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A side; part, camp; direction, either right or left."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Power of performance; means of execution; ability; skill; dexterity."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An agent; a servant, or manual laborer, especially in compounds; a workman, trained or competent for special service or duty; a performer more or less skillful."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An instance of helping."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Handwriting; style of penmanship."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A person's autograph or signature."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Personal possession; ownership."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(usually in the plural, hands) Management, domain, control."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "That which is, or may be, held in a hand at once."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Applause."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A Native American gambling game, involving guessing the whereabouts of bits of ivory or similar, which are passed rapidly from hand to hand."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The small part of a gunstock near the lock, which is grasped by the hand in taking aim."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A whole rhizome of ginger."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The feel of a fabric; the impression or quality of the fabric as judged qualitatively by the sense of touch."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Actual performance; deed; act; workmanship; agency; hence, manner of performance."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Agency in transmission from one person to another."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Rate; price."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To give, pass, or transmit with the hand, literally or figuratively."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To lead, guide, or assist with the hand; to conduct."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To manage."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To seize; to lay hands on."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To pledge by the hand; to handfast."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "(said of a sail) To furl."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To cooperate."
+        }
+      ],
+      "examples": [
+        "Her hands are really strong.",
+        "an old hand at speaking;  large farms need many farm hands",
+        "Bob gave Alice a hand to move the furniture.",
+        "a good hand",
+        "Given under my Hand and Seal of the State this 1st Day of January, 2010.",
+        "in safe hands;  in good hands;  He lost his job when the factory changed hands.  With the business back in the founder's hands, there is new hope for the company.  With John in charge of the project, it's in good hands.",
+        "Give him a hand.",
+        "This fabric has a smooth, soft hand.",
+        "to buy at first hand (from the producer, or when new);  to buy at second hand (when no longer in the producer’s hand, or when not new);  It's not a rumor. I heard it at first hand.",
+        "He handed them the letter.   She handed responsibility over to her deputy.",
+        "to hand a lady into a carriage"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "人类前臂或手腕下方的前肢部分，以及许多其他动物的相应部分。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "类似于人手的东西，或者在某种程度上执行人手的职责的东西。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "在线性测量中："
+        }
+      ]
+    },
+    "last_accessed": 1766447299.2244463,
+    "cached_at": 1766447299.2244465
+  },
+  "sight": {
+    "data": {
+      "word": "sight",
+      "phonetic": "/saɪt/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "(in the singular) The ability to see."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The act of seeing; perception of objects by the eye; view."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Something seen."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Something worth seeing; a spectacle, either good or bad."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A device used in aiming a projectile, through which the person aiming looks at the intended target."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A small aperture through which objects are to be seen, and by which their direction is settled or ascertained."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A great deal, a lot; frequently used to intensify a comparative."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "In a drawing, picture, etc., that part of the surface, as of paper or canvas, which is within the frame or the border or margin. In a frame, the open space, the opening."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The instrument of seeing; the eye."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Mental view; opinion; judgment."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To register visually."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To get sight of (something)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To apply sights to; to adjust the sights of; also, to give the proper elevation and direction to by means of a sight."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To take aim at."
+        }
+      ],
+      "examples": [
+        "He is losing his sight and now can barely read.",
+        "to gain sight of land",
+        "We went to London and saw all the sights – Buckingham Palace, Tower Bridge, and so on.",
+        "the sight of a quadrant",
+        "This is a darn sight better than what I'm used to at home!",
+        "In their sight it was harmless.",
+        "to sight land from a ship",
+        "to sight a rifle or a cannon"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "（单数）看见的能力。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "观看的行为；眼睛对物体的感知；看法。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "看到了一些东西。"
+        }
+      ]
+    },
+    "last_accessed": 1766447309.5783956,
+    "cached_at": 1766447309.578396
+  },
+  "dual": {
+    "data": {
+      "word": "dual",
+      "phonetic": "/ˈdjuː.əl/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Of an item that is one of a pair, the other item in the pair."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Of a regular polyhedron with V vertices and F faces, the regular polyhedron having F vertices and V faces."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(grammar) dual number The grammatical number of a noun marking two of something (as in singular, dual, plural), sometimes referring to two of anything (a couple of, exactly two of), or a chirality-marked pair (as in left and right, as with gloves or shoes) or in some languages as a discourse marker, \"between you and me\". A few languages display trial number."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Of a vector in an inner product space, the linear functional corresponding to taking the inner product with that vector. The set of all duals is a vector space called the dual space."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To convert from single to dual; specifically, to convert a single-carriageway road to a dual carriageway."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Exhibiting duality; characterized by having two (usually equivalent) components."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Acting as a counterpart."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Double."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "(grammar) Pertaining to grammatical number (as in singular and plural), referring to two of something, such as a pair of shoes, in the context of the singular, plural and, in some languages, trial grammatical number."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Being the space of all linear functionals of (some other space)."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Being the dual of some other category; containing the same objects but with source and target reversed for all morphisms."
+        }
+      ],
+      "examples": [
+        "The octahedron is the dual of the cube.",
+        "a dual-headed computer",
+        "Modern Arabic displays a dual number, as did Homeric Greek."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "对于一对中的一个项目，该对中的另一个项目。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "具有V个顶点和F个面的正多面体，具有F个顶点和V个面的正多面体。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（语法）对偶数 名词的语法数，标记某事物的两个（如单数、对偶、复数），有时指任何事物中的两个（一对、正好两个），或手性标记的一对（如左和右，如手套或鞋子）或在某些语言中作为话语标记，“在你和我之间”。有几种语言会显示试用号。"
+        }
+      ]
+    },
+    "last_accessed": 1766447387.9924495,
+    "cached_at": 1766447319.1038733
+  },
+  "some": {
+    "data": {
+      "word": "some",
+      "phonetic": "/sɐm/",
+      "meanings": [
+        {
+          "part_of_speech": "adverb",
+          "definition": "Of a measurement: approximately, roughly."
+        },
+        {
+          "part_of_speech": "pronoun",
+          "definition": "A certain number, at least two."
+        },
+        {
+          "part_of_speech": "pronoun",
+          "definition": "An indefinite quantity."
+        },
+        {
+          "part_of_speech": "pronoun",
+          "definition": "An indefinite amount, a part."
+        }
+      ],
+      "examples": [
+        "I guess he must have weighed some 90 kilos.",
+        "Some enjoy spicy food, others prefer it milder.",
+        "Can I have some of them?",
+        "Everyone is wrong some of the time."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "adverb",
+          "definition": "测量的：大约，粗略。"
+        },
+        {
+          "part_of_speech": "pronoun",
+          "definition": "有一定数量，至少两个。"
+        },
+        {
+          "part_of_speech": "pronoun",
+          "definition": "数量不定。"
+        }
+      ]
+    },
+    "last_accessed": 1766447433.4680524,
+    "cached_at": 1766447433.468053
+  },
+  "figure": {
+    "data": {
+      "word": "figure",
+      "phonetic": "/ˈfɪɡjɚ/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A drawing or diagram conveying information."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The representation of any form, as by drawing, painting, modelling, carving, embroidering, etc.; especially, a representation of the human body."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A person or thing representing a certain consciousness."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The appearance or impression made by the conduct or career of a person."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Distinguished appearance; magnificence; conspicuous representation; splendour; show."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A human figure, which dress or corset must fit to; the shape of a human body."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A numeral."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A number, an amount."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A shape."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A visible pattern as in wood or cloth."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any complex dance moveW."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A figure of speech."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The form of a syllogism with respect to the relative position of the middle term."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A horoscope; the diagram of the aspects of the astrological houses."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any short succession of notes, either as melody or as a group of chords, which produce a single complete and distinct impression."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A form of melody or accompaniment kept up through a strain or passage; a motif; a florid embellishment."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To calculate, to solve a mathematical problem."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To come to understand."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To think, to assume, to suppose, to reckon."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To be reasonable."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To enter into; to be a part of."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To represent by a figure, as to form or mould; to make an image of, either palpable or ideal; also, to fashion into a determinate form; to shape."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To embellish with design; to adorn with figures."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To indicate by numerals."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To represent by a metaphor; to signify or symbolize."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To prefigure; to foreshow."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To write over or under the bass, as figures or other characters, in order to indicate the accompanying chords."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To embellish."
+        }
+      ],
+      "examples": [
+        "a figure in bronze; a figure cut in marble",
+        "He cut a sorry figure standing there in the rain.",
+        "The muslin was of a pretty figure.",
+        "I can’t figure if he’s telling the truth or lying.",
+        "It figures that somebody like him would be upset about the situation."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "传达信息的绘图或图表。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "任何形式的表现形式，如绘画、绘画、造型、雕刻、刺绣等；特别是人体的代表。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "代表某种意识的人或物。"
+        }
+      ]
+    },
+    "last_accessed": 1766447440.7780383,
+    "cached_at": 1766447440.7780385
+  },
+  "affable": {
+    "data": {
+      "word": "affable",
+      "phonetic": "/ˈæf.ə.bəl/",
+      "meanings": [
+        {
+          "part_of_speech": "adjective",
+          "definition": "Receiving others kindly and conversing with them in a free and friendly manner; friendly, courteous, sociable."
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "Mild; benign."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "adjective",
+          "definition": "友善地接待他人，并以自由、友好的方式与他们交谈；友好、有礼貌、善于交际。"
+        },
+        {
+          "part_of_speech": "adjective",
+          "definition": "温和的;良性。"
+        }
+      ]
+    },
+    "last_accessed": 1766447458.6768427,
+    "cached_at": 1766447451.012106
+  },
+  "rejoice": {
+    "data": {
+      "word": "rejoice",
+      "phonetic": "/ɹɪˈd͡ʒɔɪs/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To be very happy, be delighted, exult; to feel joy."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To have (someone) as a lover or spouse; to enjoy sexually."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To make happy, exhilarate."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To enjoy."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "非常高兴、高兴、狂喜；感受到快乐。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "有（某人）作为情人或配偶；享受性爱。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "使人高兴、振奋。"
+        }
+      ]
+    },
+    "last_accessed": 1766447470.9119318,
+    "cached_at": 1766447470.911932
   }
 }

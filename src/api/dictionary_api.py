@@ -9,6 +9,7 @@ import requests
 import json
 import logging
 import time
+import os
 from typing import Dict, Optional, List
 
 # 导入翻译API

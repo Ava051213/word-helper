@@ -11,10 +11,10 @@
 - Windows/Linux/macOS 操作系统
 
 ### 安装步骤
-1. 确保已安装Python 3.6+
-2. 克隆或下载项目代码
-3. 进入项目根目录
-4. 运行程序: `python src/main.py`
+1. 确保已安装 Python 3.8+。
+2. 克隆或下载项目代码。
+3. 运行 `pip install -r requirements.txt` 安装依赖。
+4. 运行 `start_gui.bat` (图形界面) 或 `start_cli.bat` (命令行界面)。
 
 ## 界面版本说明
 

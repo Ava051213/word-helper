@@ -9,18 +9,18 @@ import os
 import datetime
 import logging
 from typing import Dict, List, Optional
-from sqlalchemy import or_
+from sqlalchemy import or_, func, case
 
 from .database import Database
 from .models import Word, ReviewHistory
 
 # 导入词典API模块
 try:
-    from ..api.buffered_dictionary_api import BufferedDictionaryAPI
+    from api.buffered_dictionary_api import BufferedDictionaryAPI
     DICTIONARY_API_AVAILABLE = True
 except ImportError:
     try:
-        from ..api.dictionary_api import DictionaryAPI
+        from api.dictionary_api import DictionaryAPI
         DICTIONARY_API_AVAILABLE = True
     except ImportError:
         DICTIONARY_API_AVAILABLE = False
@@ -157,8 +157,8 @@ class WordManager:
         finally:
             session.close()
 
-    def get_words_for_review(self) -> List[str]:
-        """获取需要复习的单词列表"""
+    def get_words_for_review(self, limit: int = 100) -> List[str]:
+        """获取需要复习的单词列表（优化：添加限制数量）"""
         session = self.db.get_session()
         try:
             now = datetime.datetime.now()
@@ -168,7 +168,7 @@ class WordManager:
                     Word.next_review <= now,
                     Word.next_review == None
                 )
-            ).order_by(Word.next_review.asc()).all()
+            ).order_by(Word.next_review.asc()).limit(limit).all()
             return [w.word for w in words]
         finally:
             session.close()
@@ -253,3 +253,100 @@ class WordManager:
             return False
         finally:
             session.close()
+    
+    def get_recent_activity(self, days: int = 30) -> Dict:
+        """获取最近活动统计"""
+        session = self.db.get_session()
+        try:
+            cutoff_date = datetime.datetime.now() - datetime.timedelta(days=days)
+            
+            # 新增单词数
+            new_words = session.query(Word).filter(
+                Word.added_date >= cutoff_date
+            ).count()
+            
+            # 复习会话数（通过ReviewHistory统计）
+            review_sessions = session.query(
+                func.date(ReviewHistory.review_date).distinct()
+            ).filter(
+                ReviewHistory.review_date >= cutoff_date
+            ).count()
+            
+            # 每日统计
+            daily_stats = {}
+            words_added = session.query(
+                func.date(Word.added_date).label('date'),
+                func.count(Word.id).label('count')
+            ).filter(
+                Word.added_date >= cutoff_date
+            ).group_by(func.date(Word.added_date)).all()
+            
+            for date, count in words_added:
+                daily_stats[date.strftime('%Y-%m-%d')] = {'new': count, 'review': 0}
+            
+            # 每日复习统计
+            reviews = session.query(
+                func.date(ReviewHistory.review_date).label('date'),
+                func.count(ReviewHistory.id).label('count')
+            ).filter(
+                ReviewHistory.review_date >= cutoff_date
+            ).group_by(func.date(ReviewHistory.review_date)).all()
+            
+            for date, count in reviews:
+                date_str = date.strftime('%Y-%m-%d')
+                if date_str not in daily_stats:
+                    daily_stats[date_str] = {'new': 0, 'review': 0}
+                daily_stats[date_str]['review'] = count
+            
+            return {
+                'new_words': new_words,
+                'review_sessions': review_sessions,
+                'daily_stats': daily_stats
+            }
+        finally:
+            session.close()
+    
+    def get_review_history(self, limit: int = 100) -> List[Dict]:
+        """获取复习历史记录"""
+        session = self.db.get_session()
+        try:
+            # 按日期分组获取复习会话
+            sessions = session.query(
+                func.date(ReviewHistory.review_date).label('date'),
+                func.count(ReviewHistory.id).label('word_count'),
+                func.sum(case((ReviewHistory.quality >= 3, 1), else_=0)).label('known_count')
+            ).group_by(
+                func.date(ReviewHistory.review_date)
+            ).order_by(
+                ReviewHistory.review_date.desc()
+            ).limit(limit).all()
+            
+            history = []
+            for date, word_count, known_count in sessions:
+                # 获取该会话的单词详情
+                words = session.query(ReviewHistory).filter(
+                    func.date(ReviewHistory.review_date) == date
+                ).all()
+                
+                word_results = []
+                for review in words:
+                    word = session.query(Word).filter_by(id=review.word_id).first()
+                    if word:
+                        word_results.append({
+                            'word': word.word,
+                            'known': review.quality >= 3
+                        })
+                
+                history.append({
+                    'timestamp': date.strftime('%Y-%m-%d %H:%M:%S'),
+                    'words': word_results,
+                    'known_count': int(known_count or 0)
+                })
+            
+            return history
+        finally:
+            session.close()
+    
+    def clear_all_data(self) -> bool:
+        """清空所有数据（包括配置等）"""
+        return self.clear_all_words()

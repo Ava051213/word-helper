@@ -10,8 +10,10 @@ import logging
 import os
 import threading
 import time
+from collections import deque
 from typing import Dict, Optional, List
 from .dictionary_api import DictionaryAPI
+from core.constants import Constants
 
 # 配置日志
 logging.basicConfig(level=logging.INFO)
@@ -33,6 +35,11 @@ class BufferedDictionaryAPI:
         self.max_cache_size = max_cache_size
         self.cache = {}
         self.cache_lock = threading.Lock()
+        
+        # API请求限流
+        self.request_times = deque(maxlen=10)  # 记录最近10次请求时间
+        self.min_interval = Constants.API_RATE_LIMIT  # 最小间隔
+        self.rate_limit_lock = threading.Lock()
         
         # 加载缓存
         self._load_cache()
@@ -85,8 +92,17 @@ class BufferedDictionaryAPI:
             self.cache = dict(sorted_items[:self.max_cache_size])
             logger.info(f"缓存已清理，保留 {len(self.cache)} 个单词")
     
+    def _rate_limit_check(self):
+        """API请求限流检查"""
+        with self.rate_limit_lock:
+            now = time.time()
+            if self.request_times and now - self.request_times[-1] < self.min_interval:
+                sleep_time = self.min_interval - (now - self.request_times[-1])
+                time.sleep(sleep_time)
+            self.request_times.append(time.time())
+    
     def get_word_info(self, word: str) -> Optional[Dict]:
-        """获取单词信息（带缓存）
+        """获取单词信息（带缓存和限流）
         
         Args:
             word: 要查询的单词
@@ -106,9 +122,12 @@ class BufferedDictionaryAPI:
                 logger.info(f"缓存命中: {word}")
                 return self.cache[cache_key]['data']
         
-        # 缓存未命中，从API获取
+        # 缓存未命中，从API获取（限流检查）
         self.stats['cache_misses'] += 1
         logger.info(f"缓存未命中，从API获取: {word}")
+        
+        # 限流检查
+        self._rate_limit_check()
         
         word_info = self.dictionary_api.get_word_info(word)
         
@@ -139,10 +158,11 @@ class BufferedDictionaryAPI:
         import random
         
         # 根据词汇级别选择对应的词汇文件
+        base_dir = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
         vocabulary_files = {
-            "cet4": "data/cet4_words.txt",
-            "cet6": "data/cet6_words.txt", 
-            "gre": "data/gre_words.txt"
+            "cet4": os.path.join(base_dir, "data", "cet4_words.txt"),
+            "cet6": os.path.join(base_dir, "data", "cet6_words.txt"), 
+            "gre": os.path.join(base_dir, "data", "gre_words.txt")
         }
         
         # 默认词汇级别为cet6

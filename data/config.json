@@ -1,0 +1,11 @@
+{
+    "appearance_mode": "System",
+    "default_vocabulary_level": "gre",
+    "auto_play_tts": false,
+    "last_used_at": null,
+    "daily_review_goal": 20,
+    "reminder_enabled": true,
+    "reminder_time": "09:00",
+    "auto_backup": true,
+    "backup_interval_days": 7
+}

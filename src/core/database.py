@@ -8,7 +8,9 @@
 import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+from sqlalchemy.pool import QueuePool
 from .models import Base
+from .constants import Constants
 
 class Database:
     """数据库管理类"""
@@ -22,7 +24,15 @@ class Database:
             os.makedirs(data_dir, exist_ok=True)
             db_path = os.path.join(data_dir, "words.db")
         
-        self.engine = create_engine(f'sqlite:///{db_path}', echo=False)
+        # 使用连接池优化数据库连接
+        self.engine = create_engine(
+            f'sqlite:///{db_path}',
+            echo=False,
+            poolclass=QueuePool,
+            pool_size=Constants.DB_POOL_SIZE,
+            max_overflow=Constants.DB_MAX_OVERFLOW,
+            pool_pre_ping=True  # 自动重连
+        )
         self.session_factory = sessionmaker(bind=self.engine)
         self.Session = scoped_session(self.session_factory)
         
