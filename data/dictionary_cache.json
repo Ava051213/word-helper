@@ -4222,5 +4222,83 @@
     },
     "last_accessed": 1766362846.7387745,
     "cached_at": 1766362846.7387748
+  },
+  "scrap": {
+    "data": {
+      "word": "scrap",
+      "phonetic": "/skɹæp/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A (small) piece; a fragment; a detached, incomplete portion."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(usually in the plural) Leftover food."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The crisp substance that remains after drying out animal fat."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Discarded objects (especially metal) that may be dismantled to recover their constituent materials, junk."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(in the plural) A piece of deep-fried batter left over from frying fish, sometimes sold with chips."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A Hispanic criminal, especially a Mexican or one affiliated with the Norte gang."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A snare for catching birds."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To discard."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "(of a project or plan) To stop working on indefinitely."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To scrapbook; to create scrapbooks."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To dispose of at a scrapyard."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To make into scrap."
+        }
+      ],
+      "examples": [
+        "I found a scrap of cloth to patch the hole.",
+        "Give the scraps to the dogs and watch them fight.",
+        "pork scraps",
+        "That car isn't good for anything but scrap."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "一块（小）；一个片段；分离的、不完整的部分。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "（通常为复数）剩余的食物。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "动物脂肪干燥后剩下的松脆物质。"
+        }
+      ]
+    },
+    "last_accessed": 1766404149.1048713,
+    "cached_at": 1766404149.1048717
   }
 }

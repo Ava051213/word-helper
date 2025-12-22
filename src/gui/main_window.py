@@ -7,6 +7,7 @@
 
 import tkinter as tk
 from tkinter import ttk, messagebox, scrolledtext
+import customtkinter as ctk
 import sys
 import os
 import json
@@ -14,6 +15,9 @@ import datetime
 import threading
 import time
 import random
+import logging
+
+logger = logging.getLogger(__name__)
 
 # 添加src目录到Python路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -30,6 +34,11 @@ class WordReminderGUI:
     def __init__(self, root):
         """初始化GUI"""
         self.root = root
+        
+        # 设置 CustomTkinter 主题
+        ctk.set_appearance_mode("System")
+        ctk.set_default_color_theme("blue")
+        
         self.root.title("单词记忆助手 - V1.0")
         self.root.geometry("1200x800")
         self.root.minsize(1000, 700)
@@ -87,20 +96,38 @@ class WordReminderGUI:
     def setup_styles(self):
         """设置界面样式"""
         style = ttk.Style()
+        
+        # 获取当前主题模式
+        mode = ctk.get_appearance_mode()
+        is_dark = mode == "Dark"
+        
+        # 配置 Treeview 样式以匹配 CustomTkinter
+        bg_color = "#2b2b2b" if is_dark else "#ffffff"
+        fg_color = "#ffffff" if is_dark else "#000000"
+        selected_color = "#1f538d" if is_dark else "#3b8ed0"
+        header_bg = "#333333" if is_dark else "#eeeeee"
+        
         style.theme_use('clam')
+        style.configure("Treeview", 
+                        background=bg_color, 
+                        foreground=fg_color, 
+                        fieldbackground=bg_color,
+                        rowheight=30,
+                        font=('Arial', 11))
         
-        # 配置标签页样式
-        style.configure('TNotebook.Tab', padding=[10, 5])
+        style.map("Treeview", 
+                  background=[('selected', selected_color)],
+                  foreground=[('selected', 'white')])
         
-        # 配置按钮样式
-        style.configure('Accent.TButton', foreground='white', background='#4a6fa5')
-        style.map('Accent.TButton', background=[('active', '#3a5a80')])
+        style.configure("Treeview.Heading", 
+                        background=header_bg, 
+                        foreground=fg_color, 
+                        relief="flat",
+                        font=('Arial', 11, 'bold'))
         
-        # 配置表单验证样式
-        style.configure('Error.TEntry', fieldbackground='#ffe6e6', foreground='#d32f2f')
-        style.configure('Success.TEntry', fieldbackground='#e8f5e8', foreground='#2e7d32')
-        style.configure('Warning.TEntry', fieldbackground='#fff3e0', foreground='#f57c00')
-    
+        style.map("Treeview.Heading", 
+                  background=[('active', selected_color)])
+
     def check_dictionary_api_status(self):
         """检查词典API状态"""
         # 在状态栏显示API状态
@@ -110,37 +137,43 @@ class WordReminderGUI:
             status_text = "词典API: 不可用"
         
         # 更新状态栏
-        self.status_bar.config(text=status_text)
+        self.status_bar.configure(text=status_text)
     
     def show_loading_indicator(self, message="正在处理..."):
         """显示加载指示器"""
         if self.loading_window is None or not self.loading_window.winfo_exists():
-            self.loading_window = tk.Toplevel(self.root)
+            self.loading_window = ctk.CTkToplevel(self.root)
             self.loading_window.title("请稍候")
-            self.loading_window.geometry("250x100")
+            self.loading_window.geometry("300x150")
             self.loading_window.resizable(False, False)
             
             # 设置窗口居中
             self.loading_window.transient(self.root)
             self.loading_window.grab_set()
             
-            # 添加消息和进度条
-            label = ttk.Label(self.loading_window, text=message)
-            label.pack(pady=10)
+            # 容器
+            container = ctk.CTkFrame(self.loading_window)
+            container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
             
-            progress = ttk.Progressbar(self.loading_window, mode='indeterminate')
-            progress.pack(padx=20, pady=10, fill=tk.X)
-            progress.start(10)
+            # 添加消息和进度条
+            label = ctk.CTkLabel(container, text=message, font=('Arial', 14))
+            label.pack(pady=(10, 15))
+            
+            self.loading_progress = ctk.CTkProgressBar(container, mode='indeterminate')
+            self.loading_progress.pack(padx=20, pady=10, fill=tk.X)
+            self.loading_progress.start()
             
             # 更新界面
             self.loading_window.update_idletasks()
         
         # 更新状态栏
-        self.status_bar.config(text=message)
+        self.status_bar.configure(text=message)
     
     def hide_loading_indicator(self):
         """隐藏加载指示器"""
         if self.loading_window and self.loading_window.winfo_exists():
+            if hasattr(self, 'loading_progress'):
+                self.loading_progress.stop()
             self.loading_window.destroy()
             self.loading_window = None
         
@@ -202,40 +235,61 @@ class WordReminderGUI:
     def create_widgets(self):
         """创建界面组件"""
         # 创建顶部标题
-        title_frame = ttk.Frame(self.root)
-        title_frame.pack(fill=tk.X, padx=10, pady=(10, 5))
+        self.title_frame = ctk.CTkFrame(self.root, fg_color="transparent")
+        self.title_frame.pack(fill=tk.X, padx=20, pady=(20, 10))
         
-        title_label = ttk.Label(title_frame, text="单词记忆助手", font=('Arial', 16, 'bold'))
-        title_label.pack(side=tk.LEFT)
+        self.title_label = ctk.CTkLabel(self.title_frame, text="单词记忆助手", font=('Arial', 24, 'bold'))
+        self.title_label.pack(side=tk.LEFT)
         
-        version_label = ttk.Label(title_frame, text="V1.0", font=('Arial', 10))
-        version_label.pack(side=tk.RIGHT)
+        self.version_label = ctk.CTkLabel(self.title_frame, text="V1.0", font=('Arial', 12))
+        self.version_label.pack(side=tk.RIGHT)
         
-        # 创建标签页
-        self.notebook = ttk.Notebook(self.root)
-        self.notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        # 创建标签页 - 使用 CTkTabview
+        self.tabview = ctk.CTkTabview(self.root)
+        self.tabview.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
         
-        # 创建各个标签页
-        self.create_home_tab()
-        self.create_add_tab()
-        self.create_view_tab()
-        self.create_review_tab()
-        self.create_search_tab()
-        self.create_stats_tab()
-        self.create_settings_tab()
+        # 添加各个标签页
+        self.home_tab = self.tabview.add("首页")
+        self.add_tab = self.tabview.add("添加单词")
+        self.view_tab = self.tabview.add("查看单词")
+        self.review_tab = self.tabview.add("复习单词")
+        self.search_tab = self.tabview.add("搜索单词")
+        self.stats_tab = self.tabview.add("学习统计")
+        self.settings_tab = self.tabview.add("系统设置")
+        
+        # 为了兼容旧代码，将 frame 引用指向 tab 对象
+        self.home_frame = self.home_tab
+        self.add_frame = self.add_tab
+        self.view_frame = self.view_tab
+        self.review_frame = self.review_tab
+        self.search_frame = self.tabview.tab("搜索单词") # 修正：search_tab 已经是对象了
+        self.stats_frame = self.tabview.tab("学习统计")
+        self.settings_frame = self.tabview.tab("系统设置")
+        
+        # 调用各个标签页的创建函数
+        self.create_home_tab_content()
+        self.create_add_tab_content()
+        self.create_view_tab_content()
+        self.create_review_tab_content()
+        self.create_search_tab_content()
+        self.create_stats_tab_content()
+        self.create_settings_tab_content()
         
         # 创建状态栏
-        self.status_bar = ttk.Label(self.root, text="就绪", relief=tk.SUNKEN, anchor=tk.W)
-        self.status_bar.pack(side=tk.BOTTOM, fill=tk.X)
-    
-    def create_home_tab(self):
-        """创建主页标签页"""
-        self.home_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.home_frame, text="首页")
+        self.status_bar_frame = ctk.CTkFrame(self.root, height=30)
+        self.status_bar_frame.pack(side=tk.BOTTOM, fill=tk.X)
         
+        self.status_bar = ctk.CTkLabel(self.status_bar_frame, text="就绪", anchor=tk.W, padx=10)
+        self.status_bar.pack(side=tk.LEFT, fill=tk.X)
+    
+    def create_home_tab_content(self):
+        """创建主页标签页内容"""
         # 欢迎信息
-        welcome_frame = ttk.LabelFrame(self.home_frame, text="欢迎使用", padding=10)
-        welcome_frame.pack(fill=tk.X, padx=10, pady=10)
+        welcome_frame = ctk.CTkFrame(self.home_frame)
+        welcome_frame.pack(fill=tk.X, padx=20, pady=20)
+        
+        welcome_title = ctk.CTkLabel(welcome_frame, text="欢迎使用", font=('Arial', 18, 'bold'))
+        welcome_title.pack(pady=(15, 5))
         
         welcome_text = """
         欢迎使用单词记忆助手！
@@ -249,155 +303,170 @@ class WordReminderGUI:
         3. 查看"学习统计"了解您的学习进度
         """
         
-        welcome_label = ttk.Label(welcome_frame, text=welcome_text, justify=tk.LEFT)
-        welcome_label.pack()
+        welcome_label = ctk.CTkLabel(welcome_frame, text=welcome_text, justify=tk.LEFT)
+        welcome_label.pack(pady=(0, 15))
         
-        # 快捷操作 - 重新设计布局，使用更大的按钮和更好的视觉效果
-        quick_frame = ttk.LabelFrame(self.home_frame, text="快捷操作", padding=15)
-        quick_frame.pack(fill=tk.X, padx=15, pady=15)
+        # 快捷操作
+        quick_frame = ctk.CTkFrame(self.home_frame)
+        quick_frame.pack(fill=tk.X, padx=20, pady=10)
         
-        button_frame = ttk.Frame(quick_frame)
+        quick_title = ctk.CTkLabel(quick_frame, text="快捷操作", font=('Arial', 18, 'bold'))
+        quick_title.pack(pady=(15, 5))
+        
+        button_frame = ctk.CTkFrame(quick_frame, fg_color="transparent")
         button_frame.pack(pady=10)
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(button_frame, text="添加单词", command=lambda: self.notebook.select(self.add_frame), width=12).pack(side=tk.LEFT, padx=15, pady=10)
-        ttk.Button(button_frame, text="开始复习", command=self.quick_review, width=12).pack(side=tk.LEFT, padx=15, pady=10)
-        ttk.Button(button_frame, text="查看统计", command=lambda: self.notebook.select(self.stats_frame), width=12).pack(side=tk.LEFT, padx=15, pady=10)
+        # 使用更大的按钮
+        ctk.CTkButton(button_frame, text="添加单词", 
+                      command=lambda: self.tabview.set("添加单词"), 
+                      width=140, height=40).pack(side=tk.LEFT, padx=20, pady=15)
+        
+        ctk.CTkButton(button_frame, text="开始复习", 
+                      command=self.quick_review, 
+                      width=140, height=40).pack(side=tk.LEFT, padx=20, pady=15)
+        
+        ctk.CTkButton(button_frame, text="查看统计", 
+                      command=lambda: self.tabview.set("学习统计"), 
+                      width=140, height=40).pack(side=tk.LEFT, padx=20, pady=15)
         
         # 今日学习提醒
-        reminder_frame = ttk.LabelFrame(self.home_frame, text="今日学习提醒", padding=10)
-        reminder_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        reminder_frame = ctk.CTkFrame(self.home_frame)
+        reminder_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        self.reminder_text = scrolledtext.ScrolledText(reminder_frame, wrap=tk.WORD, height=10)
-        self.reminder_text.pack(fill=tk.BOTH, expand=True)
+        reminder_title = ctk.CTkLabel(reminder_frame, text="今日学习提醒", font=('Arial', 18, 'bold'))
+        reminder_title.pack(pady=(15, 5))
+        
+        self.reminder_text = ctk.CTkTextbox(reminder_frame, font=('Arial', 12))
+        self.reminder_text.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
         
         self.update_reminder()
     
-    def create_add_tab(self):
-        """创建添加单词标签页"""
-        self.add_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.add_frame, text="添加单词")
+    def create_add_tab_content(self):
+        """创建添加单词标签页内容"""
+        # 创建主容器
+        main_container = ctk.CTkFrame(self.add_tab)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 创建表单框架
-        form_frame = ttk.LabelFrame(self.add_frame, text="添加新单词", padding=20)
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # 标题
+        title_label = ctk.CTkLabel(main_container, text="添加新单词", font=('Arial', 20, 'bold'))
+        title_label.pack(pady=(20, 10))
+        
+        # 表单框架
+        form_frame = ctk.CTkFrame(main_container, fg_color="transparent")
+        form_frame.pack(fill=tk.BOTH, expand=True, padx=40, pady=10)
+        
+        # 使用 grid 布局
+        form_frame.grid_columnconfigure(1, weight=1)
         
         # 单词输入
-        ttk.Label(form_frame, text="单词:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=10)
-        self.word_entry = ttk.Entry(form_frame, width=40, font=('Arial', 12))
-        self.word_entry.grid(row=0, column=1, padx=5, pady=10, sticky=tk.W)
+        ctk.CTkLabel(form_frame, text="单词:", font=('Arial', 14)).grid(row=0, column=0, sticky=tk.W, padx=10, pady=15)
+        self.word_entry = ctk.CTkEntry(form_frame, placeholder_text="输入英文单词...", height=35)
+        self.word_entry.grid(row=0, column=1, padx=10, pady=15, sticky=tk.EW)
         
         # 释义输入
-        ttk.Label(form_frame, text="释义:").grid(row=1, column=0, sticky=tk.W, padx=5, pady=10)
-        self.meaning_entry = ttk.Entry(form_frame, width=40, font=('Arial', 12))
-        self.meaning_entry.grid(row=1, column=1, padx=5, pady=10, sticky=tk.W)
+        ctk.CTkLabel(form_frame, text="释义:", font=('Arial', 14)).grid(row=1, column=0, sticky=tk.W, padx=10, pady=15)
+        self.meaning_entry = ctk.CTkEntry(form_frame, placeholder_text="输入单词释义...", height=35)
+        self.meaning_entry.grid(row=1, column=1, padx=10, pady=15, sticky=tk.EW)
         
         # 例句输入
-        ttk.Label(form_frame, text="例句:").grid(row=2, column=0, sticky=tk.W, padx=5, pady=10)
-        self.example_entry = ttk.Entry(form_frame, width=60, font=('Arial', 12))
-        self.example_entry.grid(row=2, column=1, padx=5, pady=10, sticky=tk.W)
+        ctk.CTkLabel(form_frame, text="例句:", font=('Arial', 14)).grid(row=2, column=0, sticky=tk.W, padx=10, pady=15)
+        self.example_entry = ctk.CTkEntry(form_frame, placeholder_text="输入例句 (可选)...", height=35)
+        self.example_entry.grid(row=2, column=1, padx=10, pady=15, sticky=tk.EW)
         
         # 分类输入
-        ttk.Label(form_frame, text="分类:").grid(row=3, column=0, sticky=tk.W, padx=5, pady=10)
-        self.category_entry = ttk.Entry(form_frame, width=40, font=('Arial', 12))
-        self.category_entry.grid(row=3, column=1, padx=5, pady=10, sticky=tk.W)
+        ctk.CTkLabel(form_frame, text="分类:", font=('Arial', 14)).grid(row=3, column=0, sticky=tk.W, padx=10, pady=15)
+        self.category_entry = ctk.CTkEntry(form_frame, placeholder_text="输入分类 (可选)...", height=35)
+        self.category_entry.grid(row=3, column=1, padx=10, pady=15, sticky=tk.EW)
         
-        # 词汇级别选择框架
-        vocab_frame = ttk.Frame(form_frame)
-        vocab_frame.grid(row=4, column=1, pady=10, sticky=tk.W)
-        
-        ttk.Label(vocab_frame, text="词汇级别:").pack(side=tk.LEFT, padx=5, pady=5)
+        # 词汇级别
+        ctk.CTkLabel(form_frame, text="词汇级别:", font=('Arial', 14)).grid(row=4, column=0, sticky=tk.W, padx=10, pady=15)
         self.vocab_level_var = tk.StringVar(value="cet6")
-        vocab_combobox = ttk.Combobox(vocab_frame, textvariable=self.vocab_level_var, 
-                                     values=["cet4", "cet6", "gre"], state="readonly", width=10)
-        vocab_combobox.pack(side=tk.LEFT, padx=5, pady=5)
+        self.vocab_combobox = ctk.CTkComboBox(form_frame, variable=self.vocab_level_var, 
+                                             values=["cet4", "cet6", "gre"], height=35)
+        self.vocab_combobox.grid(row=4, column=1, padx=10, pady=15, sticky=tk.W)
         
-        # 按钮框架 - 重新设计布局，使按钮更大更易点击
-        button_frame = ttk.Frame(form_frame)
-        button_frame.grid(row=5, column=1, pady=25, sticky=tk.W)
+        # 按钮框架
+        button_frame = ctk.CTkFrame(main_container, fg_color="transparent")
+        button_frame.pack(pady=30)
         
-        # 使用更大的按钮和更好的间距
-        self.add_button = ttk.Button(button_frame, text="添加单词", command=self.add_word, width=12)
-        self.add_button.pack(side=tk.LEFT, padx=10, pady=5)
+        self.add_button = ctk.CTkButton(button_frame, text="添加单词", command=self.add_word, 
+                                       width=150, height=45, font=('Arial', 14, 'bold'))
+        self.add_button.pack(side=tk.LEFT, padx=15)
         
-        ttk.Button(button_frame, text="清空", command=self.clear_form, width=8).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(button_frame, text="清空", command=self.clear_form, 
+                      width=100, height=45, fg_color="gray").pack(side=tk.LEFT, padx=15)
         
-        # 添加随机生成单词按钮
-        ttk.Button(button_frame, text="随机生成单词", command=self.generate_random_words, width=15).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(button_frame, text="随机生成单词", command=self.generate_random_words, 
+                      width=150, height=45, fg_color="#2c3e50").pack(side=tk.LEFT, padx=15)
     
-    def create_view_tab(self):
-        """创建查看单词标签页"""
-        self.view_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.view_frame, text="查看单词")
+    def create_view_tab_content(self):
+        """创建查看单词标签页内容"""
+        # 主容器
+        main_container = ctk.CTkFrame(self.view_tab)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 控制面板 - 重新设计布局，使用更大的按钮和更好的间距
-        control_frame = ttk.Frame(self.view_frame)
-        control_frame.pack(fill=tk.X, padx=10, pady=10)
+        # 控制面板
+        control_panel = ctk.CTkFrame(main_container, fg_color="transparent")
+        control_panel.pack(fill=tk.X, padx=10, pady=10)
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(control_frame, text="刷新", command=self.refresh_word_list, width=8).pack(side=tk.LEFT, padx=8, pady=5)
-        ttk.Button(control_frame, text="删除选中", command=self.delete_selected_word, width=10).pack(side=tk.LEFT, padx=8, pady=5)
-        ttk.Button(control_frame, text="详情查看", command=self.show_selected_word_detail, width=10).pack(side=tk.LEFT, padx=8, pady=5)
-        ttk.Button(control_frame, text="获取详细信息", command=self.fetch_detailed_info, width=15).pack(side=tk.LEFT, padx=8, pady=5)
+        # 左侧按钮
+        button_frame = ctk.CTkFrame(control_panel, fg_color="transparent")
+        button_frame.pack(side=tk.LEFT)
         
-        # 添加分隔符
-        ttk.Separator(control_frame, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=15, fill=tk.Y)
+        ctk.CTkButton(button_frame, text="刷新", command=self.refresh_word_list, width=80).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(button_frame, text="删除选中", command=self.delete_selected_word, width=100, fg_color="#e74c3c", hover_color="#c0392b").pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(button_frame, text="详情查看", command=self.show_selected_word_detail, width=100).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(button_frame, text="获取详细信息", command=self.fetch_detailed_info, width=120).pack(side=tk.LEFT, padx=5)
         
-        # 搜索框 - 调整位置和大小
-        search_frame = ttk.Frame(control_frame)
-        search_frame.pack(side=tk.RIGHT, padx=8, pady=5)
+        # 右侧搜索
+        search_panel = ctk.CTkFrame(control_panel, fg_color="transparent")
+        search_panel.pack(side=tk.RIGHT)
         
-        ttk.Label(search_frame, text="搜索:").pack(side=tk.LEFT, padx=5)
+        ctk.CTkLabel(search_panel, text="搜索:").pack(side=tk.LEFT, padx=5)
         self.view_search_var = tk.StringVar()
         self.view_search_var.trace('w', self.on_view_search_change)
-        self.view_search_entry = ttk.Entry(search_frame, textvariable=self.view_search_var, width=20)
+        self.view_search_entry = ctk.CTkEntry(search_panel, textvariable=self.view_search_var, width=150)
         self.view_search_entry.pack(side=tk.LEFT, padx=5)
         
-        # 搜索历史下拉框
+        # 搜索历史 (使用 CTkComboBox)
         self.view_search_history_var = tk.StringVar()
-        self.view_search_history_combo = ttk.Combobox(search_frame, textvariable=self.view_search_history_var, 
-                                                      width=15, state="readonly")
+        self.view_search_history_combo = ctk.CTkComboBox(search_panel, variable=self.view_search_history_var, 
+                                                        values=[], width=120, command=self.on_view_search_history_selected)
         self.view_search_history_combo.pack(side=tk.LEFT, padx=5)
-        self.view_search_history_combo.bind('<<ComboboxSelected>>', self.on_view_search_history_selected)
         
-        # 搜索历史操作按钮
-        self.view_delete_history_button = ttk.Button(search_frame, text="删除", 
-                                                   command=self.delete_view_search_history, width=6)
-        self.view_delete_history_button.pack(side=tk.LEFT, padx=2)
-        
-        self.view_clear_history_button = ttk.Button(search_frame, text="清空", 
-                                                  command=self.clear_view_search_history, width=6)
-        self.view_clear_history_button.pack(side=tk.LEFT, padx=2)
+        ctk.CTkButton(search_panel, text="删除历史", command=self.delete_view_search_history, width=70, fg_color="gray").pack(side=tk.LEFT, padx=2)
         
         # 加载搜索历史
         self.load_view_search_history()
         
-        # 创建表格
+        # 表格容器 (使用 CTkFrame 来包裹 Treeview)
+        tree_container = ctk.CTkFrame(main_container)
+        tree_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # 创建表格 (继续使用 ttk.Treeview)
         columns = ("单词", "释义", "分类", "添加日期", "复习次数", "下次复习")
-        self.word_tree = ttk.Treeview(self.view_frame, columns=columns, show="headings", height=25)
+        self.word_tree = ttk.Treeview(tree_container, columns=columns, show="headings")
         
         # 定义列标题和宽度
-        column_widths = [150, 200, 120, 120, 80, 120]
+        column_widths = [150, 250, 120, 120, 80, 120]
         column_headers = ["单词", "释义", "分类", "添加日期", "复习次数", "下次复习"]
         for i, (col, header) in enumerate(zip(columns, column_headers)):
             self.word_tree.heading(col, text=header)
             self.word_tree.column(col, width=column_widths[i], anchor=tk.CENTER)
         
-        # 添加滚动条
-        tree_scroll_y = ttk.Scrollbar(self.view_frame, orient=tk.VERTICAL, command=self.word_tree.yview)
-        tree_scroll_x = ttk.Scrollbar(self.view_frame, orient=tk.HORIZONTAL, command=self.word_tree.xview)
-        self.word_tree.configure(yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
+        # 滚动条 (CustomTkinter 的滚动条不能直接用于 Treeview，所以用标准的)
+        tree_scroll_y = ttk.Scrollbar(tree_container, orient=tk.VERTICAL, command=self.word_tree.yview)
+        self.word_tree.configure(yscrollcommand=tree_scroll_y.set)
         
         # 布局
-        self.word_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(10, 0), pady=10)
-        tree_scroll_y.pack(side=tk.RIGHT, fill=tk.Y, pady=10)
-        tree_scroll_x.pack(side=tk.BOTTOM, fill=tk.X, padx=10)
+        self.word_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        tree_scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
         
-        # 绑定双击事件和右键菜单
+        # 绑定事件
         self.word_tree.bind("<Double-1>", self.on_word_double_click)
         self.word_tree.bind("<Button-3>", self.show_context_menu)
         
-        # 创建右键菜单
+        # 右键菜单
         self.context_menu = tk.Menu(self.word_tree, tearoff=0)
         self.context_menu.add_command(label="查看详情", command=self.show_selected_word_detail)
         self.context_menu.add_command(label="获取详细信息", command=self.fetch_detailed_info)
@@ -424,86 +493,54 @@ class WordReminderGUI:
         info = self.word_manager.get_word(word)
         
         # 创建详情窗口
-        detail_window = tk.Toplevel(self.root)
+        detail_window = ctk.CTkToplevel(self.root)
         detail_window.title(f"单词详情 - {word}")
-        detail_window.geometry("600x500")
+        detail_window.geometry("600x600")
         detail_window.minsize(500, 400)
         
         # 设置窗口居中
         detail_window.transient(self.root)
         detail_window.grab_set()
         
-        # 创建笔记本控件用于标签页
-        detail_notebook = ttk.Notebook(detail_window)
-        detail_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # 创建标签页
+        detail_tabview = ctk.CTkTabview(detail_window)
+        detail_tabview.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
         # 基本信息标签页
-        basic_frame = ttk.Frame(detail_notebook)
-        detail_notebook.add(basic_frame, text="基本信息")
+        basic_tab = detail_tabview.add("基本信息")
+        basic_scroll = ctk.CTkScrollableFrame(basic_tab, fg_color="transparent")
+        basic_scroll.pack(fill=tk.BOTH, expand=True)
         
-        # 创建基本信息内容
-        basic_canvas = tk.Canvas(basic_frame)
-        basic_scrollbar = ttk.Scrollbar(basic_frame, orient="vertical", command=basic_canvas.yview)
-        basic_scrollable_frame = ttk.Frame(basic_canvas)
-        
-        basic_scrollable_frame.bind(
-            "<Configure>",
-            lambda e: basic_canvas.configure(scrollregion=basic_canvas.bbox("all"))
-        )
-        
-        basic_canvas.create_window((0, 0), window=basic_scrollable_frame, anchor="nw")
-        basic_canvas.configure(yscrollcommand=basic_scrollbar.set)
-        
-        # 显示基本信息
-        ttk.Label(basic_scrollable_frame, text="单词:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-        ttk.Label(basic_scrollable_frame, text=word, font=('Arial', 12)).pack(anchor=tk.W, padx=20)
-        
-        ttk.Label(basic_scrollable_frame, text="释义:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-        ttk.Label(basic_scrollable_frame, text=info['meaning'], font=('Arial', 12), wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, padx=20)
+        def add_info_row(parent, label, value):
+            row = ctk.CTkFrame(parent, fg_color="transparent")
+            row.pack(fill=tk.X, pady=5)
+            ctk.CTkLabel(row, text=f"{label}:", font=('Arial', 12, 'bold'), width=100, anchor=tk.W).pack(side=tk.LEFT)
+            ctk.CTkLabel(row, text=str(value), font=('Arial', 12), wraplength=350, justify=tk.LEFT, anchor=tk.W).pack(side=tk.LEFT, fill=tk.X, expand=True)
+
+        add_info_row(basic_scroll, "单词", word)
+        add_info_row(basic_scroll, "释义", info['meaning'])
         
         if info.get('example'):
-            ttk.Label(basic_scrollable_frame, text="例句:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-            ttk.Label(basic_scrollable_frame, text=info['example'], font=('Arial', 12), wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, padx=20)
+            add_info_row(basic_scroll, "例句", info['example'])
         
         if info.get('category'):
-            ttk.Label(basic_scrollable_frame, text="分类:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-            ttk.Label(basic_scrollable_frame, text=info['category'], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
+            add_info_row(basic_scroll, "分类", info['category'])
         
         if info.get('add_date'):
-            ttk.Label(basic_scrollable_frame, text="添加日期:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-            ttk.Label(basic_scrollable_frame, text=info['add_date'][:10], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
+            add_info_row(basic_scroll, "添加日期", info['add_date'][:10])
         
-        ttk.Label(basic_scrollable_frame, text="复习次数:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-        ttk.Label(basic_scrollable_frame, text=str(info.get('review_count', 0)), font=('Arial', 12)).pack(anchor=tk.W, padx=20)
+        add_info_row(basic_scroll, "复习次数", info.get('review_count', 0))
         
         if info.get('last_reviewed'):
-            ttk.Label(basic_scrollable_frame, text="上次复习:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-            ttk.Label(basic_scrollable_frame, text=info['last_reviewed'][:10], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
+            add_info_row(basic_scroll, "上次复习", info['last_reviewed'][:10])
         
         if info.get('next_review'):
-            ttk.Label(basic_scrollable_frame, text="下次复习:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-            ttk.Label(basic_scrollable_frame, text=info['next_review'][:10], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
-        
-        # 布局滚动区域
-        basic_canvas.pack(side="left", fill="both", expand=True)
-        basic_scrollbar.pack(side="right", fill="y")
+            add_info_row(basic_scroll, "下次复习", info['next_review'][:10])
         
         # 详细信息标签页（从词典API获取）
-        detail_frame = ttk.Frame(detail_notebook)
-        detail_notebook.add(detail_frame, text="详细信息")
-        
-        # 创建详细信息内容
-        detail_canvas = tk.Canvas(detail_frame)
-        detail_scrollbar = ttk.Scrollbar(detail_frame, orient="vertical", command=detail_canvas.yview)
-        detail_scrollable_frame = ttk.Frame(detail_canvas)
-        
-        detail_scrollable_frame.bind(
-            "<Configure>",
-            lambda e: detail_canvas.configure(scrollregion=detail_canvas.bbox("all"))
-        )
-        
-        detail_canvas.create_window((0, 0), window=detail_scrollable_frame, anchor="nw")
-        detail_canvas.configure(yscrollcommand=detail_scrollbar.set)
+        detail_tab = detail_tabview.add("详细信息")
+        detail_scroll = ctk.CTkScrollableFrame(detail_tab, fg_color="transparent")
+        detail_scroll.pack(fill=tk.BOTH, expand=True)
         
         # 尝试从词典API获取更详细的信息
         if hasattr(self.word_manager, 'dictionary_api') and self.word_manager.dictionary_api:
@@ -513,50 +550,46 @@ class WordReminderGUI:
                 if word_info:
                     # 显示音标
                     if word_info.get('phonetic'):
-                        ttk.Label(detail_scrollable_frame, text="音标:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
-                        ttk.Label(detail_scrollable_frame, text=word_info['phonetic'], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
+                        ctk.CTkLabel(detail_scroll, text="音标:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
+                        ctk.CTkLabel(detail_scroll, text=word_info['phonetic'], font=('Arial', 12)).pack(anchor=tk.W, padx=20)
                     
                     # 显示英文释义
                     if word_info.get('meanings'):
-                        ttk.Label(detail_scrollable_frame, text="英文释义:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
+                        ctk.CTkLabel(detail_scroll, text="英文释义:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
                         for i, meaning_info in enumerate(word_info['meanings']):
                             part_of_speech = meaning_info.get('part_of_speech', '')
                             definition = meaning_info.get('definition', '')
                             meaning_text = f"{i+1}. {part_of_speech}: {definition}" if part_of_speech else f"{i+1}. {definition}"
-                            ttk.Label(detail_scrollable_frame, text=meaning_text, font=('Arial', 11), wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
+                            ctk.CTkLabel(detail_scroll, text=meaning_text, font=('Arial', 11), wraplength=450, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
                     
                     # 显示中文释义
                     if word_info.get('chinese_meanings'):
-                        ttk.Label(detail_scrollable_frame, text="中文释义:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
+                        ctk.CTkLabel(detail_scroll, text="中文释义:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
                         for i, meaning_info in enumerate(word_info['chinese_meanings']):
                             part_of_speech = meaning_info.get('part_of_speech', '')
                             definition = meaning_info.get('definition', '')
                             meaning_text = f"{i+1}. {part_of_speech}: {definition}" if part_of_speech else f"{i+1}. {definition}"
-                            ttk.Label(detail_scrollable_frame, text=meaning_text, font=('Arial', 11), wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
+                            ctk.CTkLabel(detail_scroll, text=meaning_text, font=('Arial', 11), wraplength=450, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
                     
                     # 显示例句
                     if word_info.get('examples'):
-                        ttk.Label(detail_scrollable_frame, text="例句:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
+                        ctk.CTkLabel(detail_scroll, text="例句:", font=('Arial', 12, 'bold')).pack(anchor=tk.W, pady=(10, 2))
                         for i, example in enumerate(word_info['examples']):
-                            ttk.Label(detail_scrollable_frame, text=f"{i+1}. {example}", font=('Arial', 11), wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
+                            ctk.CTkLabel(detail_scroll, text=f"{i+1}. {example}", font=('Arial', 11), wraplength=450, justify=tk.LEFT).pack(anchor=tk.W, padx=30, pady=2)
                 else:
-                    ttk.Label(detail_scrollable_frame, text="未找到该单词的详细信息", font=('Arial', 12)).pack(pady=20)
+                    ctk.CTkLabel(detail_scroll, text="未找到该单词的详细信息", font=('Arial', 12)).pack(pady=20)
             except Exception as e:
-                ttk.Label(detail_scrollable_frame, text=f"获取详细信息时发生错误: {str(e)}", font=('Arial', 12)).pack(pady=20)
+                ctk.CTkLabel(detail_scroll, text=f"获取详细信息时发生错误: {str(e)}", font=('Arial', 12)).pack(pady=20)
             finally:
                 self.hide_loading_indicator()
         else:
-            ttk.Label(detail_scrollable_frame, text="词典API不可用，无法获取详细信息", font=('Arial', 12)).pack(pady=20)
-        
-        # 布局滚动区域
-        detail_canvas.pack(side="left", fill="both", expand=True)
-        detail_scrollbar.pack(side="right", fill="y")
+            ctk.CTkLabel(detail_scroll, text="词典API不可用，无法获取详细信息", font=('Arial', 12)).pack(pady=20)
         
         # 添加关闭按钮
-        button_frame = ttk.Frame(detail_window)
-        button_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        button_frame = ctk.CTkFrame(detail_window, fg_color="transparent")
+        button_frame.pack(fill=tk.X, padx=20, pady=(0, 20))
         
-        ttk.Button(button_frame, text="关闭", command=detail_window.destroy).pack(side=tk.RIGHT, padx=5)
+        ctk.CTkButton(button_frame, text="关闭", command=detail_window.destroy, width=100).pack(side=tk.RIGHT, padx=5)
     
     def fetch_detailed_info(self):
         """获取选中单词的详细信息"""
@@ -619,129 +652,120 @@ class WordReminderGUI:
             # 隐藏加载指示器
             self.hide_loading_indicator()
     
-    def create_review_tab(self):
-        """创建复习单词标签页"""
-        self.review_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.review_frame, text="复习单词")
+    def create_review_tab_content(self):
+        """创建复习单词标签页内容"""
+        # 复习控制面板
+        control_frame = ctk.CTkFrame(self.review_tab)
+        control_frame.pack(fill=tk.X, padx=20, pady=20)
         
-        # 复习控制面板 - 重新设计布局，使按钮更大更易点击
-        control_frame = ttk.Frame(self.review_frame)
-        control_frame.pack(fill=tk.X, padx=10, pady=10)
+        # 按钮容器
+        button_container = ctk.CTkFrame(control_frame, fg_color="transparent")
+        button_container.pack(fill=tk.X, padx=10, pady=10)
         
-        # 使用更大的按钮和更好的间距
-        self.start_review_button = ttk.Button(control_frame, text="开始复习", command=self.start_review, width=12)
-        self.start_review_button.pack(side=tk.LEFT, padx=10, pady=5)
+        # 使用更大的按钮
+        self.start_review_button = ctk.CTkButton(button_container, text="开始复习", command=self.start_review, width=120)
+        self.start_review_button.pack(side=tk.LEFT, padx=10)
         
         # 添加快捷复习按钮
-        self.quick_review_button = ttk.Button(control_frame, text="快速复习", command=self.quick_review, width=12)
-        self.quick_review_button.pack(side=tk.LEFT, padx=10, pady=5)
+        self.quick_review_button = ctk.CTkButton(button_container, text="快速复习", command=self.quick_review, width=120)
+        self.quick_review_button.pack(side=tk.LEFT, padx=10)
         
         # 添加暂停/继续按钮
-        self.pause_review_button = ttk.Button(control_frame, text="暂停复习", command=self.toggle_pause_review, width=12, state=tk.DISABLED)
-        self.pause_review_button.pack(side=tk.LEFT, padx=5, pady=5)
+        self.pause_review_button = ctk.CTkButton(button_container, text="暂停复习", command=self.toggle_pause_review, 
+                                                width=120, state=tk.DISABLED)
+        self.pause_review_button.pack(side=tk.LEFT, padx=10)
         
         # 添加结束复习按钮
-        self.stop_review_button = ttk.Button(control_frame, text="结束复习", command=self.stop_review, width=12, state=tk.DISABLED)
-        self.stop_review_button.pack(side=tk.LEFT, padx=5, pady=5)
+        self.stop_review_button = ctk.CTkButton(button_container, text="结束复习", command=self.stop_review, 
+                                               width=120, state=tk.DISABLED, fg_color="#e74c3c", hover_color="#c0392b")
+        self.stop_review_button.pack(side=tk.LEFT, padx=10)
         
-        # 添加分隔符
-        separator = ttk.Separator(control_frame, orient=tk.VERTICAL)
-        separator.pack(side=tk.LEFT, padx=20, fill=tk.Y)
+        # 信息容器
+        info_container = ctk.CTkFrame(control_frame, fg_color="transparent")
+        info_container.pack(fill=tk.X, padx=10, pady=10)
         
-        self.review_count_label = ttk.Label(control_frame, text="待复习单词: 0", font=('Arial', 10, 'bold'))
-        self.review_count_label.pack(side=tk.LEFT, padx=10, pady=5)
+        self.review_count_label = ctk.CTkLabel(info_container, text="待复习单词: 0", font=('Arial', 14, 'bold'))
+        self.review_count_label.pack(side=tk.LEFT, padx=10)
         
         # 添加刷新按钮
-        refresh_button = ttk.Button(control_frame, text="刷新", command=self.update_review_count, width=8)
-        refresh_button.pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(info_container, text="刷新", command=self.update_review_count, width=80).pack(side=tk.LEFT, padx=10)
         
-        # 复习区域
-        self.review_notebook = ttk.Notebook(self.review_frame)
-        self.review_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        # 复习区域 - 使用 CTkTabview 代替 Notebook
+        self.review_tabview = ctk.CTkTabview(self.review_tab)
+        self.review_tabview.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
         
-        # 学习卡片视图
-        self.card_frame = ttk.Frame(self.review_notebook)
-        self.review_notebook.add(self.card_frame, text="学习卡片")
+        # 添加标签页
+        self.card_frame = self.review_tabview.add("学习卡片")
+        self.stats_frame = self.review_tabview.add("复习统计")
         
         # 卡片内容
-        card_content_frame = ttk.Frame(self.card_frame)
+        card_content_frame = ctk.CTkFrame(self.card_frame, fg_color="transparent")
         card_content_frame.pack(expand=True, fill=tk.BOTH)
         
         # 单词显示区域
-        word_display_frame = ttk.Frame(card_content_frame)
-        word_display_frame.pack(expand=True, fill=tk.BOTH, pady=20)
+        word_display_frame = ctk.CTkFrame(card_content_frame)
+        word_display_frame.pack(expand=True, fill=tk.BOTH, padx=40, pady=20)
         
-        self.word_label = ttk.Label(word_display_frame, text="", font=('Arial', 24, 'bold'))
-        self.word_label.pack(pady=(20, 10))
+        self.word_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 32, 'bold'))
+        self.word_label.pack(pady=(40, 10))
         
-        self.phonetic_label = ttk.Label(word_display_frame, text="", font=('Arial', 14), foreground='gray')
+        self.phonetic_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 18), text_color='gray')
         self.phonetic_label.pack(pady=5)
         
-        self.meaning_label = ttk.Label(word_display_frame, text="", font=('Arial', 16))
-        self.meaning_label.pack(pady=10)
+        self.meaning_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 20))
+        self.meaning_label.pack(pady=20)
         
-        self.example_label = ttk.Label(word_display_frame, text="", font=('Arial', 12), foreground='gray')
+        self.example_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 16), text_color='gray')
         self.example_label.pack(pady=10)
         
         # 进度显示
-        progress_frame = ttk.Frame(card_content_frame)
-        progress_frame.pack(pady=10)
+        progress_frame = ctk.CTkFrame(card_content_frame, fg_color="transparent")
+        progress_frame.pack(pady=10, fill=tk.X, padx=40)
         
-        self.progress_label = ttk.Label(progress_frame, text="")
+        self.progress_label = ctk.CTkLabel(progress_frame, text="")
         self.progress_label.pack(side=tk.LEFT)
         
         # 添加进度条
-        self.review_progress = ttk.Progressbar(progress_frame, length=300, mode='determinate')
-        self.review_progress.pack(side=tk.RIGHT, padx=20)
+        self.review_progress = ctk.CTkProgressBar(progress_frame)
+        self.review_progress.pack(side=tk.RIGHT, fill=tk.X, expand=True, padx=(20, 0))
+        self.review_progress.set(0)
         
-        # 按钮框架 - 重新设计布局，使其更直观
-        button_frame = ttk.Frame(card_content_frame)
+        # 按钮框架
+        button_frame = ctk.CTkFrame(card_content_frame, fg_color="transparent")
         button_frame.pack(pady=20, fill=tk.X, padx=50)
         
-        # 使用更大的按钮，更好的布局，采用网格布局使按钮更加整齐
-        button_sub_frame = ttk.Frame(button_frame)
+        # 按钮居中容器
+        button_sub_frame = ctk.CTkFrame(button_frame, fg_color="transparent")
         button_sub_frame.pack(expand=True)
         
-        # 使用网格布局优化按钮排列，使它们居中且间距一致
-        self.not_know_button = ttk.Button(button_sub_frame, text="不认识 (✗)", 
+        # 按钮布局
+        self.not_know_button = ctk.CTkButton(button_sub_frame, text="不认识 (✗)", 
                                          command=lambda: self.review_feedback(False),
-                                         state=tk.DISABLED, width=15)
-        self.not_know_button.grid(row=0, column=0, padx=15, pady=10)
+                                         state=tk.DISABLED, width=150, height=45, fg_color="#e74c3c", hover_color="#c0392b")
+        self.not_know_button.pack(side=tk.LEFT, padx=20)
         
-        self.know_button = ttk.Button(button_sub_frame, text="认识 (✓)", 
+        self.know_button = ctk.CTkButton(button_sub_frame, text="认识 (✓)", 
                                      command=lambda: self.review_feedback(True),
-                                     state=tk.DISABLED, width=15)
-        self.know_button.grid(row=0, column=1, padx=15, pady=10)
+                                     state=tk.DISABLED, width=150, height=45, fg_color="#2ecc71", hover_color="#27ae60")
+        self.know_button.pack(side=tk.LEFT, padx=20)
         
         # 添加"稍后复习"按钮
-        self.later_button = ttk.Button(button_sub_frame, text="稍后复习", 
+        self.later_button = ctk.CTkButton(button_sub_frame, text="稍后复习", 
                                       command=lambda: self.review_feedback(None),
-                                      state=tk.DISABLED, width=15)
-        self.later_button.grid(row=0, column=2, padx=15, pady=10)
+                                      state=tk.DISABLED, width=150, height=45, fg_color="#f39c12", hover_color="#d35400")
+        self.later_button.pack(side=tk.LEFT, padx=20)
         
-        # 配置列权重使按钮居中
-        button_sub_frame.columnconfigure(0, weight=1)
-        button_sub_frame.columnconfigure(1, weight=1)
-        button_sub_frame.columnconfigure(2, weight=1)
-        
-        # 复习统计视图
-        self.stats_frame = ttk.Frame(self.review_notebook)
-        self.review_notebook.add(self.stats_frame, text="复习统计")
-        
-        # 在统计视图中添加控制按钮 - 使用更好的布局和间距
-        stats_control_frame = ttk.Frame(self.stats_frame)
+        # 在统计视图中添加控制按钮
+        stats_control_frame = ctk.CTkFrame(self.stats_frame)
         stats_control_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(stats_control_frame, text="导出复习记录", command=self.export_review_record, width=12).pack(side=tk.LEFT, padx=10, pady=5)
-        ttk.Button(stats_control_frame, text="重新开始", command=self.restart_review, width=12).pack(side=tk.LEFT, padx=10, pady=5)
-        ttk.Button(stats_control_frame, text="查看历史记录", command=self.show_review_history, width=12).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(stats_control_frame, text="导出复习记录", command=self.export_review_record, width=120).pack(side=tk.LEFT, padx=10, pady=10)
+        ctk.CTkButton(stats_control_frame, text="重新开始", command=self.restart_review, width=120).pack(side=tk.LEFT, padx=10, pady=10)
+        ctk.CTkButton(stats_control_frame, text="查看历史记录", command=self.show_review_history, width=120).pack(side=tk.LEFT, padx=10, pady=10)
         
-        # 添加分隔符和提示信息
-        ttk.Separator(stats_control_frame, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=20, fill=tk.Y)
-        ttk.Label(stats_control_frame, text="复习完成后可导出记录或重新开始", font=('Arial', 9)).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkLabel(stats_control_frame, text="复习完成后可导出记录或重新开始", font=('Arial', 12)).pack(side=tk.LEFT, padx=20)
         
-        self.stats_text = scrolledtext.ScrolledText(self.stats_frame, wrap=tk.WORD)
+        self.stats_text = ctk.CTkTextbox(self.stats_frame, font=('Arial', 12))
         self.stats_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         # 初始化复习状态
@@ -753,98 +777,102 @@ class WordReminderGUI:
         # 更新待复习单词数量
         self.update_review_count()
     
-    def create_search_tab(self):
-        """创建搜索单词标签页"""
-        self.search_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.search_frame, text="搜索单词")
+    def create_search_tab_content(self):
+        """创建搜索单词标签页内容"""
+        # 搜索主容器
+        main_container = ctk.CTkFrame(self.search_tab)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 搜索框 - 重新设计布局，使用更大的控件和更好的间距
-        search_frame = ttk.LabelFrame(self.search_frame, text="搜索", padding=15)
-        search_frame.pack(fill=tk.X, padx=15, pady=15)
+        # 搜索框区域
+        search_area = ctk.CTkFrame(main_container)
+        search_area.pack(fill=tk.X, padx=15, pady=15)
+        
+        ctk.CTkLabel(search_area, text="搜索单词", font=('Arial', 20, 'bold')).pack(pady=10)
         
         # 第一行：搜索输入和基本操作
-        search_input_frame = ttk.Frame(search_frame)
-        search_input_frame.pack(fill=tk.X, pady=5)
+        search_input_frame = ctk.CTkFrame(search_area, fg_color="transparent")
+        search_input_frame.pack(fill=tk.X, pady=10, padx=20)
         
-        ttk.Label(search_input_frame, text="关键词:").pack(side=tk.LEFT, padx=10, pady=5)
-        self.search_entry = ttk.Entry(search_input_frame, width=35, font=('Arial', 11))
-        self.search_entry.pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkLabel(search_input_frame, text="关键词:", font=('Arial', 14)).pack(side=tk.LEFT, padx=10)
+        self.search_entry = ctk.CTkEntry(search_input_frame, placeholder_text="输入要搜索的单词或释义...", height=35)
+        self.search_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=10)
         self.search_entry.bind('<Return>', lambda event: self.search_words())
-        self.search_entry.bind('<KeyRelease>', lambda event: self.on_search_key_release())
         
-        # 使用更大的按钮和更好的间距
-        self.search_button = ttk.Button(search_input_frame, text="搜索", command=self.search_words, width=8)
-        self.search_button.pack(side=tk.LEFT, padx=10, pady=5)
+        # 搜索和清空按钮
+        self.search_button = ctk.CTkButton(search_input_frame, text="搜索", command=self.search_words, width=100, height=35)
+        self.search_button.pack(side=tk.LEFT, padx=5)
         
-        ttk.Button(search_input_frame, text="清空", command=self.clear_search, width=8).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(search_input_frame, text="清空", command=self.clear_search, width=80, height=35, fg_color="gray").pack(side=tk.LEFT, padx=5)
         
         # 第二行：搜索选项
-        self.search_options_frame = ttk.Frame(search_frame)
-        self.search_options_frame.pack(fill=tk.X, pady=5)
+        options_frame = ctk.CTkFrame(search_area, fg_color="transparent")
+        options_frame.pack(fill=tk.X, pady=10, padx=20)
         
-        # 搜索模式选择
-        ttk.Label(self.search_options_frame, text="搜索模式:").pack(side=tk.LEFT, padx=10, pady=5)
+        # 搜索模式
+        ctk.CTkLabel(options_frame, text="匹配模式:", font=('Arial', 12)).pack(side=tk.LEFT, padx=10)
         self.search_mode_var = tk.StringVar(value="partial")
-        ttk.Radiobutton(self.search_options_frame, text="模糊匹配", variable=self.search_mode_var, value="partial").pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(self.search_options_frame, text="精确匹配", variable=self.search_mode_var, value="exact").pack(side=tk.LEFT, padx=5)
+        ctk.CTkRadioButton(options_frame, text="模糊匹配", variable=self.search_mode_var, value="partial").pack(side=tk.LEFT, padx=10)
+        ctk.CTkRadioButton(options_frame, text="精确匹配", variable=self.search_mode_var, value="exact").pack(side=tk.LEFT, padx=10)
         
-        # 搜索范围选择
-        ttk.Label(self.search_options_frame, text="搜索范围:").pack(side=tk.LEFT, padx=10, pady=5)
+        # 搜索范围
+        ctk.CTkLabel(options_frame, text="搜索范围:", font=('Arial', 12)).pack(side=tk.LEFT, padx=(30, 10))
         self.search_scope_var = tk.StringVar(value="all")
-        ttk.Radiobutton(self.search_options_frame, text="全部", variable=self.search_scope_var, value="all").pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(self.search_options_frame, text="单词", variable=self.search_scope_var, value="word").pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(self.search_options_frame, text="释义", variable=self.search_scope_var, value="meaning").pack(side=tk.LEFT, padx=5)
-        ttk.Radiobutton(self.search_options_frame, text="分类", variable=self.search_scope_var, value="category").pack(side=tk.LEFT, padx=5)
+        ctk.CTkRadioButton(options_frame, text="全部", variable=self.search_scope_var, value="all").pack(side=tk.LEFT, padx=10)
+        ctk.CTkRadioButton(options_frame, text="单词", variable=self.search_scope_var, value="word").pack(side=tk.LEFT, padx=10)
+        ctk.CTkRadioButton(options_frame, text="释义", variable=self.search_scope_var, value="meaning").pack(side=tk.LEFT, padx=10)
+        ctk.CTkRadioButton(options_frame, text="分类", variable=self.search_scope_var, value="category").pack(side=tk.LEFT, padx=10)
         
         # 排序选项
-        ttk.Label(self.search_options_frame, text="排序:").pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkLabel(options_frame, text="排序:", font=('Arial', 12)).pack(side=tk.LEFT, padx=(30, 10))
         self.sort_var = tk.StringVar(value="word")
         sort_options = [("单词", "word"), ("添加日期", "date"), ("分类", "category"), ("复习次数", "review_count")]
         for text, value in sort_options:
-            ttk.Radiobutton(self.search_options_frame, text=text, variable=self.sort_var, value=value).pack(side=tk.LEFT, padx=5)
-        
+            ctk.CTkRadioButton(options_frame, text=text, variable=self.sort_var, value=value).pack(side=tk.LEFT, padx=5)
+            
         # 实时搜索选项
         self.realtime_search_var = tk.BooleanVar(value=False)
-        ttk.Checkbutton(self.search_options_frame, text="实时搜索", variable=self.realtime_search_var, 
-                       command=self.toggle_realtime_search).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkCheckBox(options_frame, text="实时搜索", variable=self.realtime_search_var, 
+                       command=self.toggle_realtime_search).pack(side=tk.LEFT, padx=20)
         
-        # 移除了搜索历史功能
+        # 结果区域
+        result_container = ctk.CTkFrame(main_container)
+        result_container.pack(fill=tk.BOTH, expand=True, padx=15, pady=15)
         
-        # 搜索结果
-        result_frame = ttk.LabelFrame(self.search_frame, text="搜索结果", padding=10)
-        result_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # 结果操作栏
+        result_actions = ctk.CTkFrame(result_container, fg_color="transparent")
+        result_actions.pack(fill=tk.X, padx=10, pady=5)
         
-        # 搜索结果操作按钮
-        result_actions_frame = ttk.Frame(result_frame)
-        result_actions_frame.pack(fill=tk.X, pady=(0, 5))
+        ctk.CTkLabel(result_actions, text="搜索结果", font=('Arial', 16, 'bold')).pack(side=tk.LEFT)
         
-        ttk.Button(result_actions_frame, text="导出搜索结果", command=self.export_search_results, width=12).pack(side=tk.LEFT, padx=5)
-        ttk.Button(result_actions_frame, text="复制选中项", command=self.copy_selected_search_results, width=12).pack(side=tk.LEFT, padx=5)
-        ttk.Button(result_actions_frame, text="清空结果", command=self.clear_search_results, width=10).pack(side=tk.LEFT, padx=5)
+        ctk.CTkButton(result_actions, text="导出搜索结果", command=self.export_search_results, width=100).pack(side=tk.RIGHT, padx=5)
+        ctk.CTkButton(result_actions, text="复制选中项", command=self.copy_selected_search_results, width=100).pack(side=tk.RIGHT, padx=5)
+        ctk.CTkButton(result_actions, text="清空结果", command=self.clear_search_results, width=80, fg_color="gray").pack(side=tk.RIGHT, padx=5)
         
-        # 搜索结果统计标签
-        self.search_stats_label = ttk.Label(result_actions_frame, text="找到 0 个匹配项", foreground='green')
-        self.search_stats_label.pack(side=tk.RIGHT, padx=10)
+        self.search_stats_label = ctk.CTkLabel(result_actions, text="找到 0 个匹配项", text_color="#2ecc71")
+        self.search_stats_label.pack(side=tk.RIGHT, padx=20)
         
+        # 表格容器 (使用 CTkFrame 来包裹 Treeview)
+        tree_container = ctk.CTkFrame(result_container)
+        tree_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        
+        # 创建搜索结果表格
         columns = ("单词", "释义", "分类", "添加日期", "复习次数")
-        self.search_tree = ttk.Treeview(result_frame, columns=columns, show="headings", height=20)
+        self.search_tree = ttk.Treeview(tree_container, columns=columns, show="headings")
         
-        # 定义列标题和宽度
-        column_widths = [150, 250, 100, 120, 80]
-        column_headers = ["单词", "释义", "分类", "添加日期", "复习次数"]
-        for i, (col, header) in enumerate(zip(columns, column_headers)):
-            self.search_tree.heading(col, text=header)
-            self.search_tree.column(col, width=column_widths[i], anchor=tk.CENTER)
+        # 定义列
+        col_widths = [150, 250, 100, 120, 80]
+        for i, col in enumerate(columns):
+            self.search_tree.heading(col, text=col)
+            self.search_tree.column(col, width=col_widths[i], anchor=tk.CENTER)
+            
+        # 滚动条
+        search_scroll_y = ttk.Scrollbar(tree_container, orient=tk.VERTICAL, command=self.search_tree.yview)
+        search_scroll_x = ttk.Scrollbar(tree_container, orient=tk.HORIZONTAL, command=self.search_tree.xview)
+        self.search_tree.configure(yscrollcommand=search_scroll_y.set, xscrollcommand=search_scroll_x.set)
         
-        # 添加滚动条
-        tree_scroll_y = ttk.Scrollbar(result_frame, orient=tk.VERTICAL, command=self.search_tree.yview)
-        tree_scroll_x = ttk.Scrollbar(result_frame, orient=tk.HORIZONTAL, command=self.search_tree.xview)
-        self.search_tree.configure(yscrollcommand=tree_scroll_y.set, xscrollcommand=tree_scroll_x.set)
-        
-        # 布局
         self.search_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        tree_scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
-        tree_scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
+        search_scroll_y.pack(side=tk.RIGHT, fill=tk.Y)
+        search_scroll_x.pack(side=tk.BOTTOM, fill=tk.X)
         
         # 绑定双击事件
         self.search_tree.bind("<Double-1>", self.on_search_double_click)
@@ -852,49 +880,45 @@ class WordReminderGUI:
         # 初始化搜索结果列表
         self.search_results = []
     
-    def create_stats_tab(self):
-        """创建统计信息标签页"""
-        self.stats_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.stats_frame, text="学习统计")
+    def create_stats_tab_content(self):
+        """创建统计信息标签页内容"""
+        # 统计主容器
+        main_container = ctk.CTkFrame(self.stats_tab)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 统计控制面板 - 重新设计布局，使用更大的控件和更好的间距
-        control_frame = ttk.Frame(self.stats_frame)
+        # 统计控制面板
+        control_frame = ctk.CTkFrame(main_container)
         control_frame.pack(fill=tk.X, padx=15, pady=15)
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(control_frame, text="刷新", command=self.show_statistics, width=8).pack(side=tk.LEFT, padx=10, pady=5)
+        # 按钮
+        ctk.CTkButton(control_frame, text="刷新统计", command=self.show_statistics, width=100).pack(side=tk.LEFT, padx=10, pady=10)
+        ctk.CTkButton(control_frame, text="导出图表", command=self.export_chart, width=100, fg_color="#2c3e50").pack(side=tk.LEFT, padx=10, pady=10)
         
-        # 添加导出按钮
-        ttk.Button(control_frame, text="导出图表", command=self.export_chart, width=10).pack(side=tk.LEFT, padx=10, pady=5)
+        # 时间范围筛选
+        filter_frame = ctk.CTkFrame(control_frame, fg_color="transparent")
+        filter_frame.pack(side=tk.RIGHT, padx=10)
         
-        # 添加分隔符
-        ttk.Separator(control_frame, orient=tk.VERTICAL).pack(side=tk.LEFT, padx=20, fill=tk.Y)
-        
-        # 添加时间范围筛选控件
-        ttk.Label(control_frame, text="时间范围:").pack(side=tk.LEFT, padx=(25, 10), pady=5)
+        ctk.CTkLabel(filter_frame, text="时间范围:").pack(side=tk.LEFT, padx=5)
         self.time_range_var = tk.StringVar(value="30")
-        time_range_combo = ttk.Combobox(control_frame, textvariable=self.time_range_var, 
-                                       values=["7", "14", "30", "60", "90"], width=12, state="readonly")
-        time_range_combo.pack(side=tk.LEFT, padx=10, pady=5)
-        time_range_combo.bind("<<ComboboxSelected>>", self.on_time_range_change)
+        time_range_combo = ctk.CTkComboBox(filter_frame, variable=self.time_range_var, 
+                                          values=["7", "14", "30", "60", "90"], width=100,
+                                          command=self.on_time_range_change)
+        time_range_combo.pack(side=tk.LEFT, padx=5)
         
-        # 统计内容框架
-        content_frame = ttk.Frame(self.stats_frame)
-        content_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+        # 统计内容框架 - 使用 CTkTabview 来组织不同的统计视图
+        stats_display_tabview = ctk.CTkTabview(main_container)
+        stats_display_tabview.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # 左侧：概览统计
-        overview_frame = ttk.LabelFrame(content_frame, text="学习概览", padding=15)
-        overview_frame.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(0, 10))
+        overview_tab = stats_display_tabview.add("学习概览")
+        trend_tab = stats_display_tabview.add("学习趋势")
         
-        self.overview_text = scrolledtext.ScrolledText(overview_frame, wrap=tk.WORD, font=('Arial', 11))
-        self.overview_text.pack(fill=tk.BOTH, expand=True)
+        # 概览统计内容
+        self.overview_text = ctk.CTkTextbox(overview_tab, font=('Arial', 13))
+        self.overview_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # 右侧：图表展示（简化版文本展示）
-        chart_frame = ttk.LabelFrame(content_frame, text="学习趋势", padding=15)
-        chart_frame.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True, padx=(10, 0))
-        
-        self.chart_text = scrolledtext.ScrolledText(chart_frame, wrap=tk.WORD, font=('Arial', 11))
-        self.chart_text.pack(fill=tk.BOTH, expand=True)
+        # 趋势统计内容
+        self.chart_text = ctk.CTkTextbox(trend_tab, font=('Arial', 13))
+        self.chart_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
         # 为图表文本组件绑定鼠标点击事件
         self.chart_text.bind("<Button-1>", self.on_chart_click)
@@ -902,40 +926,63 @@ class WordReminderGUI:
         # 初始化显示统计信息
         self.show_statistics()
     
-    def create_settings_tab(self):
-        """创建设置标签页"""
-        self.settings_frame = ttk.Frame(self.notebook)
-        self.notebook.add(self.settings_frame, text="设置")
+    def create_settings_tab_content(self):
+        """创建设置标签页内容"""
+        # 设置主容器
+        main_container = ctk.CTkFrame(self.settings_tab)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 设置内容
-        settings_container = ttk.LabelFrame(self.settings_frame, text="系统设置", padding=20)
-        settings_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # 设置内容滚动容器
+        settings_scroll = ctk.CTkScrollableFrame(main_container, label_text="系统设置")
+        settings_scroll.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         
-        # 数据管理 - 重新设计布局，使用更大的按钮和更好的间距
-        data_frame = ttk.LabelFrame(settings_container, text="数据管理", padding=15)
-        data_frame.pack(fill=tk.X, pady=15)
+        # 数据管理部分
+        data_frame = ctk.CTkFrame(settings_scroll)
+        data_frame.pack(fill=tk.X, padx=15, pady=15)
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(data_frame, text="备份数据", command=self.backup_data, width=10).pack(side=tk.LEFT, padx=12, pady=8)
-        ttk.Button(data_frame, text="恢复数据", command=self.restore_data, width=10).pack(side=tk.LEFT, padx=12, pady=8)
-        ttk.Button(data_frame, text="清空数据", command=self.clear_data, width=10).pack(side=tk.LEFT, padx=12, pady=8)
+        ctk.CTkLabel(data_frame, text="数据管理", font=('Arial', 16, 'bold')).pack(pady=10, padx=15, anchor=tk.W)
         
-        # 关于信息
-        about_frame = ttk.LabelFrame(settings_container, text="关于", padding=10)
-        about_frame.pack(fill=tk.X, pady=10)
+        btn_container = ctk.CTkFrame(data_frame, fg_color="transparent")
+        btn_container.pack(fill=tk.X, padx=15, pady=10)
         
-        about_text = """
-        单词记忆助手 V1.0
+        ctk.CTkButton(btn_container, text="备份数据", command=self.backup_data, width=120).pack(side=tk.LEFT, padx=10)
+        ctk.CTkButton(btn_container, text="恢复数据", command=self.restore_data, width=120).pack(side=tk.LEFT, padx=10)
+        ctk.CTkButton(btn_container, text="清空所有数据", command=self.clear_data, width=120, fg_color="#e74c3c", hover_color="#c0392b").pack(side=tk.LEFT, padx=10)
         
-        基于艾宾浩斯遗忘曲线理论的智能单词记忆系统
-        帮助您科学高效地记忆单词
+        # 界面设置部分
+        ui_frame = ctk.CTkFrame(settings_scroll)
+        ui_frame.pack(fill=tk.X, padx=15, pady=15)
         
-        开发者: 计算机专业学生
-        开发时间: 2025年12月
-        """
+        ctk.CTkLabel(ui_frame, text="界面设置", font=('Arial', 16, 'bold')).pack(pady=10, padx=15, anchor=tk.W)
         
-        about_label = ttk.Label(about_frame, text=about_text, justify=tk.LEFT)
-        about_label.pack()
+        theme_container = ctk.CTkFrame(ui_frame, fg_color="transparent")
+        theme_container.pack(fill=tk.X, padx=15, pady=10)
+        
+        ctk.CTkLabel(theme_container, text="外观模式:").pack(side=tk.LEFT, padx=10)
+        self.appearance_mode_var = tk.StringVar(value="System")
+        ctk.CTkOptionMenu(theme_container, variable=self.appearance_mode_var, 
+                          values=["System", "Light", "Dark"], 
+                          command=self.change_appearance_mode).pack(side=tk.LEFT, padx=10)
+        
+        # 关于信息部分
+        about_frame = ctk.CTkFrame(settings_scroll)
+        about_frame.pack(fill=tk.X, padx=15, pady=15)
+        
+        ctk.CTkLabel(about_frame, text="关于", font=('Arial', 16, 'bold')).pack(pady=10, padx=15, anchor=tk.W)
+        
+        about_text = """单词记忆助手 V1.0
+        
+基于艾宾浩斯遗忘曲线理论的智能单词记忆系统
+帮助您科学高效地记忆单词
+
+开发者: 计算机专业学生
+开发时间: 2025年12月"""
+        
+        ctk.CTkLabel(about_frame, text=about_text, justify=tk.LEFT).pack(pady=10, padx=20)
+    
+    def change_appearance_mode(self, new_appearance_mode: str):
+        """更改外观模式"""
+        ctk.set_appearance_mode(new_appearance_mode)
     
     def add_word(self):
         """添加单词"""
@@ -1023,7 +1070,7 @@ class WordReminderGUI:
         meaning_input = self.meaning_entry.get().strip()
         if not meaning_input:
             messagebox.showwarning("输入错误", "释义不能为空！")
-            self.add_button.config(state=tk.NORMAL, text="添加单词")
+            self.add_button.configure(state=tk.NORMAL, text="添加单词")
             return
         
         example_input = self.example_entry.get().strip()
@@ -1049,7 +1096,7 @@ class WordReminderGUI:
             self.update_reminder()
         else:
             self.show_error_feedback(f"单词 '{word}' {action}失败！")
-            self.add_button.config(state=tk.NORMAL, text="添加单词")
+            self.add_button.configure(state=tk.NORMAL, text="添加单词")
     
     def setup_form_validation(self):
         """设置表单验证"""
@@ -1163,25 +1210,20 @@ class WordReminderGUI:
         if not widget:
             return
         
-        # 清除之前的样式
-        for style in ['Error.TEntry', 'Success.TEntry', 'Warning.TEntry']:
-            if style in widget.configure('style'):
-                widget.configure(style='TEntry')
-        
-        # 应用新样式
+        # 应用新样式 (CustomTkinter 使用 border_color)
         if state == 'error':
-            widget.configure(style='Error.TEntry')
+            widget.configure(border_color="#e74c3c")
             self.validation_errors[field_name] = message
         elif state == 'success':
-            widget.configure(style='Success.TEntry')
+            widget.configure(border_color="#2ecc71")
             if field_name in self.validation_errors:
                 del self.validation_errors[field_name]
         elif state == 'warning':
-            widget.configure(style='Warning.TEntry')
+            widget.configure(border_color="#f39c12")
             if field_name in self.validation_errors:
                 del self.validation_errors[field_name]
         else:  # neutral
-            widget.configure(style='TEntry')
+            widget.configure(border_color=ctk.ThemeManager.theme["CTkEntry"]["border_color"])
             if field_name in self.validation_errors:
                 del self.validation_errors[field_name]
         
@@ -1189,9 +1231,9 @@ class WordReminderGUI:
         
         # 更新状态栏显示验证信息
         if message and state in ['error', 'warning']:
-            self.status_bar.config(text=f"{field_name.capitalize()}: {message}")
+            self.status_bar.configure(text=f"{field_name.capitalize()}: {message}")
         elif state == 'success':
-            self.status_bar.config(text=f"{field_name.capitalize()}: 验证通过")
+            self.status_bar.configure(text=f"{field_name.capitalize()}: 验证通过")
     
     def validate_all_fields(self):
         """验证所有字段"""
@@ -1207,20 +1249,21 @@ class WordReminderGUI:
         
         # 更新添加按钮状态
         if has_errors:
-            self.add_button.config(state=tk.DISABLED)
+            self.add_button.configure(state="disabled")
         else:
-            self.add_button.config(state=tk.NORMAL)
+            self.add_button.configure(state="normal")
         
         return not has_errors
     
     def show_success_feedback(self, message):
         """显示成功反馈"""
         # 在状态栏显示成功信息
-        self.status_bar.config(text=message, foreground='green')
+        self.status_bar.configure(text=message, text_color='#2ecc71')
         
         # 短暂改变状态栏颜色
         def reset_status_bar():
-            self.status_bar.config(foreground='black')
+            mode = ctk.get_appearance_mode()
+            self.status_bar.configure(text_color="#ffffff" if mode == "Dark" else "#000000")
         
         # 3秒后恢复状态栏颜色
         self.root.after(3000, reset_status_bar)
@@ -1231,11 +1274,12 @@ class WordReminderGUI:
     def show_error_feedback(self, message, field_name=None):
         """显示错误反馈"""
         # 在状态栏显示错误信息
-        self.status_bar.config(text=message, foreground='red')
+        self.status_bar.configure(text=message, text_color='#e74c3c')
         
         # 短暂改变状态栏颜色
         def reset_status_bar():
-            self.status_bar.config(foreground='black')
+            mode = ctk.get_appearance_mode()
+            self.status_bar.configure(text_color="#ffffff" if mode == "Dark" else "#000000")
         
         # 3秒后恢复状态栏颜色
         self.root.after(3000, reset_status_bar)
@@ -1258,11 +1302,12 @@ class WordReminderGUI:
     def show_warning_feedback(self, message):
         """显示警告反馈"""
         # 在状态栏显示警告信息
-        self.status_bar.config(text=message, foreground='orange')
+        self.status_bar.configure(text=message, text_color='#f39c12')
         
         # 短暂改变状态栏颜色
         def reset_status_bar():
-            self.status_bar.config(foreground='black')
+            mode = ctk.get_appearance_mode()
+            self.status_bar.configure(text_color="#ffffff" if mode == "Dark" else "#000000")
         
         # 3秒后恢复状态栏颜色
         self.root.after(3000, reset_status_bar)
@@ -1281,8 +1326,8 @@ class WordReminderGUI:
         for field in ['word', 'meaning', 'example', 'category']:
             self.set_field_validation_state(field, 'neutral')
         
-        self.status_bar.config(text="表单已清空")
-        self.add_button.config(state=tk.NORMAL)
+        self.status_bar.configure(text="表单已清空")
+        self.add_button.configure(state=tk.NORMAL)
     
     def refresh_word_list(self):
         """刷新单词列表"""
@@ -1342,46 +1387,58 @@ class WordReminderGUI:
         info = self.word_manager.get_word(word)
         
         # 创建编辑窗口
-        edit_window = tk.Toplevel(self.root)
+        edit_window = ctk.CTkToplevel(self.root)
         edit_window.title(f"编辑单词 - {word}")
-        edit_window.geometry("500x400")
-        edit_window.minsize(400, 300)
+        edit_window.geometry("600x500")
+        edit_window.minsize(500, 400)
         
         # 设置窗口居中
         edit_window.transient(self.root)
         edit_window.grab_set()
         
-        # 创建表单框架
-        form_frame = ttk.LabelFrame(edit_window, text="编辑单词信息", padding=20)
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        # 主容器
+        main_container = ctk.CTkFrame(edit_window)
+        main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
+        # 标题
+        ctk.CTkLabel(main_container, text="编辑单词信息", font=('Arial', 20, 'bold')).pack(pady=(10, 20))
+        
+        # 表单容器
+        form_scroll = ctk.CTkScrollableFrame(main_container, fg_color="transparent")
+        form_scroll.pack(fill=tk.BOTH, expand=True, padx=10)
+        
+        def add_edit_row(parent, label, variable, is_readonly=False):
+            row = ctk.CTkFrame(parent, fg_color="transparent")
+            row.pack(fill=tk.X, pady=10)
+            ctk.CTkLabel(row, text=f"{label}:", font=('Arial', 13), width=80, anchor=tk.W).pack(side=tk.LEFT, padx=(0, 10))
+            
+            if is_readonly:
+                entry = ctk.CTkEntry(row, textvariable=variable, font=('Arial', 12), state='readonly', height=35)
+            else:
+                entry = ctk.CTkEntry(row, textvariable=variable, font=('Arial', 12), height=35)
+            
+            entry.pack(side=tk.LEFT, fill=tk.X, expand=True)
+            return entry
+
         # 单词（只读）
-        ttk.Label(form_frame, text="单词:").grid(row=0, column=0, sticky=tk.W, padx=5, pady=10)
         word_var = tk.StringVar(value=word)
-        word_entry = ttk.Entry(form_frame, textvariable=word_var, width=40, font=('Arial', 12), state='readonly')
-        word_entry.grid(row=0, column=1, padx=5, pady=10, sticky=tk.W)
+        add_edit_row(form_scroll, "单词", word_var, is_readonly=True)
         
         # 释义
-        ttk.Label(form_frame, text="释义:").grid(row=1, column=0, sticky=tk.W, padx=5, pady=10)
         meaning_var = tk.StringVar(value=info['meaning'])
-        meaning_entry = ttk.Entry(form_frame, textvariable=meaning_var, width=40, font=('Arial', 12))
-        meaning_entry.grid(row=1, column=1, padx=5, pady=10, sticky=tk.W)
+        add_edit_row(form_scroll, "释义", meaning_var)
         
         # 例句
-        ttk.Label(form_frame, text="例句:").grid(row=2, column=0, sticky=tk.W, padx=5, pady=10)
         example_var = tk.StringVar(value=info.get('example', ''))
-        example_entry = ttk.Entry(form_frame, textvariable=example_var, width=60, font=('Arial', 12))
-        example_entry.grid(row=2, column=1, padx=5, pady=10, sticky=tk.W)
+        add_edit_row(form_scroll, "例句", example_var)
         
         # 分类
-        ttk.Label(form_frame, text="分类:").grid(row=3, column=0, sticky=tk.W, padx=5, pady=10)
         category_var = tk.StringVar(value=info.get('category', ''))
-        category_entry = ttk.Entry(form_frame, textvariable=category_var, width=40, font=('Arial', 12))
-        category_entry.grid(row=3, column=1, padx=5, pady=10, sticky=tk.W)
+        add_edit_row(form_scroll, "分类", category_var)
         
-        # 按钮框架 - 重新设计布局，使用更大的按钮和更好的间距
-        button_frame = ttk.Frame(form_frame)
-        button_frame.grid(row=4, column=1, pady=25, sticky=tk.W)
+        # 按钮框架
+        button_frame = ctk.CTkFrame(main_container, fg_color="transparent")
+        button_frame.pack(pady=20)
         
         def save_changes():
             """保存修改"""
@@ -1389,6 +1446,10 @@ class WordReminderGUI:
             meaning = meaning_var.get().strip()
             example = example_var.get().strip()
             category = category_var.get().strip()
+            
+            if not meaning:
+                messagebox.showwarning("警告", "释义不能为空！")
+                return
             
             if self.word_manager.update_word(word, meaning=meaning, example=example, category=category):
                 # 刷新单词列表
@@ -1401,9 +1462,8 @@ class WordReminderGUI:
             else:
                 messagebox.showerror("错误", f"单词 '{word}' 修改失败！")
         
-        # 使用更大的按钮和更好的间距
-        ttk.Button(button_frame, text="保存", command=save_changes, width=8).pack(side=tk.LEFT, padx=10, pady=5)
-        ttk.Button(button_frame, text="取消", command=edit_window.destroy, width=8).pack(side=tk.LEFT, padx=10, pady=5)
+        ctk.CTkButton(button_frame, text="保存修改", command=save_changes, width=120, height=40).pack(side=tk.LEFT, padx=15)
+        ctk.CTkButton(button_frame, text="取消", command=edit_window.destroy, width=100, height=40, fg_color="gray").pack(side=tk.LEFT, padx=15)
     
     def on_word_double_click(self, event):
         """单词列表双击事件"""
@@ -1430,7 +1490,7 @@ class WordReminderGUI:
     def update_review_count(self):
         """更新待复习单词数量显示"""
         review_count = len(self.word_manager.get_words_for_review())
-        self.review_count_label.config(text=f"待复习单词: {review_count}")
+        self.review_count_label.configure(text=f"待复习单词: {review_count}")
     
     def start_review(self):
         """开始复习（标准复习，更新复习数据）"""
@@ -1463,14 +1523,14 @@ class WordReminderGUI:
         self.show_next_review_word()
         
         # 启用按钮
-        self.know_button.config(state=tk.NORMAL)
-        self.not_know_button.config(state=tk.NORMAL)
-        self.later_button.config(state=tk.NORMAL)
-        self.start_review_button.config(state=tk.DISABLED)
+        self.know_button.configure(state=tk.NORMAL)
+        self.not_know_button.configure(state=tk.NORMAL)
+        self.later_button.configure(state=tk.NORMAL)
+        self.start_review_button.configure(state=tk.DISABLED)
         
-        # 启用暂停和结束按钮
-        self.pause_review_button.config(state=tk.NORMAL)
-        self.stop_review_button.config(state=tk.NORMAL)
+        # 启用暂停和停止按钮
+        self.pause_review_button.configure(state=tk.NORMAL)
+        self.stop_review_button.configure(state=tk.NORMAL)
         
         # 切换到卡片视图
         self.review_notebook.select(self.card_frame)
@@ -1485,7 +1545,7 @@ class WordReminderGUI:
         info = self.word_manager.get_word(self.current_review_word)
         
         # 显示单词信息
-        self.word_label.config(text=self.current_review_word)
+        self.word_label.configure(text=self.current_review_word)
         
         # 尝试从词典API获取音标信息
         phonetic_text = ""
@@ -1510,25 +1570,25 @@ class WordReminderGUI:
                 # 显示例句（如果没有用户自定义例句）
                 if not info.get('example') and word_info.get('examples'):
                     example_text = word_info['examples'][0] if word_info['examples'] else ""
-                    self.example_label.config(text=example_text)
+                    self.example_label.configure(text=example_text)
         
         # 更新显示
-        self.phonetic_label.config(text=phonetic_text)
-        self.meaning_label.config(text=meaning_text)
+        self.phonetic_label.configure(text=phonetic_text)
+        self.meaning_label.configure(text=meaning_text)
         
         # 如果没有从词典API获取到例句，则显示用户自定义的例句
         if not self.example_label.cget("text"):
-            self.example_label.config(text=info.get('example', ''))
+            self.example_label.configure(text=info.get('example', ''))
         
-        self.progress_label.config(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)}")
+        self.progress_label.configure(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)}")
         
         # 添加复习提示
         review_count = info.get('review_count', 0)
         if review_count == 0:
-            self.progress_label.config(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)} (新单词)")
+            self.progress_label.configure(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)} (新单词)")
         else:
             interval = info.get('interval', 1)
-            self.progress_label.config(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)} (第{review_count}次复习, 间隔{interval}天)")
+            self.progress_label.configure(text=f"进度: {self.current_review_index + 1}/{len(self.review_words)} (第{review_count}次复习, 间隔{interval}天)")
     
     def review_feedback(self, is_known):
         """处理复习反馈"""
@@ -1574,32 +1634,32 @@ class WordReminderGUI:
     def finish_review(self):
         """完成复习"""
         # 清空当前显示的单词信息
-        self.word_label.config(text="复习已完成")
-        self.phonetic_label.config(text="")
-        self.meaning_label.config(text="请查看复习统计信息")
-        self.example_label.config(text="")
-        self.progress_label.config(text="")
+        self.word_label.configure(text="复习已完成")
+        self.phonetic_label.configure(text="")
+        self.meaning_label.configure(text="请查看复习统计信息")
+        self.example_label.configure(text="")
+        self.progress_label.configure(text="")
         
         # 确保按钮状态正确设置
         try:
             # 禁用复习操作按钮
-            self.know_button.config(state=tk.DISABLED)
-            self.not_know_button.config(state=tk.DISABLED)
-            self.later_button.config(state=tk.DISABLED)
+            self.know_button.configure(state=tk.DISABLED)
+            self.not_know_button.configure(state=tk.DISABLED)
+            self.later_button.configure(state=tk.DISABLED)
             
             # 确保开始复习按钮被重新启用
-            self.start_review_button.config(state=tk.NORMAL)
+            self.start_review_button.configure(state=tk.NORMAL)
             
             # 禁用暂停和结束按钮
-            self.pause_review_button.config(state=tk.DISABLED)
-            self.stop_review_button.config(state=tk.DISABLED)
+            self.pause_review_button.configure(state=tk.DISABLED)
+            self.stop_review_button.configure(state=tk.DISABLED)
         except Exception as e:
             # 如果按钮状态设置失败，记录错误但继续执行
             print(f"按钮状态设置错误: {e}")
             # 尝试在UI线程中重新设置按钮状态
-            self.after(100, lambda: self.start_review_button.config(state=tk.NORMAL))
-            self.after(100, lambda: self.pause_review_button.config(state=tk.DISABLED))
-            self.after(100, lambda: self.stop_review_button.config(state=tk.DISABLED))
+            self.after(100, lambda: self.start_review_button.configure(state=tk.NORMAL))
+            self.after(100, lambda: self.pause_review_button.configure(state=tk.DISABLED))
+            self.after(100, lambda: self.stop_review_button.configure(state=tk.DISABLED))
         
         # 显示复习统计
         self.show_review_stats()
@@ -1620,10 +1680,10 @@ class WordReminderGUI:
             self.update_reminder()
             self.refresh_word_list()
             self.show_statistics()
-            self.status_bar.config(text="复习已完成，界面已更新")
+            self.status_bar.configure(text="复习已完成，界面已更新")
         else:
             # 快捷复习：只更新界面显示，不更新复习数据
-            self.status_bar.config(text="快捷复习已完成（练习模式）")
+            self.status_bar.configure(text="快捷复习已完成（练习模式）")
         
         # 显示详细的完成信息
         if self.review_results:
@@ -1661,15 +1721,15 @@ class WordReminderGUI:
         if self.review_paused:
             # 继续复习
             self.review_paused = False
-            self.pause_review_button.config(text="暂停复习")
+            self.pause_review_button.configure(text="暂停复习")
             
             # 启用复习按钮
-            self.know_button.config(state=tk.NORMAL)
-            self.not_know_button.config(state=tk.NORMAL)
-            self.later_button.config(state=tk.NORMAL)
+            self.know_button.configure(state=tk.NORMAL)
+            self.not_know_button.configure(state=tk.NORMAL)
+            self.later_button.configure(state=tk.NORMAL)
             
             # 更新状态栏
-            self.status_bar.config(text="复习已继续")
+            self.status_bar.configure(text="复习已继续")
             
             # 显示当前单词
             if self.current_review_word:
@@ -1677,22 +1737,22 @@ class WordReminderGUI:
         else:
             # 暂停复习
             self.review_paused = True
-            self.pause_review_button.config(text="继续复习")
+            self.pause_review_button.configure(text="继续复习")
             
             # 禁用复习按钮
-            self.know_button.config(state=tk.DISABLED)
-            self.not_know_button.config(state=tk.DISABLED)
-            self.later_button.config(state=tk.DISABLED)
+            self.know_button.configure(state=tk.DISABLED)
+            self.not_know_button.configure(state=tk.DISABLED)
+            self.later_button.configure(state=tk.DISABLED)
             
             # 更新状态栏
-            self.status_bar.config(text="复习已暂停")
+            self.status_bar.configure(text="复习已暂停")
             
             # 显示暂停信息
             if self.current_review_word:
-                self.word_label.config(text="复习已暂停")
-                self.meaning_label.config(text="点击'继续复习'按钮继续学习")
-                self.example_label.config(text="")
-                self.phonetic_label.config(text="")
+                self.word_label.configure(text="复习已暂停")
+                self.meaning_label.configure(text="点击'继续复习'按钮继续学习")
+                self.example_label.configure(text="")
+                self.phonetic_label.configure(text="")
     
     def stop_review(self):
         """结束当前复习会话"""
@@ -1707,26 +1767,26 @@ class WordReminderGUI:
         self.current_review_word = None
         
         # 清空当前显示的单词信息
-        self.word_label.config(text="复习已结束")
-        self.phonetic_label.config(text="")
-        self.meaning_label.config(text="点击'开始复习'按钮重新开始")
-        self.example_label.config(text="")
-        self.progress_label.config(text="")
+        self.word_label.configure(text="复习已结束")
+        self.phonetic_label.configure(text="")
+        self.meaning_label.configure(text="点击'开始复习'按钮重新开始")
+        self.example_label.configure(text="")
+        self.progress_label.configure(text="")
         
         # 禁用复习操作按钮
-        self.know_button.config(state=tk.DISABLED)
-        self.not_know_button.config(state=tk.DISABLED)
-        self.later_button.config(state=tk.DISABLED)
+        self.know_button.configure(state=tk.DISABLED)
+        self.not_know_button.configure(state=tk.DISABLED)
+        self.later_button.configure(state=tk.DISABLED)
         
         # 启用开始复习按钮
-        self.start_review_button.config(state=tk.NORMAL)
+        self.start_review_button.configure(state=tk.NORMAL)
         
         # 禁用暂停和结束按钮
-        self.pause_review_button.config(state=tk.DISABLED)
-        self.stop_review_button.config(state=tk.DISABLED)
+        self.pause_review_button.configure(state=tk.DISABLED)
+        self.stop_review_button.configure(state=tk.DISABLED)
         
         # 更新状态栏
-        self.status_bar.config(text="复习已结束")
+        self.status_bar.configure(text="复习已结束")
         
         # 显示结束信息
         messagebox.showinfo("复习已结束", "当前复习会话已结束。\n\n您可以：\n1. 点击'开始复习'重新开始复习\n2. 查看复习统计了解已完成的进度")
@@ -1742,42 +1802,36 @@ class WordReminderGUI:
                 return
             
             # 创建历史记录窗口
-            history_window = tk.Toplevel(self.root)
+            history_window = ctk.CTkToplevel(self.root)
             history_window.title("复习历史记录")
-            history_window.geometry("800x600")
-            history_window.minsize(600, 400)
+            history_window.geometry("900x700")
+            history_window.minsize(700, 500)
             
             # 设置窗口居中
             history_window.transient(self.root)
             history_window.grab_set()
             
-            # 创建框架
-            main_frame = ttk.Frame(history_window)
-            main_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            # 创建主容器
+            main_container = ctk.CTkFrame(history_window)
+            main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
             
             # 标题
-            title_label = ttk.Label(main_frame, text="复习历史记录", font=('Arial', 14, 'bold'))
-            title_label.pack(pady=(0, 10))
+            ctk.CTkLabel(main_container, text="复习历史记录", font=('Arial', 20, 'bold')).pack(pady=(0, 20))
             
-            # 创建笔记本控件用于标签页
-            history_notebook = ttk.Notebook(main_frame)
-            history_notebook.pack(fill=tk.BOTH, expand=True)
+            # 创建标签页 - 使用 CTkTabview
+            history_tabview = ctk.CTkTabview(main_container)
+            history_tabview.pack(fill=tk.BOTH, expand=True)
             
-            # 概览标签页
-            overview_frame = ttk.Frame(history_notebook)
-            history_notebook.add(overview_frame, text="概览")
+            overview_tab = history_tabview.add("概览")
+            detail_tab = history_tabview.add("详细记录")
             
-            # 详细记录标签页
-            detail_frame = ttk.Frame(history_notebook)
-            history_notebook.add(detail_frame, text="详细记录")
+            # 概览内容 - 使用 CTkTextbox
+            overview_text = ctk.CTkTextbox(overview_tab, font=('Arial', 13))
+            overview_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
             
-            # 概览内容
-            overview_text = scrolledtext.ScrolledText(overview_frame, wrap=tk.WORD, font=('Arial', 10))
-            overview_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-            
-            # 详细记录内容
-            detail_text = scrolledtext.ScrolledText(detail_frame, wrap=tk.WORD, font=('Arial', 9))
-            detail_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+            # 详细记录内容 - 使用 CTkTextbox
+            detail_text = ctk.CTkTextbox(detail_tab, font=('Arial', 12))
+            detail_text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
             
             # 生成概览统计
             total_sessions = len(history)
@@ -1812,7 +1866,7 @@ class WordReminderGUI:
                 overview_content += f"\n{i+1}. {timestamp[:16]}: {word_count}个单词, 正确率{accuracy:.1f}%"
             
             overview_text.insert(tk.END, overview_content)
-            overview_text.config(state=tk.DISABLED)
+            overview_text.configure(state="disabled")
             
             # 生成详细记录
             detail_content = "详细复习记录\n================\n\n"
@@ -1844,10 +1898,10 @@ class WordReminderGUI:
                 detail_content += "\n" + "-" * 50 + "\n\n"
             
             detail_text.insert(tk.END, detail_content)
-            detail_text.config(state=tk.DISABLED)
+            detail_text.configure(state="disabled")
             
-            # 添加导出按钮
-            button_frame = ttk.Frame(main_frame)
+            # 底部按钮
+            button_frame = ctk.CTkFrame(main_container, fg_color="transparent")
             button_frame.pack(fill=tk.X, pady=(10, 0))
             
             def export_history():
@@ -1863,8 +1917,8 @@ class WordReminderGUI:
                 except Exception as e:
                     messagebox.showerror("导出失败", f"导出复习历史时发生错误:\n{str(e)}")
             
-            ttk.Button(button_frame, text="导出历史记录", command=export_history).pack(side=tk.RIGHT, padx=5)
-            ttk.Button(button_frame, text="关闭", command=history_window.destroy).pack(side=tk.RIGHT, padx=5)
+            ctk.CTkButton(button_frame, text="导出历史记录", command=export_history, width=150).pack(side=tk.RIGHT, padx=10)
+            ctk.CTkButton(button_frame, text="关闭", command=history_window.destroy, width=100, fg_color="gray").pack(side=tk.RIGHT, padx=10)
             
         except Exception as e:
             messagebox.showerror("错误", f"显示复习历史时发生错误:\n{str(e)}")
@@ -2082,7 +2136,7 @@ class WordReminderGUI:
         self.stats_text.insert(tk.END, "准备开始新的复习会话...")
         
         # 启用开始复习按钮
-        self.start_review_button.config(state=tk.NORMAL)
+        self.start_review_button.configure(state=tk.NORMAL)
         
         # 切换到卡片视图
         self.review_notebook.select(self.card_frame)
@@ -2172,12 +2226,12 @@ class WordReminderGUI:
         """显示搜索结果统计"""
         if result_count == 0:
             messagebox.showinfo("搜索结果", f"未找到包含 '{keyword}' 的单词")
-            self.search_stats_label.config(text="找到 0 个匹配项", foreground='red')
+            self.search_stats_label.configure(text="找到 0 个匹配项", text_color="#e74c3c")
         else:
-            self.status_bar.config(text=f"找到 {result_count} 个匹配的单词", foreground='green')
-            self.search_stats_label.config(text=f"找到 {result_count} 个匹配项", foreground='green')
+            self.status_bar.configure(text=f"找到 {result_count} 个匹配的单词", text_color="#2ecc71")
+            self.search_stats_label.configure(text=f"找到 {result_count} 个匹配项", text_color="#2ecc71")
             # 3秒后恢复状态栏
-            self.root.after(3000, lambda: self.status_bar.config(foreground='black'))
+            self.root.after(3000, lambda: self.status_bar.configure(text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"]))
     
     def clear_search(self):
         """清空搜索"""
@@ -2186,7 +2240,7 @@ class WordReminderGUI:
         for item in self.search_tree.get_children():
             self.search_tree.delete(item)
         # 重置状态栏
-        self.status_bar.config(text="", foreground='black')
+        self.status_bar.configure(text="", text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"])
     
     def on_search_key_release(self):
         """搜索框按键释放事件 - 实时搜索"""
@@ -2199,9 +2253,9 @@ class WordReminderGUI:
     def toggle_realtime_search(self):
         """切换实时搜索模式"""
         if self.realtime_search_var.get():
-            self.status_bar.config(text="实时搜索已启用", foreground='blue')
+            self.status_bar.configure(text="实时搜索已启用", text_color="#3498db")
         else:
-            self.status_bar.config(text="实时搜索已禁用", foreground='black')
+            self.status_bar.configure(text="实时搜索已禁用", text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"])
     
 
     
@@ -2398,10 +2452,10 @@ class WordReminderGUI:
                 f.write(export_text)
             
             messagebox.showinfo("导出成功", f"搜索结果已导出到:\n{filepath}")
-            self.status_bar.config(text=f"搜索结果已导出到 {filename}", foreground='green')
+            self.status_bar.configure(text=f"搜索结果已导出到 {filename}", text_color="#2ecc71")
         except Exception as e:
             messagebox.showerror("导出失败", f"导出搜索结果时发生错误:\n{str(e)}")
-            self.status_bar.config(text="导出失败", foreground='red')
+            self.status_bar.configure(text="导出失败", text_color="#e74c3c")
     
     def copy_selected_search_results(self):
         """复制选中的搜索结果到剪贴板"""
@@ -2430,10 +2484,10 @@ class WordReminderGUI:
             
             count = len(selected_items)
             messagebox.showinfo("复制成功", f"已复制 {count} 个单词到剪贴板！")
-            self.status_bar.config(text=f"已复制 {count} 个单词到剪贴板", foreground='green')
+            self.status_bar.configure(text=f"已复制 {count} 个单词到剪贴板", text_color="#2ecc71")
         except Exception as e:
             messagebox.showerror("复制失败", f"复制到剪贴板时发生错误:\n{str(e)}")
-            self.status_bar.config(text="复制失败", foreground='red')
+            self.status_bar.configure(text="复制失败", text_color="#e74c3c")
     
     def clear_search_results(self):
         """清空搜索结果"""
@@ -2446,11 +2500,11 @@ class WordReminderGUI:
             self.search_results = []
         
         # 更新状态
-        self.search_stats_label.config(text="找到 0 个匹配项", foreground='red')
-        self.status_bar.config(text="搜索结果已清空", foreground='blue')
+        self.search_stats_label.configure(text="找到 0 个匹配项", text_color="#e74c3c")
+        self.status_bar.configure(text="搜索结果已清空", text_color="#3498db")
         
         # 3秒后恢复状态栏
-        self.root.after(3000, lambda: self.status_bar.config(foreground='black'))
+        self.root.after(3000, lambda: self.status_bar.configure(text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"]))
     
     def show_statistics(self):
         """显示统计信息"""
@@ -2542,36 +2596,36 @@ class WordReminderGUI:
     def _setup_chart_text_tags(self):
         """设置图表文本的标签样式（简洁实用版）"""
         # 配置必要类型的标签样式
-        self.chart_text.tag_configure("title", foreground="black", font=('Arial', 14, 'bold'))
-        self.chart_text.tag_configure("header", foreground="black", font=('Arial', 11, 'bold'))
-        self.chart_text.tag_configure("new_word", foreground="red")
-        self.chart_text.tag_configure("review_word", foreground="orange")
-        self.chart_text.tag_configure("mastered_word", foreground="purple")
-        self.chart_text.tag_configure("positive", foreground="green")
-        self.chart_text.tag_configure("negative", foreground="red")
-        self.chart_text.tag_configure("neutral", foreground="blue")
-        self.chart_text.tag_configure("metric_value", foreground="black")
-        self.chart_text.tag_configure("date_header", foreground="gray")
-        self.chart_text.tag_configure("separator", foreground="gray")
-        self.chart_text.tag_configure("legend_label", foreground="black")
+        self.chart_text._textbox.tag_configure("title", foreground="black", font=('Arial', 14, 'bold'))
+        self.chart_text._textbox.tag_configure("header", foreground="black", font=('Arial', 11, 'bold'))
+        self.chart_text._textbox.tag_configure("new_word", foreground="red")
+        self.chart_text._textbox.tag_configure("review_word", foreground="orange")
+        self.chart_text._textbox.tag_configure("mastered_word", foreground="purple")
+        self.chart_text._textbox.tag_configure("positive", foreground="green")
+        self.chart_text._textbox.tag_configure("negative", foreground="red")
+        self.chart_text._textbox.tag_configure("neutral", foreground="blue")
+        self.chart_text._textbox.tag_configure("metric_value", foreground="black")
+        self.chart_text._textbox.tag_configure("date_header", foreground="gray")
+        self.chart_text._textbox.tag_configure("separator", foreground="gray")
+        self.chart_text._textbox.tag_configure("legend_label", foreground="black")
 
     def _insert_colored_text(self, text, tag=None):
         """插入带颜色的文本"""
         if tag:
-            self.chart_text.insert(tk.END, text, tag)
+            self.chart_text._textbox.insert(tk.END, text, tag)
         else:
-            self.chart_text.insert(tk.END, text)
+            self.chart_text._textbox.insert(tk.END, text)
 
     def on_chart_click(self, event):
         """处理图表点击事件"""
         try:
             # 获取点击位置的索引
-            index = self.chart_text.index(f"@{event.x},{event.y}")
+            index = self.chart_text._textbox.index(f"@{event.x},{event.y}")
             
             # 获取当前行的所有文本
             line_start = f"{index.split('.')[0]}.0"
             line_end = f"{index.split('.')[0]}.end"
-            line_text = self.chart_text.get(line_start, line_end)
+            line_text = self.chart_text._textbox.get(line_start, line_end)
             
             # 根据点击的文本内容显示不同的详细信息
             if "学习趋势分析报告" in line_text:
@@ -2801,34 +2855,34 @@ class WordReminderGUI:
         self.show_next_review_word()
         
         # 启用按钮
-        self.know_button.config(state=tk.NORMAL)
-        self.not_know_button.config(state=tk.NORMAL)
-        self.later_button.config(state=tk.NORMAL)
-        self.start_review_button.config(state=tk.DISABLED)
+        self.know_button.configure(state=tk.NORMAL)
+        self.not_know_button.configure(state=tk.NORMAL)
+        self.later_button.configure(state=tk.NORMAL)
+        self.start_review_button.configure(state=tk.DISABLED)
         
         # 启用暂停和结束按钮
-        self.pause_review_button.config(state=tk.NORMAL)
-        self.stop_review_button.config(state=tk.NORMAL)
+        self.pause_review_button.configure(state=tk.NORMAL)
+        self.stop_review_button.configure(state=tk.NORMAL)
         
         # 切换到卡片视图
         self.review_notebook.select(self.card_frame)
         
         # 更新状态栏
-        self.status_bar.config(text=f"快捷复习已开始，将随机复习 {len(self.review_words)} 个单词（练习模式）")
+        self.status_bar.configure(text=f"快捷复习已开始，将随机复习 {len(self.review_words)} 个单词（练习模式）")
     
     def focus_search_entry(self):
         """聚焦到搜索输入框"""
         self.notebook.select(self.search_frame)
         self.search_entry.focus_set()
-        self.status_bar.config(text="已聚焦到搜索框，可以开始输入关键词")
+        self.status_bar.configure(text="已聚焦到搜索框，可以开始输入关键词")
     
     def search_next(self):
         """搜索下一个匹配项"""
         if hasattr(self, 'search_results') and self.search_results:
             # 如果有搜索结果，可以在这里实现搜索下一个功能
-            self.status_bar.config(text="搜索下一个功能已激活")
+            self.status_bar.configure(text="搜索下一个功能已激活")
         else:
-            self.status_bar.config(text="请先执行搜索操作")
+            self.status_bar.configure(text="请先执行搜索操作")
     
     def backup_data(self):
         """备份数据"""
@@ -3044,9 +3098,9 @@ class WordReminderGUI:
             self.meaning_entry.insert(0, combined_meaning)
         
         # 显示成功消息 - 使用状态栏显示替代弹窗
-        self.status_bar.config(text=f"已将随机单词 '{word}' 插入到输入字段中", foreground='green')
+        self.status_bar.configure(text=f"已将随机单词 '{word}' 插入到输入字段中", text_color="#2ecc71")
         # 3秒后恢复状态栏
-        self.root.after(3000, lambda: self.status_bar.config(foreground='black'))
+        self.root.after(3000, lambda: self.status_bar.configure(text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"]))
     
     def _show_random_words_error(self, error_msg):
         """显示随机单词生成错误"""
@@ -3056,19 +3110,19 @@ class WordReminderGUI:
             self.loading_window = None
             
         # 错误消息也使用状态栏显示
-        self.status_bar.config(text=f"生成随机单词时发生错误: {error_msg}", foreground='red')
+        self.status_bar.configure(text=f"生成随机单词时发生错误: {error_msg}", text_color="#e74c3c")
         # 3秒后恢复状态栏
-        self.root.after(3000, lambda: self.status_bar.config(foreground='black'))
+        self.root.after(3000, lambda: self.status_bar.configure(text_color=ctk.ThemeManager.theme["CTkLabel"]["text_color"]))
     
     def _regenerate_words(self, text_widget):
         """重新生成随机单词"""
         # 检查词典API是否可用
         if not hasattr(self.word_manager, 'dictionary_api') or not self.word_manager.dictionary_api:
-            text_widget.config(state=tk.NORMAL)
+            text_widget.configure(state=tk.NORMAL)
             text_widget.delete(1.0, tk.END)
             text_widget.insert(tk.END, "错误: 词典API不可用，无法生成随机单词！", "error")
             text_widget.tag_config("error", foreground="red")
-            text_widget.config(state=tk.DISABLED)
+            text_widget.configure(state=tk.DISABLED)
             return
             
         # 显示加载指示器
@@ -3112,7 +3166,7 @@ class WordReminderGUI:
                 self.loading_window = None
                 
             # 启用文本框编辑
-            text_widget.config(state=tk.NORMAL)
+            text_widget.configure(state=tk.NORMAL)
             
             # 清空内容
             text_widget.delete(1.0, tk.END)
@@ -3120,7 +3174,7 @@ class WordReminderGUI:
             if not random_words_info:
                 text_widget.insert(tk.END, "错误: 未能获取到随机单词，请检查网络连接或稍后重试。", "error")
                 text_widget.tag_config("error", foreground="red")
-                text_widget.config(state=tk.DISABLED)
+                text_widget.configure(state=tk.DISABLED)
                 return
                 
             # 格式化显示单词详细信息
@@ -3182,7 +3236,7 @@ class WordReminderGUI:
             text_widget.tag_config("info", font=('Arial', 10, 'italic'), foreground="green")
             
             # 设置文本框为只读
-            text_widget.config(state=tk.DISABLED)
+            text_widget.configure(state=tk.DISABLED)
             
         except Exception as e:
             # 关闭加载指示器
@@ -3190,11 +3244,11 @@ class WordReminderGUI:
                 self.loading_window.destroy()
                 self.loading_window = None
                 
-            text_widget.config(state=tk.NORMAL)
+            text_widget.configure(state=tk.NORMAL)
             text_widget.delete(1.0, tk.END)
             text_widget.insert(tk.END, f"重新生成随机单词时发生错误:\n{str(e)}", "error")
             text_widget.tag_config("error", foreground="red")
-            text_widget.config(state=tk.DISABLED)
+            text_widget.configure(state=tk.DISABLED)
     
     def on_closing(self):
         """关闭程序时的处理"""
@@ -3204,7 +3258,7 @@ class WordReminderGUI:
 
 def main():
     """主函数"""
-    root = tk.Tk()
+    root = ctk.CTk()
     app = WordReminderGUI(root)
     root.mainloop()
 
