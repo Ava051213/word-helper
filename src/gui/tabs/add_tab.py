@@ -42,8 +42,17 @@ class AddTab(BaseTab):
         
         # 单词输入
         ctk.CTkLabel(form_frame, text="单词:", font=('Arial', 14)).grid(row=0, column=0, sticky=tk.W, padx=10, pady=15)
-        self.word_entry = ctk.CTkEntry(form_frame, placeholder_text="输入英文单词...", height=35)
-        self.word_entry.grid(row=0, column=1, padx=10, pady=15, sticky=tk.EW)
+        
+        word_input_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        word_input_frame.grid(row=0, column=1, padx=10, pady=15, sticky=tk.EW)
+        word_input_frame.grid_columnconfigure(0, weight=1)
+        
+        self.word_entry = ctk.CTkEntry(word_input_frame, placeholder_text="输入英文单词...", height=35)
+        self.word_entry.grid(row=0, column=0, sticky=tk.EW)
+        
+        self.speak_button = ctk.CTkButton(word_input_frame, text="🔊", width=40, height=35, 
+                                         command=lambda: self.audio_manager.speak(self.word_entry.get()))
+        self.speak_button.grid(row=0, column=1, padx=(5, 0))
         
         # 释义输入
         ctk.CTkLabel(form_frame, text="释义:", font=('Arial', 14)).grid(row=1, column=0, sticky=tk.W, padx=10, pady=15)

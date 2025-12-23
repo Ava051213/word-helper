@@ -20,6 +20,7 @@ class ReviewTab(BaseTab):
         self.is_quick_review = False
         self.review_start_time = None
         self.review_paused = False
+        self.review_mode = tk.StringVar(value="Standard") # "Standard", "Dictation", "Choice"
         
         self.create_widgets()
         
@@ -60,6 +61,18 @@ class ReviewTab(BaseTab):
         
         # 添加刷新按钮
         ctk.CTkButton(info_container, text="刷新", command=self.update_review_count, width=80).pack(side=tk.LEFT, padx=10)
+
+        # 添加复习模式选择
+        mode_frame = ctk.CTkFrame(info_container, fg_color="transparent")
+        mode_frame.pack(side=tk.RIGHT, padx=10)
+        
+        ctk.CTkLabel(mode_frame, text="复习模式:").pack(side=tk.LEFT, padx=5)
+        self.mode_selector = ctk.CTkSegmentedButton(mode_frame, values=["Standard", "Dictation", "Choice"],
+                                                   variable=self.review_mode, command=self.on_mode_change)
+        self.mode_selector.pack(side=tk.LEFT, padx=5)
+        # 设置中文显示
+        self.mode_selector.configure(values=["标准", "听写", "选择"])
+        self.review_mode_map = {"标准": "Standard", "听写": "Dictation", "选择": "Choice"}
         
         # 复习区域 - 使用 CTkTabview
         self.review_tabview = ctk.CTkTabview(self)
@@ -77,8 +90,15 @@ class ReviewTab(BaseTab):
         word_display_frame = ctk.CTkFrame(card_content_frame)
         word_display_frame.pack(expand=True, fill=tk.BOTH, padx=40, pady=20)
         
-        self.word_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 32, 'bold'))
-        self.word_label.pack(pady=(40, 10))
+        self.word_display_container = ctk.CTkFrame(word_display_frame, fg_color="transparent")
+        self.word_display_container.pack(pady=(40, 10))
+        
+        self.word_label = ctk.CTkLabel(self.word_display_container, text="", font=('Arial', 32, 'bold'))
+        self.word_label.pack(side=tk.LEFT)
+        
+        self.review_speak_button = ctk.CTkButton(self.word_display_container, text="🔊", width=40, height=40,
+                                                command=lambda: self.audio_manager.speak(self.current_review_word))
+        self.review_speak_button.pack(side=tk.LEFT, padx=10)
         
         self.phonetic_label = ctk.CTkLabel(word_display_frame, text="", font=('Arial', 18), text_color='gray')
         self.phonetic_label.pack(pady=5)
@@ -102,30 +122,50 @@ class ReviewTab(BaseTab):
         self.review_progress.set(0)
         
         # 按钮框架
-        button_frame = ctk.CTkFrame(card_content_frame, fg_color="transparent")
-        button_frame.pack(pady=20, fill=tk.X, padx=50)
+        self.button_frame = ctk.CTkFrame(card_content_frame, fg_color="transparent")
+        self.button_frame.pack(pady=20, fill=tk.X, padx=50)
         
-        # 按钮居中容器
-        button_sub_frame = ctk.CTkFrame(button_frame, fg_color="transparent")
-        button_sub_frame.pack(expand=True)
+        # 1. 标准模式按钮
+        self.standard_buttons = ctk.CTkFrame(self.button_frame, fg_color="transparent")
+        self.standard_buttons.pack(expand=True)
         
-        # 按钮布局
-        self.not_know_button = ctk.CTkButton(button_sub_frame, text="不认识 (✗)", 
+        self.not_know_button = ctk.CTkButton(self.standard_buttons, text="不认识 (✗)", 
                                          command=lambda: self.review_feedback(False),
                                          state=tk.DISABLED, width=150, height=45, fg_color="#e74c3c", hover_color="#c0392b")
         self.not_know_button.pack(side=tk.LEFT, padx=20)
         
-        self.know_button = ctk.CTkButton(button_sub_frame, text="认识 (✓)", 
+        self.know_button = ctk.CTkButton(self.standard_buttons, text="认识 (✓)", 
                                      command=lambda: self.review_feedback(True),
                                      state=tk.DISABLED, width=150, height=45, fg_color="#2ecc71", hover_color="#27ae60")
         self.know_button.pack(side=tk.LEFT, padx=20)
         
-        # 添加"稍后复习"按钮
-        self.later_button = ctk.CTkButton(button_sub_frame, text="稍后复习", 
+        self.later_button = ctk.CTkButton(self.standard_buttons, text="稍后复习", 
                                       command=lambda: self.review_feedback(None),
                                       state=tk.DISABLED, width=150, height=45, fg_color="#f39c12", hover_color="#d35400")
         self.later_button.pack(side=tk.LEFT, padx=20)
         
+        # 2. 听写模式界面
+        self.dictation_frame = ctk.CTkFrame(self.button_frame, fg_color="transparent")
+        # 初始隐藏
+        
+        self.dictation_entry = ctk.CTkEntry(self.dictation_frame, placeholder_text="输入单词拼写...", width=300, height=40)
+        self.dictation_entry.pack(side=tk.LEFT, padx=10)
+        self.dictation_entry.bind("<Return>", lambda e: self.check_dictation())
+        
+        self.dictation_submit = ctk.CTkButton(self.dictation_frame, text="检查", command=self.check_dictation, width=100, height=40)
+        self.dictation_submit.pack(side=tk.LEFT, padx=10)
+        
+        # 3. 选择模式界面
+        self.choice_frame = ctk.CTkFrame(self.button_frame, fg_color="transparent")
+        # 初始隐藏
+        
+        self.choice_buttons = []
+        for i in range(4):
+            btn = ctk.CTkButton(self.choice_frame, text="", command=lambda idx=i: self.check_choice(idx), 
+                                width=250, height=50, fg_color="transparent", border_width=2)
+            btn.grid(row=i//2, column=i%2, padx=10, pady=10)
+            self.choice_buttons.append(btn)
+
         # 在统计视图中添加控制按钮
         stats_control_frame = ctk.CTkFrame(self.stats_frame)
         stats_control_frame.pack(fill=tk.X, padx=10, pady=10)
@@ -141,6 +181,98 @@ class ReviewTab(BaseTab):
         
         # 更新待复习单词数量
         self.update_review_count()
+
+    def on_mode_change(self, selected_mode):
+        """处理复习模式改变"""
+        mode = self.review_mode_map.get(selected_mode, "Standard")
+        
+        # 隐藏所有模式按钮
+        self.standard_buttons.pack_forget()
+        self.dictation_frame.pack_forget()
+        self.choice_frame.pack_forget()
+        
+        # 显示选中的模式按钮
+        if mode == "Standard":
+            self.standard_buttons.pack(expand=True)
+            if self.current_review_word:
+                self.word_label.configure(text=self.current_review_word)
+                self.meaning_label.configure(text=self.word_manager.get_word(self.current_review_word)['meaning'])
+        elif mode == "Dictation":
+            self.dictation_frame.pack(expand=True)
+            self.dictation_entry.delete(0, tk.END)
+            self.dictation_entry.focus_set()
+            if self.current_review_word:
+                # 听写模式下，如果还没开始或已完成，显示提示
+                if self.word_label.cget("text") not in ["复习已结束", "复习已暂停", "复习已完成"]:
+                    self.word_label.configure(text="***")
+                    self.meaning_label.configure(text=self.word_manager.get_word(self.current_review_word)['meaning'])
+        elif mode == "Choice":
+            self.choice_frame.pack(expand=True)
+            if self.current_review_word:
+                self.word_label.configure(text=self.current_review_word)
+                self.update_choices()
+
+    def update_choices(self):
+        """为选择模式生成并显示选项"""
+        if not self.current_review_word:
+            return
+            
+        correct_meaning = self.word_manager.get_word(self.current_review_word)['meaning']
+        
+        # 获取干扰项 (从所有单词中随机选)
+        all_words = self.word_manager.get_all_words()
+        other_meanings = [w['meaning'] for w in all_words if w['word'] != self.current_review_word]
+        
+        if len(other_meanings) < 3:
+            # 如果单词太少，用占位符
+            other_meanings += ["(占位选项1)", "(占位选项2)", "(占位选项3)"]
+            
+        distractors = random.sample(other_meanings, 3)
+        self.current_choices = distractors + [correct_meaning]
+        random.shuffle(self.current_choices)
+        
+        for i, btn in enumerate(self.choice_buttons):
+            btn.configure(text=self.current_choices[i], fg_color="transparent", border_color="#3b8ed0")
+
+    def check_dictation(self):
+        """检查听写拼写"""
+        if not self.current_review_word:
+            return
+            
+        user_input = self.dictation_entry.get().strip().lower()
+        is_correct = user_input == self.current_review_word.lower()
+        
+        if is_correct:
+            self.status_bar.configure(text=f"拼写正确: {self.current_review_word}", text_color="#2ecc71")
+            self.review_feedback(True)
+            self.dictation_entry.delete(0, tk.END)
+        else:
+            self.status_bar.configure(text=f"拼写错误，正确是: {self.current_review_word}", text_color="#e74c3c")
+            # 摇晃效果 (模拟)
+            self.dictation_entry.configure(border_color="#e74c3c")
+            self.parent_gui.root.after(1000, lambda: self.dictation_entry.configure(border_color="#3b8ed0"))
+            self.review_feedback(False)
+
+    def check_choice(self, idx):
+        """检查选择题答案"""
+        if not self.current_review_word:
+            return
+            
+        selected_meaning = self.current_choices[idx]
+        correct_meaning = self.word_manager.get_word(self.current_review_word)['meaning']
+        is_correct = selected_meaning == correct_meaning
+        
+        # 反馈颜色
+        btn = self.choice_buttons[idx]
+        if is_correct:
+            btn.configure(fg_color="#2ecc71")
+            self.status_bar.configure(text="回答正确！", text_color="#2ecc71")
+        else:
+            btn.configure(fg_color="#e74c3c")
+            self.status_bar.configure(text=f"回答错误，正确释义是: {correct_meaning}", text_color="#e74c3c")
+            
+        # 延迟进入下一个
+        self.parent_gui.root.after(500, lambda: self.review_feedback(is_correct))
 
     def update_review_count(self):
         """更新待复习单词数量显示"""
@@ -189,7 +321,27 @@ class ReviewTab(BaseTab):
         self.current_review_word = self.review_words[self.current_review_index]
         info = self.word_manager.get_word(self.current_review_word)
         
-        self.word_label.configure(text=self.current_review_word)
+        # 获取当前模式
+        current_mode = self.review_mode_map.get(self.mode_selector.get(), "Standard")
+        
+        # 根据模式显示内容
+        if current_mode == "Dictation":
+            self.word_label.configure(text="***")
+            self.meaning_label.configure(text=info['meaning'])
+            self.dictation_entry.delete(0, tk.END)
+            self.dictation_entry.focus_set()
+        elif current_mode == "Choice":
+            self.word_label.configure(text=self.current_review_word)
+            self.meaning_label.configure(text="请选择正确的释义")
+            self.update_choices()
+        else:
+            self.word_label.configure(text=self.current_review_word)
+            self.meaning_label.configure(text=info['meaning'])
+            
+        # 自动朗读逻辑
+        if self.config_manager.get("auto_play_tts", False):
+            self.audio_manager.speak(self.current_review_word)
+            
         phonetic_text = ""
         meaning_text = info['meaning']
         

@@ -306,6 +306,24 @@ class WordManager:
         finally:
             session.close()
     
+    def get_future_review_stats(self, days: int = 7) -> Dict:
+        """获取未来复习计划统计"""
+        session = self.db.get_session()
+        try:
+            now = datetime.datetime.now().date()
+            future_stats = {}
+            
+            for i in range(days):
+                target_date = now + datetime.timedelta(days=i)
+                count = session.query(Word).filter(
+                    func.date(Word.next_review) == target_date
+                ).count()
+                future_stats[target_date.strftime('%Y-%m-%d')] = count
+                
+            return future_stats
+        finally:
+            session.close()
+    
     def get_review_history(self, limit: int = 100) -> List[Dict]:
         """获取复习历史记录"""
         session = self.db.get_session()

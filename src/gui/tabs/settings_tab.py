@@ -50,6 +50,20 @@ class SettingsTab(BaseTab):
         ctk.CTkOptionMenu(theme_container, variable=self.appearance_mode_var, 
                           values=["System", "Light", "Dark"], 
                           command=self.change_appearance_mode).pack(side=tk.LEFT, padx=10)
+
+        # 语音设置部分
+        audio_frame = ctk.CTkFrame(settings_scroll)
+        audio_frame.pack(fill=tk.X, padx=15, pady=15)
+        
+        ctk.CTkLabel(audio_frame, text="语音设置", font=('Arial', 16, 'bold')).pack(pady=10, padx=15, anchor=tk.W)
+        
+        tts_container = ctk.CTkFrame(audio_frame, fg_color="transparent")
+        tts_container.pack(fill=tk.X, padx=15, pady=10)
+        
+        self.auto_tts_var = tk.BooleanVar(value=self.config_manager.get("auto_play_tts", False))
+        ctk.CTkCheckBox(tts_container, text="复习时自动朗读单词", 
+                        variable=self.auto_tts_var,
+                        command=self.toggle_auto_tts).pack(side=tk.LEFT, padx=10)
         
         # 关于信息部分
         about_frame = ctk.CTkFrame(settings_scroll)
@@ -74,6 +88,11 @@ class SettingsTab(BaseTab):
         # 更新样式以匹配新模式
         if hasattr(self.parent_gui, 'setup_styles'):
             self.parent_gui.setup_styles()
+
+    def toggle_auto_tts(self):
+        """切换自动朗读"""
+        self.config_manager.set("auto_play_tts", self.auto_tts_var.get())
+        self.status_bar.configure(text=f"自动朗读已{'开启' if self.auto_tts_var.get() else '关闭'}")
 
     def backup_data(self):
         """备份数据"""

@@ -120,6 +120,10 @@ class WordReminderGUI:
         
         style.map("Treeview.Heading", 
                   background=[('active', selected_color)])
+        
+        # 如果统计页面已初始化，刷新统计页面以适应新主题
+        if hasattr(self, 'stats_tab_comp'):
+            self.stats_tab_comp.show_statistics()
 
     def check_dictionary_api_status(self):
         """检查词典API状态"""
@@ -257,6 +261,9 @@ class WordReminderGUI:
         self.stats_tab = self.tabview.add("学习统计")
         self.settings_tab = self.tabview.add("系统设置")
         
+        # 绑定标签页切换事件以添加过渡效果
+        self.tabview.configure(command=self.on_tab_change)
+        
         # 初始化标签页组件
         self.home_tab_comp = HomeTab(self.home_tab, self)
         self.add_tab_comp = AddTab(self.add_tab, self)
@@ -266,6 +273,20 @@ class WordReminderGUI:
         self.stats_tab_comp = StatsTab(self.stats_tab, self)
         self.settings_tab_comp = SettingsTab(self.settings_tab, self)
     
+    def on_tab_change(self):
+        """处理标签页切换"""
+        current_tab = self.tabview.get()
+        
+        # 刷新对应标签页的数据
+        if current_tab == "学习统计" and hasattr(self, 'stats_tab_comp'):
+            self.stats_tab_comp.show_statistics()
+        elif current_tab == "首页" and hasattr(self, 'home_tab_comp'):
+            self.home_tab_comp.update_reminder()
+        elif current_tab == "复习单词" and hasattr(self, 'review_tab_comp'):
+            self.review_tab_comp.update_review_count()
+        elif current_tab == "查看单词" and hasattr(self, 'view_tab_comp'):
+            self.view_tab_comp.refresh_word_list()
+
     def refresh_word_list(self):
         """刷新单词列表 (委托给 ViewTab)"""
         if hasattr(self, 'view_tab_comp'):
