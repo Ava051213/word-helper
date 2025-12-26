@@ -29,68 +29,80 @@ class AddTab(BaseTab):
         main_container = ctk.CTkFrame(self)
         main_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
-        # 标题
-        title_label = ctk.CTkLabel(main_container, text="添加新单词", font=('Arial', 20, 'bold'))
-        title_label.pack(pady=(20, 10))
+        # 顶部标题区
+        header_frame = ctk.CTkFrame(main_container, fg_color="transparent")
+        header_frame.pack(fill=tk.X, pady=(10, 20))
         
-        # 表单框架
-        form_frame = ctk.CTkFrame(main_container, fg_color="transparent")
-        form_frame.pack(fill=tk.BOTH, expand=True, padx=40, pady=10)
+        title_label = ctk.CTkLabel(header_frame, text="✨ 添加新生词", font=('Arial', 24, 'bold'))
+        title_label.pack(side=tk.LEFT, padx=20)
+        
+        # 表单框架 (使用卡片式设计)
+        self.form_container = ctk.CTkFrame(main_container)
+        self.form_container.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+        
+        form_inner = ctk.CTkFrame(self.form_container, fg_color="transparent")
+        form_inner.pack(padx=40, pady=20, fill=tk.BOTH, expand=True)
         
         # 使用 grid 布局
-        form_frame.grid_columnconfigure(1, weight=1)
+        form_inner.grid_columnconfigure(1, weight=1)
         
-        # 单词输入
-        ctk.CTkLabel(form_frame, text="单词:", font=('Arial', 14)).grid(row=0, column=0, sticky=tk.W, padx=10, pady=15)
+        label_font = ('Arial', 14, 'bold')
+        entry_height = 38
         
-        word_input_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        # 1. 单词输入
+        ctk.CTkLabel(form_inner, text="🔤 单词:", font=label_font).grid(row=0, column=0, sticky=tk.W, padx=10, pady=15)
+        
+        word_input_frame = ctk.CTkFrame(form_inner, fg_color="transparent")
         word_input_frame.grid(row=0, column=1, padx=10, pady=15, sticky=tk.EW)
         word_input_frame.grid_columnconfigure(0, weight=1)
         
-        self.word_entry = ctk.CTkEntry(word_input_frame, placeholder_text="输入英文单词...", height=35)
+        self.word_entry = ctk.CTkEntry(word_input_frame, placeholder_text="输入英文单词...", height=entry_height, font=('Arial', 14))
         self.word_entry.grid(row=0, column=0, sticky=tk.EW)
         
-        self.speak_button = ctk.CTkButton(word_input_frame, text="🔊", width=40, height=35, 
-                                         command=lambda: self.audio_manager.speak(self.word_entry.get()))
-        self.speak_button.grid(row=0, column=1, padx=(5, 0))
+        self.speak_button = ctk.CTkButton(word_input_frame, text="🔊", width=45, height=entry_height, 
+                                         command=lambda: self.word_manager.speak(self.word_entry.get()))
+        self.speak_button.grid(row=0, column=1, padx=(10, 0))
         
-        # 释义输入
-        ctk.CTkLabel(form_frame, text="释义:", font=('Arial', 14)).grid(row=1, column=0, sticky=tk.W, padx=10, pady=15)
-        self.meaning_entry = ctk.CTkEntry(form_frame, placeholder_text="输入单词释义...", height=35)
+        # 2. 释义输入
+        ctk.CTkLabel(form_inner, text="📖 释义:", font=label_font).grid(row=1, column=0, sticky=tk.W, padx=10, pady=15)
+        self.meaning_entry = ctk.CTkEntry(form_inner, placeholder_text="输入中文释义...", height=entry_height, font=('Arial', 14))
         self.meaning_entry.grid(row=1, column=1, padx=10, pady=15, sticky=tk.EW)
         
-        # 例句输入
-        ctk.CTkLabel(form_frame, text="例句:", font=('Arial', 14)).grid(row=2, column=0, sticky=tk.W, padx=10, pady=15)
-        self.example_entry = ctk.CTkEntry(form_frame, placeholder_text="输入例句 (可选)...", height=35)
+        # 3. 例句输入
+        ctk.CTkLabel(form_inner, text="📝 例句:", font=label_font).grid(row=2, column=0, sticky=tk.W, padx=10, pady=15)
+        self.example_entry = ctk.CTkEntry(form_inner, placeholder_text="输入例句 (可选)...", height=entry_height, font=('Arial', 14))
         self.example_entry.grid(row=2, column=1, padx=10, pady=15, sticky=tk.EW)
         
-        # 分类输入
-        ctk.CTkLabel(form_frame, text="分类:", font=('Arial', 14)).grid(row=3, column=0, sticky=tk.W, padx=10, pady=15)
-        self.category_entry = ctk.CTkEntry(form_frame, placeholder_text="输入分类 (可选)...", height=35)
-        self.category_entry.grid(row=3, column=1, padx=10, pady=15, sticky=tk.EW)
+        # 4. 分类与级别 (合并在一行)
+        ctk.CTkLabel(form_inner, text="🏷️ 标签:", font=label_font).grid(row=3, column=0, sticky=tk.W, padx=10, pady=15)
         
-        # 词汇级别
-        ctk.CTkLabel(form_frame, text="词汇级别:", font=('Arial', 14)).grid(row=4, column=0, sticky=tk.W, padx=10, pady=15)
+        extra_frame = ctk.CTkFrame(form_inner, fg_color="transparent")
+        extra_frame.grid(row=3, column=1, padx=10, pady=15, sticky=tk.EW)
+        extra_frame.grid_columnconfigure(0, weight=1)
+        
+        self.category_entry = ctk.CTkEntry(extra_frame, placeholder_text="分类 (如: 考研, 生活)...", height=entry_height)
+        self.category_entry.grid(row=0, column=0, sticky=tk.EW, padx=(0, 10))
+        
         saved_level = self.config_manager.get("default_vocabulary_level", "cet6")
         self.vocab_level_var = tk.StringVar(value=saved_level)
-        self.vocab_combobox = ctk.CTkComboBox(form_frame, variable=self.vocab_level_var, 
-                                             values=["cet4", "cet6", "gre"], height=35,
+        self.vocab_combobox = ctk.CTkComboBox(extra_frame, variable=self.vocab_level_var, 
+                                             values=["cet4", "cet6", "gre"], height=entry_height, width=120,
                                              command=self._on_vocab_level_change)
-        self.vocab_combobox.grid(row=4, column=1, padx=10, pady=15, sticky=tk.W)
+        self.vocab_combobox.grid(row=0, column=1, sticky=tk.E)
         
-        # 按钮框架
+        # 底部操作按钮
         button_frame = ctk.CTkFrame(main_container, fg_color="transparent")
-        button_frame.pack(pady=30)
+        button_frame.pack(pady=(20, 20))
         
-        self.add_button = ctk.CTkButton(button_frame, text="添加单词", command=self.add_word, 
-                                       width=150, height=45, font=('Arial', 14, 'bold'))
+        self.add_button = ctk.CTkButton(button_frame, text="✅ 确认添加", command=self.add_word, 
+                                       width=180, height=48, font=('Arial', 16, 'bold'))
         self.add_button.pack(side=tk.LEFT, padx=15)
         
-        ctk.CTkButton(button_frame, text="清空", command=self.clear_form, 
-                      width=100, height=45, fg_color="gray").pack(side=tk.LEFT, padx=15)
+        ctk.CTkButton(button_frame, text="🧹 清空重填", command=self.clear_form, 
+                      width=120, height=48, fg_color="#95a5a6", hover_color="#7f8c8d").pack(side=tk.LEFT, padx=15)
         
-        ctk.CTkButton(button_frame, text="随机生成单词", command=self.generate_random_words, 
-                      width=150, height=45, fg_color="#2c3e50").pack(side=tk.LEFT, padx=15)
+        ctk.CTkButton(button_frame, text="🎲 随机单词", command=self.generate_random_words, 
+                      width=150, height=48, fg_color="#34495e", hover_color="#2c3e50").pack(side=tk.LEFT, padx=15)
 
     def _on_vocab_level_change(self, new_level: str):
         """处理词汇级别变化"""
@@ -332,7 +344,7 @@ class AddTab(BaseTab):
         meaning_input = self.meaning_entry.get().strip()
         if not meaning_input:
             messagebox.showwarning("输入错误", "释义不能为空！")
-            self.add_button.configure(state=tk.NORMAL, text="添加单词")
+            self.add_button.configure(state=tk.NORMAL, text="✨ 确认添加")
             return
         
         example_input = self.example_entry.get().strip()
@@ -358,10 +370,10 @@ class AddTab(BaseTab):
             self.show_success_feedback(f"单词 '{word}' {action}成功！")
             self.clear_form()
             if hasattr(self.parent_gui, 'home_tab'):
-                self.parent_gui.home_tab.update_reminder()
+                self.parent_gui.home_tab.update_statistics() # 修改为 update_statistics
         else:
             self.show_error_feedback(f"单词 '{word}' {action}失败！")
-            self.add_button.configure(state=tk.NORMAL, text="添加单词")
+            self.add_button.configure(state=tk.NORMAL, text="✨ 确认添加")
 
     def show_success_feedback(self, message):
         """显示成功反馈"""

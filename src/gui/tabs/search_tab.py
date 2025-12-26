@@ -92,6 +92,8 @@ class SearchTab(BaseTab):
         self.search_stats_label = ctk.CTkLabel(result_actions, text="找到 0 个匹配项", text_color="#2ecc71")
         self.search_stats_label.pack(side=tk.RIGHT, padx=20)
         
+        ctk.CTkButton(result_actions, text="🔊 朗读", command=self.speak_selected_word, width=80).pack(side=tk.RIGHT, padx=5)
+        
         # 表格容器 (使用 CTkFrame 来包裹 Treeview)
         tree_container = ctk.CTkFrame(result_container)
         tree_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
@@ -117,6 +119,34 @@ class SearchTab(BaseTab):
         
         # 绑定双击事件
         self.search_tree.bind("<Double-1>", self.on_search_double_click)
+        
+        # 创建右键菜单
+        self.context_menu = tk.Menu(self, tearoff=0)
+        self.context_menu.add_command(label="朗读单词", command=self.speak_selected_word)
+        self.context_menu.add_command(label="复制信息", command=self.copy_selected_search_results)
+        self.context_menu.add_separator()
+        self.context_menu.add_command(label="在查看页显示", command=lambda: self.on_search_double_click(None))
+        
+        # 绑定右键点击
+        self.search_tree.bind("<Button-3>", self.show_context_menu)
+
+    def speak_selected_word(self):
+        """朗读选中的单词"""
+        selected = self.search_tree.selection()
+        if not selected:
+            messagebox.showwarning("提示", "请先选择要朗读的单词")
+            return
+            
+        word_text = self.search_tree.item(selected[0])['values'][0]
+        self.word_manager.speak(word_text)
+
+    def show_context_menu(self, event):
+        """显示右键菜单"""
+        # 选中点击的项目
+        item = self.search_tree.identify_row(event.y)
+        if item:
+            self.search_tree.selection_set(item)
+            self.context_menu.post(event.x_root, event.y_root)
 
     def search_words(self):
         """搜索单词核心逻辑"""

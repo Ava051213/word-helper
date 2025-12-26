@@ -1,6 +1,6 @@
 {
     "appearance_mode": "System",
-    "default_vocabulary_level": "gre",
+    "default_vocabulary_level": "cet6",
     "auto_play_tts": false,
     "last_used_at": null,
     "daily_review_goal": 20,

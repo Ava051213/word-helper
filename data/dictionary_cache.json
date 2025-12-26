@@ -5257,5 +5257,343 @@
     },
     "last_accessed": 1766447470.9119318,
     "cached_at": 1766447470.911932
+  },
+  "interpose": {
+    "data": {
+      "word": "interpose",
+      "phonetic": "/ˌɪn.təˈpəʊz/",
+      "meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "To insert something (or oneself) between other things."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To interrupt a conversation by introducing a different subject or making a comment."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To offer (one's help or services)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To be inserted between parts or things; to come between."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To intervene in a dispute, or in a conversation."
+        }
+      ],
+      "examples": [
+        "to interpose a screen between the eye and the light"
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "verb",
+          "definition": "将某物（或自己）插入其他事物之间。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "通过引入不同的主题或发表评论来打断谈话。"
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "提供（某人的帮助或服务）。"
+        }
+      ]
+    },
+    "last_accessed": 1766485872.4522004,
+    "cached_at": 1766485872.4522011
+  },
+  "shade": {
+    "data": {
+      "word": "shade",
+      "phonetic": "/ʃeɪd/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Darkness where light, particularly sunlight, is blocked."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Something that blocks light, particularly in a window."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A variety of a colour/color, in particular one obtained by adding black (compare tint)."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A subtle variation in a concept."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An aspect that is reminiscent of something."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A very small degree of a quantity, or variety of meaning"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A ghost or specter; a spirit."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A postage stamp showing an obvious difference in colour/color to the original printing and needing a separate catalogue/catalog entry."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "(originally gay slang) Subtle insults."
+        }
+      ],
+      "examples": [
+        "The old oak tree gave shade in the heat of the day.",
+        "Close the shade, please: it's too bright in here.",
+        "I've painted my room in five lovely shades of pink and chartreuse.",
+        "shades of meaning",
+        "shades of Groucho",
+        "The adventurer was attacked by a shade.",
+        "Why did you paint your room chartreuse? No shade; I'm genuinely curious."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "光线（尤其是阳光）被阻挡的黑暗。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "阻挡光线的东西，尤其是在窗户里。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "多种颜色，特别是通过添加黑色（比较色调）获得的颜色。"
+        }
+      ]
+    },
+    "last_accessed": 1766485883.8394456,
+    "cached_at": 1766485883.839446
+  },
+  "glow": {
+    "data": {
+      "word": "glow",
+      "phonetic": "/ɡləʊ/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "The state of a glowing object."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The condition of being passionate or having warm feelings."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The brilliance or warmth of color in an environment or on a person (especially one's face)."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To give off light from heat or to emit light as if heated."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To radiate some emotional quality like light."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To gaze especially passionately at something."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To radiate thermal heat."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To shine brightly and steadily."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To make hot; to flush."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To feel hot; to have a burning sensation, as of the skin, from friction, exercise, etc.; to burn."
+        }
+      ],
+      "examples": [
+        "He had a bright red glow on his face.",
+        "The fire was still glowing after ten hours.",
+        "The zealots glowed with religious fervor.",
+        "After their workout, the gymnasts' faces were glowing red.",
+        "The new baby's room glows with bright, loving colors."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "发光物体的状态。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "充满激情或有温暖感情的状态。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "环境或人（尤其是人脸）上颜色的光彩或温暖。"
+        }
+      ]
+    },
+    "last_accessed": 1766485892.2849164,
+    "cached_at": 1766485892.2849166
+  },
+  "behavior": {
+    "data": {
+      "word": "behavior",
+      "phonetic": "[bɪˈheɪvjə]",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Human conduct relative to social norms."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The way a living creature behaves or acts generally."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A state of probation about one's conduct."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An instance of the way a living creature behaves."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Observable response produced by an organism."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "The way a device or system operates."
+        }
+      ],
+      "examples": [
+        "He was on his best behavior when her family visited."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "与社会规范相关的人类行为。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "生物的一般行为或行为方式。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "对一个人的行为进行缓刑的状态。"
+        }
+      ]
+    },
+    "last_accessed": 1766485898.945483,
+    "cached_at": 1766485898.9454832
+  },
+  "rain": {
+    "data": {
+      "word": "rain",
+      "phonetic": "/ɹeɪn/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "Condensed water falling from a cloud."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "Any matter moving or falling, usually through air, and especially if liquid or otherwise figuratively identifiable with raindrops."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An instance of particles or larger pieces of matter moving or falling through air."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To have rain fall from the sky."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To fall as or like rain."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To issue (something) in large quantities."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To reign."
+        }
+      ],
+      "examples": [
+        "The rains came late that year.",
+        "A rain of mortar fire fell on our trenches.",
+        "It will rain today.",
+        "Bombs rained from the sky.",
+        "The boxer rained punches on his opponent's head."
+      ],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "凝结的水从云中落下。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "任何移动或下落的物质，通常是通过空气，尤其是液体或以雨滴的方式进行象征性识别的物质。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "颗粒或较大物质在空气中移动或下落的实例。"
+        }
+      ]
+    },
+    "last_accessed": 1766485906.057885,
+    "cached_at": 1766485906.0578852
+  },
+  "anecdote": {
+    "data": {
+      "word": "anecdote",
+      "phonetic": "/ˈæ.nɪk.doʊt/",
+      "meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "A short account of a real incident or person, often humorous or interesting."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "An account which supports an argument, but which is not supported by scientific or statistical analysis."
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "A previously untold secret account of an incident."
+        },
+        {
+          "part_of_speech": "verb",
+          "definition": "To tell anecdotes (about)."
+        }
+      ],
+      "examples": [],
+      "chinese_meanings": [
+        {
+          "part_of_speech": "noun",
+          "definition": "对真实事件或人物的简短描述，通常幽默或有趣。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "支持某个论点但不受科学或统计分析支持的说法。"
+        },
+        {
+          "part_of_speech": "noun",
+          "definition": "之前不为人知的事件的秘密描述。"
+        }
+      ]
+    },
+    "last_accessed": 1766485917.2557483,
+    "cached_at": 1766485917.2557485
   }
 }

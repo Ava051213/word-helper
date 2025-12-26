@@ -84,6 +84,7 @@ class ViewTab(BaseTab):
         # 右键菜单
         self.context_menu = tk.Menu(self.word_tree, tearoff=0)
         self.context_menu.add_command(label="查看详情", command=self.show_selected_word_detail)
+        self.context_menu.add_command(label="朗读单词", command=self.speak_selected_word)
         self.context_menu.add_command(label="获取详细信息", command=self.fetch_detailed_info)
         self.context_menu.add_command(label="编辑单词", command=self.edit_selected_word)
         self.context_menu.add_command(label="删除单词", command=self.delete_selected_word)
@@ -95,6 +96,15 @@ class ViewTab(BaseTab):
         if item:
             self.word_tree.selection_set(item)
             self.context_menu.post(event.x_root, event.y_root)
+
+    def speak_selected_word(self):
+        """朗读选中的单词"""
+        selected_item = self.word_tree.selection()
+        if not selected_item:
+            return
+        
+        word_text = self.word_tree.item(selected_item[0])['values'][0]
+        self.word_manager.speak(word_text)
 
     def show_selected_word_detail(self):
         """显示选中单词的详细信息"""
@@ -325,7 +335,7 @@ class ViewTab(BaseTab):
                 if hasattr(self.parent_gui, 'update_review_count'):
                     self.parent_gui.update_review_count()
                 if hasattr(self.parent_gui, 'home_tab'):
-                    self.parent_gui.home_tab.update_reminder()
+                    self.parent_gui.home_tab.update_statistics()
                 messagebox.showinfo("成功", f"单词 '{word}' 删除成功！")
             else:
                 messagebox.showerror("错误", f"单词 '{word}' 删除失败！")

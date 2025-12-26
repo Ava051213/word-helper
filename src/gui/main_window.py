@@ -281,7 +281,7 @@ class WordReminderGUI:
         if current_tab == "学习统计" and hasattr(self, 'stats_tab_comp'):
             self.stats_tab_comp.show_statistics()
         elif current_tab == "首页" and hasattr(self, 'home_tab_comp'):
-            self.home_tab_comp.update_reminder()
+            self.home_tab_comp.update_statistics()
         elif current_tab == "复习单词" and hasattr(self, 'review_tab_comp'):
             self.review_tab_comp.update_review_count()
         elif current_tab == "查看单词" and hasattr(self, 'view_tab_comp'):
@@ -297,10 +297,10 @@ class WordReminderGUI:
         if hasattr(self, 'review_tab_comp'):
             self.review_tab_comp.update_review_count()
             
-    def update_reminder(self):
-        """更新首页提醒 (委托给 HomeTab)"""
+    def update_statistics(self):
+        """更新首页统计数据"""
         if hasattr(self, 'home_tab_comp'):
-            self.home_tab_comp.update_reminder()
+            self.home_tab_comp.update_statistics()
 
     def focus_search_entry(self):
         """聚焦到搜索输入框 (委托给 SearchTab)"""
